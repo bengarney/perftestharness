@@ -991,7 +991,7 @@ void DXUTParseCommandLine( WCHAR* strCommandLine )
             strSpace++;
         *strSpace = 0;
 
-        DXUTOutputDebugString( L"Unrecognized flag: %s", strFlag );
+        DXUTOutputDebugString( L"Unrecognized flag: %s\n", strFlag );
         strCmdLine += wcslen(strFlag);
     }
 }

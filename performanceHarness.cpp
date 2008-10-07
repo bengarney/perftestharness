@@ -23,7 +23,7 @@ void runTest(PerfTestMarkerBase *walk)
    walk->initialize();
 
    // Run it at least a hundred times or 1 second.
-   while(runCount < 10000 || (currentTime() - startTime) < 10.0)
+   while(runCount < 100 || (currentTime() - startTime) < 2.0)
    {
       // Run the test.
       double duration = walk->runTest();
@@ -65,7 +65,7 @@ void runTestWithIndependent(PerfTestMarkerBase *walk, int independentValue)
    walk->initializeWithIndependent(independentValue);
 
    // Run it at least a hundred times or 1 second.
-   while(runCount < 10000 || (currentTime() - startTime) < 10.0)
+   while(runCount < 100 || (currentTime() - startTime) < 2.0)
    {
       // Run the test.
       double duration = walk->runTest();

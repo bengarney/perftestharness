@@ -1,6 +1,10 @@
 #ifndef _PERFORMANCEHARNESS_H_
 #define _PERFORMANCEHARNESS_H_
 
+#ifndef NULL
+#define NULL 0
+#endif
+
 // These are implemented in winTimer.cpp.
 extern void startTimer();
 extern double stopTimer();

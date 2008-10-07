@@ -1,4 +1,4 @@
-#include "performanceHarness.h"
+#include "harness/performanceHarness.h"
 
 /*************************************************************************
    HOW TO MAKE A PERFORMANCE TEST:

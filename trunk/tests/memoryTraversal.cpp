@@ -1,6 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
-#include "performanceHarness.h"
+#include "harness/performanceHarness.h"
 
 #define DATA_SIZE 1024 * 1024 * 16
 static char data[1024 * 1024 * 16];

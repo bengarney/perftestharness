@@ -1,6 +1,6 @@
 #include <stdio.h>
 #include "windows.h"
-#include "performanceHarness.h"
+#include "harness/performanceHarness.h"
 
 PERFORMANCE_TEST("basic/delay/10ms", Delay10ms)
 {

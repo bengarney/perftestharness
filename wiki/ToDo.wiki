@@ -7,5 +7,5 @@ This page is a temporary holding spot for brainstorming.  This will probaby need
 
 = Details =
 
--Update with better stats such as standard deviation, mean, average, etc.
+-Update with better stats such as standard deviation, mean, average, etc.<br>
 -XML utility: So that the xml output is encapsulated

@@ -32,57 +32,37 @@ PERFORMANCE_TEST("memory/traverse/linear", MTL)
    }
 };
 
-PERFORMANCE_TEST("memory/traverse/linearStep100Byte", MTLStep100Byte)
+PERFORMANCE_TEST("memory/traverse/linearStep", MTLStep)
 {
-   void test()
-   {
-      int numReads = 0;
-      int sum = 0;
-      while(numReads < 100000)
-      {
-         sum += data[ (numReads * 100) % DATA_SIZE ];
-         numReads++;
-      }
-   }
-};
+   int stepSize;
 
-PERFORMANCE_TEST("memory/traverse/linearStep8Byte", MTLStep8Byte)
-{
-   void test()
+   static const char * getIndependentVariableName()
    {
-      int numReads = 0;
-      int sum = 0;
-      while(numReads < 100000)
-      {
-         sum += data[ (numReads * 8) % DATA_SIZE ];
-         numReads++;
-      }
+      return "step size (b)";
    }
-};
 
-PERFORMANCE_TEST("memory/traverse/linearStep32Byte", MTLStep32Byte)
-{
-   void test()
+   static int getIndependentVariableMin()
    {
-      int numReads = 0;
-      int sum = 0;
-      while(numReads < 100000)
-      {
-         sum += data[ (numReads * 32) % DATA_SIZE ];
-         numReads++;
-      }
+      return 4;
    }
-};
 
-PERFORMANCE_TEST("memory/traverse/linearStep33Byte", MTLStep33Byte)
-{
+   static int getIndependentVariableMax()
+   {
+      return 128;
+   }
+
+   void setIndependentVariable(int v)
+   {
+      stepSize = v;
+   }
+
    void test()
    {
       int numReads = 0;
       int sum = 0;
       while(numReads < 100000)
       {
-         sum += data[ (numReads * 33) % DATA_SIZE ];
+         sum += data[ (numReads * stepSize) % DATA_SIZE ];
          numReads++;
       }
    }

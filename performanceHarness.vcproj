@@ -41,6 +41,7 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				Optimization="0"
+				AdditionalIncludeDirectories="."
 				PreprocessorDefinitions="WIN32;_DEBUG;_CONSOLE"
 				MinimalRebuild="true"
 				BasicRuntimeChecks="3"
@@ -171,15 +172,19 @@
 			Name="Tests"
 			>
 			<File
-				RelativePath=".\basicTests.cpp"
+				RelativePath=".\tests\basicTests.cpp"
 				>
 			</File>
 			<File
-				RelativePath=".\graphicsTests.cpp"
+				RelativePath=".\tests\exampleTests.cpp"
 				>
 			</File>
 			<File
-				RelativePath=".\memoryTraversal.cpp"
+				RelativePath=".\tests\graphicsTests.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\tests\memoryTraversal.cpp"
 				>
 			</File>
 		</Filter>
@@ -267,23 +272,27 @@
 			Name="Harness"
 			>
 			<File
-				RelativePath=".\graphicsHarness.cpp"
+				RelativePath=".\harness\graphicsHarness.cpp"
 				>
 			</File>
 			<File
-				RelativePath=".\graphicsHarness.h"
+				RelativePath=".\harness\graphicsHarness.h"
 				>
 			</File>
 			<File
-				RelativePath=".\performanceHarness.cpp"
+				RelativePath=".\harness\performanceHarness.cpp"
 				>
 			</File>
 			<File
-				RelativePath=".\performanceHarness.h"
+				RelativePath=".\harness\performanceHarness.h"
 				>
 			</File>
+		</Filter>
+		<Filter
+			Name="win32"
+			>
 			<File
-				RelativePath=".\winTimer.cpp"
+				RelativePath=".\win32\winTimer.cpp"
 				>
 			</File>
 		</Filter>

@@ -1,4 +1,4 @@
-#include "graphicsHarness.h"
+#include "harness/graphicsHarness.h"
 
 /************************************************************************/
 /* Bare minimum test that shows discernable graphics.                   */

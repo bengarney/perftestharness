@@ -81,6 +81,8 @@ PERFORMANCE_TEST("basic/control/100000rand", RandomControl)
 
 Note the first line. This lets you name the test - notice how we group the test names like file system paths - and also provide a class name to use. The class name is appended with PerfTest by the macro. (This will be important if you need to declare any static members.)
 
+This macro also deals with registering the test with the test harness. As long as the file with the PERFORMANCE_TEST macro is compiled into your project, it should be included in runs of the harness. If it doesn't show up, do a clean rebuild. If it still doesn't show up, confirm the file is really being compiled (for instance by introducing a syntax error so it will break). Finally, make sure that the class and display name are unique. If it still doesn't work, drop us a line.
+
 You can provide several member functions to a test, but the only one that's really required (if you want the test to do anything) is `test()`.
 
 == More Complete Test ==

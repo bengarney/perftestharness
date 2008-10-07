@@ -115,7 +115,7 @@ PERFORMANCE_TEST("basic/control/100000randWithReport", RandomControlWithReport)
 
 == Test With Independent Variable ==
 
-Sometimes, you may want to run a test multiple times changing an independent variable. An independent variable is a variable which is changed between runs of the test. In this context, a run of the test means instantiating the test class, calling `initializeWithDependent()`, calling `test()` multiple times, and calling `teardown()`. Full timing data is gathered with each possible value for the independent variable.
+Sometimes, you may want to run a test multiple times changing an independent variable. An independent variable is a variable which is changed between runs of the test. In this context, a run of the test means instantiating the test class, calling `setIndependentVariable()`, calling `initialize()`, calling `test()` multiple times, and finally calling `teardown()`. Full timing data is gathered with each possible value for the independent variable.
 
 There are four static methods to implement if you want to use an independent variable with your test:
 
@@ -125,7 +125,7 @@ There are four static methods to implement if you want to use an independent var
 || `static int getIndependentVariableMax()` || No || The end value plus one for the independent variable. The test harness will iterate from `getIndependentVariableMin()` to this minus one. ||
 || `static bool checkSkipIndependentValue(int v)` || Yes || Before each test run, the independent value is passed to this method, and the test run is skipped if the method returns false. Use this to skip values that are meaningless (like if you only want pow2 values). ||
 
-In addition, you must provide `void initializeWithIndependentVariable(int v)` instead of `void initialize()`. This is called instead of `initialize()` when independent variables are in use.
+In addition, you must provide `void setIndependentVariable(int v)` in addition to `void initialize()`. This is called before `initialize()` when independent variables are in use.
 
 Here is an example of a test using independent variables:
 

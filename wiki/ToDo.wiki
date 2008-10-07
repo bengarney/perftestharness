@@ -1,0 +1,10 @@
+#summary Off the cuff to do page.
+
+= Introduction =
+
+This page is a temporary holding spot for brainstorming.  This will probaby need to be organized better some day soon.
+
+
+= Details =
+
+-Update with better stats such as standard deviation, mean, average, etc.

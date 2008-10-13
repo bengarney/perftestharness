@@ -25,9 +25,9 @@ Utility Development
 GPU Tests
   * Vertex Buffer Size -A single vertex buffer will have an optimal size.  Build a vertex buffer of varying size from small to large and determine, via framerate, what the optimal size is for your hardware.  Start with the vertex limiter so that the program begins at 60 hertz.  The test is over when the fps reaches 30 fps.
 
-  * Vertex Alignment - Create a degenerate triangle strip of 500,000 vertices.  Create as many permutations as possible to generate different size vertex types.  The assumption is that vertex types that are aligned to the cache boundaries of the vertex fetching system should be faster than those that are not.
+  * Vertex Alignment - Create a degenerate triangle strip of 500,000 vertices.  Create as many permutations as possible to generate different size vertex types.  The assumption is that vertex types that are aligned to the cache boundaries of the vertex fetching system should be faster than those that are not.  Use the vertex limiter to bring the framerate to 60 fps.  Once at 60 fps, switch the buffer to different vertex buffers and record the output.
 
-  * Overdraw Performance -  use a full screen quad and gather the frame rate at overdraw values of 0,1,2,3,4…x.
+  * Overdraw Performance -  use a full screen quad and gather the frame rate at overdraw values of 0,1,2,3,4…x.  Use the fullscreen quad draw to bring the frame rate down to 60.  Once there, continue to add fullsreen quads until the frame rate is below 30.  Record the fps and number of quads after the 60 hz is achieved.
 
 CPU Tests
   * CPU Stream Count

@@ -14,7 +14,7 @@ Utility Development
 
   * Fullscreen quad draw - create a utility function for other to use that draws a screen quad as fast as possible.  This quad should suppot a texture, but not require one.  The quad should also support the abilty to execute a pixel shader.
   
-* Vertex Limiter - the vertex limiter should generate as many degenerate triangles as possible until the frame rate hits 60 hz.  Once that happens, the vertex limiter will return true and return (via some function call) the vertex buffer pointer, number of degenerate triangles and the index buffer.
+  * Vertex Limiter - the vertex limiter should generate as many degenerate triangles as possible until the frame rate hits 60 hz.  Once that happens, the vertex limiter will return true and return (via some function call) the vertex buffer pointer, number of degenerate triangles and the index buffer.
 
   * Pixel Shader Limiter - the pixel shader limiter shall do the same as the vertex limiter, except it shall perform the pixel work using the full screen quad limiter to perform this job.
 

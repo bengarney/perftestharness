@@ -5,7 +5,32 @@
 This page is a temporary holding spot for brainstorming.  This will probaby need to be organized better some day soon.
 
 
-= Details =
+= Tasks =
 
-  * Update with better stats such as standard deviation, mean, average, etc.
-  * XML utility: So that the xml output is encapsulated
+Harness Work
+  * Build a system into the test harness that allows us to save out all data points not just stats like min, max, and mean.
+
+Utility Development
+
+  * Fullscreen quad draw
+  * Vertex Limiter
+  * Pixel Shader Limiter
+  * Texture Limiter
+  * XML utility: So that the xml output is better encapsulated
+
+GPU Tests
+  * Vertex Buffer Size
+  * Vertex Alignment
+  * Overdraw performance
+
+CPU Tests
+  * CPU Stream Count
+  * float vs. double performance
+  * integer vs. long performance
+  * integer vs. float performance
+  * float vs. double performance
+  * random vs. linear memory access vs. strided access
+  * single vs. multi-thread linear access
+  * single vs. multi-thread random access
+
+CPU Tests

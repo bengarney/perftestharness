@@ -10,6 +10,8 @@ This page is a temporary holding spot for brainstorming.  This will probaby need
 Harness Work
   * Build a system into the test harness that allows us to save out all data points not just stats like min, max, and mean.
 
+  * Gather machine info for recording.  Look at the CPUID instruction.
+
 Utility Development
 
   * Fullscreen quad draw - create a utility function for other to use that draws a screen quad as fast as possible.  This quad should suppot a texture, but not require one.  The quad should also support the abilty to execute a pixel shader.

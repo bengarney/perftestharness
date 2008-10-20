@@ -3,6 +3,7 @@
 #include <stdio.h>
 
 #include "performanceHarness.h"
+#include "mtwist/mtwist.h"
 
 FILE *xmlLog = NULL;
 
@@ -21,6 +22,10 @@ void runTest(PerfTestMarkerBase *walk)
    double startTime = currentTime();
 
    walk->initialize();
+
+   // Run the test a few times to warm the cache. This helps reduce outliers.
+   for(int i=0; i<10; i++)
+      walk->runTest();
 
    // Run it at least a hundred times or 1 second.
    while(runCount < 100 || (currentTime() - startTime) < 2.0)
@@ -64,6 +69,10 @@ void runTestWithIndependent(PerfTestMarkerBase *walk, int independentValue)
 
    walk->initializeWithIndependent(independentValue);
 
+   // Run the test a few times to warm the cache. This helps reduce outliers.
+   for(int i=0; i<10; i++)
+      walk->runTest();
+
    // Run it at least a hundred times or 1 second.
    while(runCount < 100 || (currentTime() - startTime) < 2.0)
    {
@@ -97,6 +106,9 @@ void runTestWithIndependent(PerfTestMarkerBase *walk, int independentValue)
 // Our main function.
 int main(int argc, char* argv[])
 {
+   // Initialize the random number generator.
+   mt_bestseed();
+
    // Open the XML log.
    fopen_s(&xmlLog, "times.xml", "w+");
    fputs("<PerformanceTests>\n", xmlLog);
@@ -106,7 +118,6 @@ int main(int argc, char* argv[])
       // Check for prefix match...
       if(argc > 1 && _strnicmp(argv[1], walk->mName, strlen(argv[1])))
          continue;
-
 
       // Check if we have independent variables...
       if(walk->getIndependentVariableName() == NULL)
@@ -144,4 +155,9 @@ int main(int argc, char* argv[])
    getc(stdin);
 
 	return 0;
+}
+
+unsigned int betterRand()
+{
+   return (unsigned int)mt_lrand();
 }

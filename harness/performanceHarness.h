@@ -10,6 +10,9 @@ extern void startTimer();
 extern double stopTimer();
 extern double currentTime();
 
+// Helper function for better random values.
+extern unsigned int betterRand();
+
 /// Base class for performance tests.
 ///
 /// Subclassed and auto-registered using the PERFORMANCE_TEST macro, this

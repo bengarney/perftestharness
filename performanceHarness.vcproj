@@ -296,6 +296,26 @@
 				>
 			</File>
 		</Filter>
+		<Filter
+			Name="mtwist"
+			>
+			<File
+				RelativePath=".\mtwist\mtwist.c"
+				>
+				<FileConfiguration
+					Name="Debug|Win32"
+					>
+					<Tool
+						Name="VCCLCompilerTool"
+						CompileAs="1"
+					/>
+				</FileConfiguration>
+			</File>
+			<File
+				RelativePath=".\mtwist\mtwist.h"
+				>
+			</File>
+		</Filter>
 	</Files>
 	<Globals>
 	</Globals>

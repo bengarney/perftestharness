@@ -24,6 +24,8 @@ Utility Development
 
   * XML utility: So that the xml output is better encapsulated ( to be better defined )
 
+  * Cache purge utility - Allocate a large chunk of memory and step through it, then delete it, so that the cache is cleared before running a test.
+
 GPU Tests
   * Vertex Buffer Size -A single vertex buffer will have an optimal size.  Build a vertex buffer of varying size from small to large and determine, via framerate, what the optimal size is for your hardware.  Start with the vertex limiter so that the program begins at 60 hertz.  The test is over when the fps reaches 30 fps.
 

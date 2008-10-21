@@ -58,8 +58,10 @@ CPU Tests
 
   * Datatypes and Operators - This test iterates through a series of multiply, divide, minus, and plus operators for different datatypes.  To reduce unfair compilation optimizations, perform these tests on series of linear arrays populated with random data of the appropriate types.
 
-  * random vs. linear memory access vs. strided access - Memory latency is hidden by hareware prefetching.  This test measures different access patterns in memory.  Memory traversals on integer datatypes will be random, linear, and strided access.  (note: this test is alreay implmented)
+  * Random vs. linear memory access vs. strided access - Memory latency is hidden by hareware prefetching.  This test measures different access patterns in memory.  Memory traversals on integer datatypes will be random, linear, and strided access.  (note: this test is alreay implmented)
 
-  * multi-thread linear access - perform linear access on an array using a linear memory access pattern.  Collect data for [1..64] threads.
+  * Sulti-thread linear access - perform linear access on an array using a linear memory access pattern.  Collect data for [1..64] threads.
 
-  * single vs. multi-thread random access  - perform the same test as the above test replacing linear access with random access.
+  * Single vs. multi-thread random access  - perform the same test as the above test replacing linear access with random access.
+
+  * Float to Int/ Int to Float Conversions [to be completed]

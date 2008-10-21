@@ -37,7 +37,7 @@ GPU Tests
 CPU Tests
   * CPU Stream Count - Hardware prefetching hides the latency of memory fetching for our CPUs.  Hardware prefetching can track more than one "stream" of memory.  Create a struct with at least 32 members in a Structure of Arrays (SOA) format.  Array size should be 4 megs.  In your first test, linearly access memory in the first member.  In the second test, iterate through the first and second member, but only iterate halfway through the entire array.  The assumption is that the CPU can track multiple streams of memory for hardware prefetching.  This test attempts to plot increasing numbers of streams without increasing the total amount of memory streamed.
 
-  * Datatypes and Operators - This test iterates through a series of *,/,-, and '+' operators for different datatypes.  To reduce unfair compilation optimizations, perform these tests on series of linear arrays populated with random data of the appropriate types.
+  * Datatypes and Operators - This test iterates through a series of multiply, divide, minus, and plus operators for different datatypes.  To reduce unfair compilation optimizations, perform these tests on series of linear arrays populated with random data of the appropriate types.
 
   * random vs. linear memory access vs. strided access - Memory latency is hidden by hareware prefetching.  This test measures different access patterns in memory.  Memory traversals on integer datatypes will be random, linear, and strided access.  (note: this test is alreay implmented)
 

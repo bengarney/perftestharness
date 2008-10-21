@@ -34,6 +34,18 @@ GPU Tests
 
   * Overdraw Performance -  use a full screen quad and a small frambuffer to gather the frame rate at overdraw values of 0,1,2,3,4…x.  Use the fullscreen quad draw to bring the frame rate down to 60.  Once there, continue to add fullsreen quads until the frame rate is at 30 Hz.  Record the fps and number of quads after the 60 hz is achieved.
 
+* Draw Call Performance Using Semi-sorted Renderstates -Too many draw calls with renderstate changes cause CPU overhead.  X number of draw calls using the same render state, on some drivers, is the same as one draw call.  The drivers, in this case, are batching the render states for you.  Determine how many different render state changes the driver can handle in a loosely sorted list of states.  Create any GPU limiter to bring the frame rate to 60Hz.  Using a single vertex buffer, implement a loop to draw the buffer in increments of 100.  Now write the program so that it changes render states between draw calls.  Change the first render state ever other call and measure the frame rate.  Change the second render state every third call.  Continue this process until the framerate is below 30.
+
+*Frequency of Updating a Static Vertex Buffer - It has been suggested that some drivers will change a static vertex buffer that is locked more often to a dynamic buffer that utilizes non-local video memory.  Use the vertex limiter to create a scene that executes at 60 Hz.  Create an fill a vertex buffer until the framerate is 30 Hz. Lock the buffer at intervals other than every frame and track the framerate delta.
+
+*Vertex Shader Control of Flow - Using the shader lab, experiment with different types of vertex shader branches to determine performance.  Chart the differences between:
+	If then else statements with random conditions
+	If then else statements without predictable conditions
+        If then else statements with semi-random conditions (interleave true and false on intervals of 31, 32, and 33.)
+	Loops with random conditions
+	Loops with static conditions
+
+
 CPU Tests
   * CPU Stream Count - Hardware prefetching hides the latency of memory fetching for our CPUs.  Hardware prefetching can track more than one "stream" of memory.  Create a struct with at least 32 members in a Structure of Arrays (SOA) format.  Array size should be 4 megs.  In your first test, linearly access memory in the first member.  In the second test, iterate through the first and second member, but only iterate halfway through the entire array.  The assumption is that the CPU can track multiple streams of memory for hardware prefetching.  This test attempts to plot increasing numbers of streams without increasing the total amount of memory streamed.
 

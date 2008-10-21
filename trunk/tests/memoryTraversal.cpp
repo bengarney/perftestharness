@@ -3,14 +3,15 @@
 #include "harness/performanceHarness.h"
 
 #define DATA_SIZE 1024 * 1024 * 32
-static char gStaticData[DATA_SIZE];
+static int gStaticData[DATA_SIZE];
+static int gResult = 0;
 
 class StaticMemoryPerformanceTest : public PerformanceTest
 {
 public:
    enum
    {
-      NumReads = 1024*1024,
+      NumReads = 1024*1024*12,
    };
 
    int accessPattern[NumReads];
@@ -19,7 +20,9 @@ public:
    {
       int sum = 0;
       for(int i=0; i<NumReads; i++)
-         sum += gStaticData[accessPattern[i]];
+         sum += gStaticData[accessPattern[i%NumReads]];
+
+      gResult = sum;
    }
 };
 
@@ -28,7 +31,7 @@ class HeapMemoryPerformanceTest : public PerformanceTest
 public:
    enum
    {
-      NumReads = 1024*1024,
+      NumReads = 1024*1024*12,
    };
 
    int accessPattern[NumReads];
@@ -38,7 +41,9 @@ public:
    {
       int sum = 0;
       for(int i=0; i<NumReads; i++)
-         sum += data[accessPattern[i]];
+         sum += data[accessPattern[i%NumReads]];
+
+      gResult = sum;
    }
 };
 

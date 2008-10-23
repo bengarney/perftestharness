@@ -8,9 +8,10 @@ This page is a temporary holding spot for brainstorming.  This will probaby need
 = Tasks =
 
 Harness Work
-  * Build a system into the test harness that allows us to save out all data points not just stats like min, max, and mean.
 
   * Gather machine info for recording.  Look at the CPUID instruction.
+
+  * Modify the test harness to run each benchmark as a single process.
 
 Utility Development
 

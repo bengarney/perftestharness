@@ -6,6 +6,8 @@ GraphicsPerformanceTest::GraphicsPerformanceTest()
 {
    desiredMSAAQuality = 0;
    desiredMSAAType = D3DMULTISAMPLE_NONE;
+   m_ScreenWidth = 0;
+   m_ScreenHeight = 0;
 }
 
 void GraphicsPerformanceTest::initialize()
@@ -27,6 +29,12 @@ void GraphicsPerformanceTest::initialize()
    deviceSettings.d3d9.pp.MultiSampleQuality   = desiredMSAAQuality;
 
    DXUTCreateDeviceFromSettings(&deviceSettings);
+
+   m_Device.m_Dx9 =  DXUTGetD3D9Device();
+   m_Device.m_Dx10 = DXUTGetD3D10Device();
+
+   m_ScreenWidth = deviceSettings.d3d9.pp.BackBufferWidth;
+   m_ScreenHeight = deviceSettings.d3d9.pp.BackBufferHeight;
 }
 
 void CALLBACK GraphicsPerformanceTest::handleFrame( IDirect3DDevice9* pd3dDevice, double fTime, float fElapsedTime, void* pUserContext )

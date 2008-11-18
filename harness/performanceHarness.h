@@ -13,6 +13,11 @@ extern double currentTime();
 // Helper function for better random values.
 extern unsigned int betterRand();
 
+struct IDirect3DDevice9 ;
+struct IDirect3DDevice10;
+
+
+
 /// Base class for performance tests.
 ///
 /// Subclassed and auto-registered using the PERFORMANCE_TEST macro, this
@@ -31,7 +36,7 @@ public:
    virtual void setIndependentVariable(int v) {}
 
    /// Do any one-time setup for the test.
-   virtual void initialize() {};
+   virtual void initialize( ) {};
 
    /// Run through the test. This will be run many times to get accurate
    /// timing, so please make sure it represents significant work.
@@ -80,7 +85,7 @@ public:
    virtual int getIndependentVariableMax() = 0;
    virtual bool checkSkipIndependentValue(int v) = 0;
 
-   virtual void initialize()=0;
+   virtual void initialize( )=0;
    virtual void initializeWithIndependent(int v)=0;
    virtual double runTest()=0;
    virtual void teardown()=0;

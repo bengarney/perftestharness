@@ -317,6 +317,46 @@
 				>
 			</File>
 		</Filter>
+		<Filter
+			Name="testUtilities"
+			>
+			<File
+				RelativePath=".\testUtilities\FullScreenQuad.fx"
+				>
+			</File>
+			<File
+				RelativePath=".\testUtilities\IUtil.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\testUtilities\IUtil.h"
+				>
+			</File>
+			<File
+				RelativePath=".\testUtilities\UtilCacheRandomizer.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\testUtilities\UtilCacheRandomizer.h"
+				>
+			</File>
+			<File
+				RelativePath=".\testUtilities\UtilFullScreenQuad.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\testUtilities\UtilFullScreenQuad.h"
+				>
+			</File>
+			<File
+				RelativePath=".\testUtilities\UtilStats.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\testUtilities\UtilStats.h"
+				>
+			</File>
+		</Filter>
 	</Files>
 	<Globals>
 	</Globals>

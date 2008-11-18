@@ -4,6 +4,7 @@
 
 #include "performanceHarness.h"
 #include "mtwist/mtwist.h"
+#include "testUtilities/IUtil.h"
 
 FILE *xmlLog = NULL;
 
@@ -23,15 +24,19 @@ void runTest(PerfTestMarkerBase *walk)
 
    walk->initialize();
 
-   // Run the test a few times to warm the cache. This helps reduce outliers.
-   for(int i=0; i<10; i++)
-      walk->runTest();
+   IUtil::GetInstance()->GetUtilStats()->Reset();
 
-   // Run it at least a hundred times or 1 second.
-   while(runCount < 100 || (currentTime() - startTime) < 2.0)
+   // Init the cache to a standard
+   IUtil::GetInstance()->GetUtilCacheRandomizer()->Init(2097152);
+   IUtil::GetInstance()->GetUtilCacheRandomizer()->ScrambleCache();
+
+   // Run it at least 10 times or 1 second.
+   //while(runCount < 1 || (currentTime() - startTime) < 2.0)
+   while(runCount < 10 )
    {
       // Run the test.
       double duration = walk->runTest();
+	  fprintf_s(xmlLog, "<DataPoint%d>%f</DataPoint%d>", runCount,duration,runCount);
 
       // Update min.
       if(duration < minTime)
@@ -41,19 +46,23 @@ void runTest(PerfTestMarkerBase *walk)
       if(duration > maxTime)
          maxTime = duration;
 
-      // Update average.
-      avgTime += duration;
-      runCount++;
+      // Update stats
+	  IUtil::GetInstance()->GetUtilStats()->AddDataPoint(duration);
+	  runCount++;
    }
 
    walk->teardown();
 
-   fprintf_s(xmlLog, "<RunCount>%d</RunCount>", runCount);
-   fprintf_s(xmlLog, "<Average>%f</Average><Min>%f</Min><Max>%f</Max>", avgTime / double(runCount), minTime, maxTime);
+   int count = IUtil::GetInstance()->GetUtilStats()->GetCount();
+   double average = IUtil::GetInstance()->GetUtilStats()->GetMean();
+   double stdDev = IUtil::GetInstance()->GetUtilStats()->GetStdDeviation();
+
+   fprintf_s(xmlLog, "<RunCount>%d</RunCount>", count );
+   fprintf_s(xmlLog, "<Average>%f</Average><Min>%f</Min><Max>%f</Max><stdDev>%f</stdDev>", average, minTime, maxTime,stdDev);
    fprintf_s(xmlLog, "</Entry>\n");
 
-   printf("   - Ran performance test %d times.\n", runCount);
-   printf("   - Timing: avg %lfms, min %lfms, max %lfms\n", avgTime / double(runCount), minTime, maxTime);
+   printf("   - Ran performance test %d times.\n", count);
+   printf("   - Timing: avg %lfms, min %lfms, max %lfms, stddev\n", average, minTime, maxTime,stdDev);
 }
 
 void runTestWithIndependent(PerfTestMarkerBase *walk, int independentValue)
@@ -69,16 +78,19 @@ void runTestWithIndependent(PerfTestMarkerBase *walk, int independentValue)
 
    walk->initializeWithIndependent(independentValue);
 
-   // Run the test a few times to warm the cache. This helps reduce outliers.
-   for(int i=0; i<10; i++)
-      walk->runTest();
+   IUtil::GetInstance()->GetUtilStats()->Reset();
+
+   // Init the cache to a standard
+   IUtil::GetInstance()->GetUtilCacheRandomizer()->Init(2097152);
+   IUtil::GetInstance()->GetUtilCacheRandomizer()->ScrambleCache();
 
    // Run it at least a hundred times or 1 second.
-   while(runCount < 100 || (currentTime() - startTime) < 2.0)
+   //while(runCount < 1 || (currentTime() - startTime) < 2.0)
+   while( runCount < 10 )
    {
       // Run the test.
       double duration = walk->runTest();
-
+	  fprintf_s(xmlLog, "<DataPoint%d>%f</DataPoint%d>", runCount,duration,runCount);
       // Update min.
       if(duration < minTime)
          minTime = duration;
@@ -87,20 +99,23 @@ void runTestWithIndependent(PerfTestMarkerBase *walk, int independentValue)
       if(duration > maxTime)
          maxTime = duration;
 
-      // Update average.
-      avgTime += duration;
-      runCount++;
+      // Update stats
+	  IUtil::GetInstance()->GetUtilStats()->AddDataPoint(duration);
+	  runCount++;
    }
 
    walk->teardown();
 
-   fprintf_s(xmlLog, "<RunCount>%d</RunCount>", runCount);
-   fprintf_s(xmlLog, "<Average>%f</Average><Min>%f</Min><Max>%f</Max>", avgTime / double(runCount), minTime, maxTime);
+   int count = IUtil::GetInstance()->GetUtilStats()->GetCount();
+   double average = IUtil::GetInstance()->GetUtilStats()->GetMean();
+   double stdDev = IUtil::GetInstance()->GetUtilStats()->GetStdDeviation();
 
+   fprintf_s(xmlLog, "<RunCount>%d</RunCount>", count );
+   fprintf_s(xmlLog, "<Average>%f</Average><Min>%f</Min><Max>%f</Max><stdDev>%f</stdDev>", average, minTime, maxTime,stdDev);
    fprintf_s(xmlLog, "</Entry>\n");
 
-   printf("      o Ran performance test %d times.\n", runCount);
-   printf("      o Timing: avg %lfms, min %lfms, max %lfms\n", avgTime / double(runCount), minTime, maxTime);
+   printf("   - Ran performance test %d times.\n", count);
+   printf("   - Timing: avg %lfms, min %lfms, max %lfms, stddev%lfms\n", average, minTime, maxTime,stdDev);
 }
 
 // Our main function.
@@ -109,52 +124,95 @@ int main(int argc, char* argv[])
    // Initialize the random number generator.
    mt_bestseed();
 
-   // Open the XML log.
-   fopen_s(&xmlLog, "times.xml", "w+");
-   fputs("<PerformanceTests>\n", xmlLog);
+   IUtil::GetInstance();//init utillities
 
-   for(PerfTestMarkerBase *walk=PerfTestMarkerBase::smHead; walk; walk=walk->mNext)
+   bool run = false;
+   for( int i=0;i<argc;i++ )
    {
-      // Check for prefix match...
-      if(argc > 1 && _strnicmp(argv[1], walk->mName, strlen(argv[1])))
-         continue;
-
-      // Check if we have independent variables...
-      if(walk->getIndependentVariableName() == NULL)
-      {
-         // Nope, no independent. So run the test.
-         runTest(walk);
-      }
-      else
-      {
-         printf("Running %s with independent value %s (%d to %d)\n", 
-            walk->mName, walk->getIndependentVariableName(), 
-            walk->getIndependentVariableMin(), walk->getIndependentVariableMax());
-
-         // We have an independent variable. So iterate through it, running
-         // the test for each value.
-         for(int independentValue = walk->getIndependentVariableMin(); 
-            independentValue < walk->getIndependentVariableMax(); 
-            independentValue++)
-         {
-            // Let the test indicate if it wants to skip.
-            if(walk->checkSkipIndependentValue(independentValue))
-               continue;
-
-            runTestWithIndependent(walk, independentValue);
-         }
-      }
+		if( strcmp(argv[i],"-run")==0 )
+		{
+			run = true;
+			break;
+		}
    }
 
-   // Close the XML output.
-   fputs("</PerformanceTests>\n", xmlLog);
-   fclose(xmlLog);
+   if( !run )
+   {
+	   
+		   // Open the XML log.
+			fopen_s(&xmlLog, "times.xml", "w");
+			fclose(xmlLog);
 
-   // Give user a chance to respond.
-   printf("Press ENTER to continue...\n");
-   getc(stdin);
+			fopen_s(&xmlLog, "times.xml", "w+");
+			fputs("<PerformanceTests>\n", xmlLog);
+			fclose(xmlLog);
 
-	return 0;
+			STARTUPINFO si;
+			PROCESS_INFORMATION pi;
+
+
+			ZeroMemory( &si, sizeof(si) );
+			si.cb = sizeof(si);
+			ZeroMemory( &pi, sizeof(pi) );
+
+
+			CreateProcess(L"performanceHarness.exe",L"-run basic/graphics/basicClear",0,0,false,0,0,0,&si,&pi);
+			
+			WaitForSingleObject(pi.hProcess,INFINITE);
+			
+   }else
+   {
+	   fopen_s(&xmlLog, "times.xml", "a");
+
+	   for(PerfTestMarkerBase *walk=PerfTestMarkerBase::smHead; walk; walk=walk->mNext)
+	   {
+		  // Check for prefix match...
+		  if(argc > 2 && _strnicmp(argv[2], walk->mName, strlen(argv[2])))
+			 continue;
+
+		  // Check if we have independent variables...
+		  if(walk->getIndependentVariableName() == NULL)
+		  {
+			 // Nope, no independent. So run the test.
+			 runTest(walk);
+		  }
+		  else
+		  {
+			 printf("Running %s with independent value %s (%d to %d)\n", 
+				walk->mName, walk->getIndependentVariableName(), 
+				walk->getIndependentVariableMin(), walk->getIndependentVariableMax());
+
+			 // We have an independent variable. So iterate through it, running
+			 // the test for each value.
+			 for(int independentValue = walk->getIndependentVariableMin(); 
+				independentValue < walk->getIndependentVariableMax(); 
+				independentValue++)
+			 {
+				// Let the test indicate if it wants to skip.
+				if(walk->checkSkipIndependentValue(independentValue))
+				   continue;
+
+				runTestWithIndependent(walk, independentValue);
+			 }
+		  }
+	   }
+
+
+   }
+
+   if( !run )
+   {
+		// Close the XML output.
+	   fopen_s(&xmlLog, "times.xml", "a");
+	   fputs("</PerformanceTests>\n", xmlLog);
+	   fclose(xmlLog);
+  
+
+	   // Give user a chance to respond.
+	   printf("Press ENTER to continue...\n");
+	   getc(stdin);
+   }
+   return 0;
 }
 
 unsigned int betterRand()

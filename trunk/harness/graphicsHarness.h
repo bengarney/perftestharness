@@ -4,6 +4,15 @@
 #include "dxut/DXUT.h"
 #include "performanceHarness.h"
 
+struct iDevice
+{
+	iDevice(){m_Dx9=0;m_Dx10=0;};
+	iDevice(IDirect3DDevice9* dPtr){m_Dx9=dPtr;}
+	iDevice(ID3D10Device* dPtr){m_Dx10=dPtr;}
+	IDirect3DDevice9* m_Dx9;
+ 	ID3D10Device* m_Dx10;
+};
+
 /// Base class for all D3D9 performance tests that use EDXUT.
 class GraphicsPerformanceTest : public PerformanceTest
 {
@@ -32,6 +41,13 @@ public:
 
    /// Used when initialize() is called, to specify a desired MSAA quality.
    int desiredMSAAQuality;
+
+   //Dx9 and Dx10 Device
+   iDevice m_Device;
+
+   //Screen Resolution
+   unsigned int m_ScreenWidth;
+   unsigned int m_ScreenHeight;
 };
 
 /// Just like PERFORMANCE_TEST, but it makes a subclass of GraphicsPerformanceTest

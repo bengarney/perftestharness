@@ -132,6 +132,7 @@ STATICMEMORY_PERFORMANCE_TEST("memory/traverse/linearStepStatic", MTLStepStatic)
       return 128;
    }
 
+
    void setIndependentVariable(int v)
    {
       stepSize = v;
@@ -163,10 +164,14 @@ STATICMEMORY_PERFORMANCE_TEST("memory/traverse/linearStepHeap", MTLStepHeap)
       return 128;
    }
 
+
+
    void setIndependentVariable(int v)
    {
       stepSize = v;
    }
+
+
 
    void initialize()
    {

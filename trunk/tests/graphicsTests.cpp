@@ -1,4 +1,5 @@
 #include "harness/graphicsHarness.h"
+#include "testUtilities/IUtil.h"
 
 /************************************************************************/
 /* Bare minimum test that shows discernable graphics.                   */
@@ -11,12 +12,17 @@ GRAPHICS_PERFORMANCE_TEST("basic/graphics/basicClear", GraphicsBasicClear)
    {
       frameCount = 0;
       Parent::initialize();
+	  IUtil::GetInstance()->GetUtilFullScreenQuad()->Init( &(iDevice)Parent::m_Device,Parent::m_ScreenWidth,Parent::m_ScreenHeight );
    }
 
    void renderFrame(IDirect3DDevice9* pd3dDevice, double fTime, float fElapsedTime)
    {
       frameCount++;
-      pd3dDevice->Clear(0, NULL, D3DCLEAR_TARGET, 0xFF000000 | frameCount << 8, 0, 0);
+      //pd3dDevice->Clear(0, NULL, D3DCLEAR_TARGET, 0xFF000000 | frameCount << 8, 0, 0);
+	  pd3dDevice->Clear(0, NULL, D3DCLEAR_TARGET, 0x00000000, 0, 0);
+	  
+
+	  IUtil::GetInstance()->GetUtilFullScreenQuad()->RenderFullScreenQuad( &iDevice(pd3dDevice) );
    }
 };
 

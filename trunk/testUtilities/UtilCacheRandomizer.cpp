@@ -3,6 +3,8 @@
 #include "UtilCacheRandomizer.h"
 int gCacheRandomizer = 0;
 
+unsigned char m_pArray[8388608];
+
 UtilCacheRandomizer::UtilCacheRandomizer()
 {
 	m_NumBytes = 0;
@@ -21,9 +23,8 @@ int UtilCacheRandomizer::ScrambleCache()
 		ret+=m_pArray[i];
 	}
 
-	delete[] m_pArray;
 	gCacheRandomizer+=ret;
-	printf("Clearing Cache\n");
+	//printf("Clearing Cache\n");
 
 	return ret;
 }
@@ -33,7 +34,7 @@ void UtilCacheRandomizer::Init( unsigned int numBytes )
 {
 	m_NumBytes = numBytes;
 
-	m_pArray = new unsigned char[numBytes];
+	
 	for( unsigned int i=0;i<numBytes;i++ )
 	{
 		m_pArray[i]=rand();

@@ -11,7 +11,6 @@ class UtilCacheRandomizer
 	void Init( unsigned int numBytes );
 
 	protected:
-	unsigned char* m_pArray;
 	unsigned int m_NumBytes;
 
 };

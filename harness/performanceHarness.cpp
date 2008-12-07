@@ -8,7 +8,7 @@
 
 FILE *xmlLog = NULL;
 
-unsigned int gRunNum = 10;
+unsigned int gRunNum = 20;
 
 //prototype
 void RunTest( PerfTestMarkerBase * walk );
@@ -94,6 +94,7 @@ void runTestWithIndependent(PerfTestMarkerBase *walk, int independentValue)
 	   // Init the cache to a standard
 	  IUtil::GetInstance()->GetUtilCacheRandomizer()->Init(8388608);
       IUtil::GetInstance()->GetUtilCacheRandomizer()->ScrambleCache();
+	  
 
       // Run the test.
       double duration = walk->runTest();
@@ -146,6 +147,7 @@ int main(int argc, char* argv[])
 			writeHeader = true;
 			writeFooter = true;
 			createProcess = false;
+			SetThreadPriority( GetCurrentThread(),THREAD_PRIORITY_ABOVE_NORMAL );
 		}
 
 		if( strcmp(argv[i],"-run")==0 )
@@ -153,6 +155,7 @@ int main(int argc, char* argv[])
 			writeHeader = false;
 			writeFooter = false;
 			createProcess = false;
+			SetThreadPriority( GetCurrentThread(),THREAD_PRIORITY_ABOVE_NORMAL );
 		}
 
 		//aids in debugging

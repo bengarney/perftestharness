@@ -1,5 +1,6 @@
 #include <stdlib.h>
 #include <stdio.h>
+#include <windows.h>
 #include "UtilCacheRandomizer.h"
 int gCacheRandomizer = 0;
 
@@ -25,7 +26,7 @@ int UtilCacheRandomizer::ScrambleCache()
 
 	gCacheRandomizer+=ret;
 	//printf("Clearing Cache\n");
-
+    Sleep(1);
 	return ret;
 }
 

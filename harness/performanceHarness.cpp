@@ -8,6 +8,11 @@
 
 FILE *xmlLog = NULL;
 
+unsigned int gRunNum = 10;
+
+//prototype
+void RunTest( PerfTestMarkerBase * walk );
+
 // Statics for the performance test list.
 PerfTestMarkerBase *PerfTestMarkerBase::smHead = NULL;
 
@@ -26,14 +31,16 @@ void runTest(PerfTestMarkerBase *walk)
 
    IUtil::GetInstance()->GetUtilStats()->Reset();
 
-   // Init the cache to a standard
-   IUtil::GetInstance()->GetUtilCacheRandomizer()->Init(2097152);
-   IUtil::GetInstance()->GetUtilCacheRandomizer()->ScrambleCache();
+
 
    // Run it at least 10 times or 1 second.
    //while(runCount < 1 || (currentTime() - startTime) < 2.0)
-   while(runCount < 10 )
+   while(runCount < gRunNum )
    {
+	      // Init the cache to a standard
+	   IUtil::GetInstance()->GetUtilCacheRandomizer()->Init(8388608);
+	   IUtil::GetInstance()->GetUtilCacheRandomizer()->ScrambleCache();
+
       // Run the test.
       double duration = walk->runTest();
 	  fprintf_s(xmlLog, "<DataPoint%d>%f</DataPoint%d>", runCount,duration,runCount);
@@ -80,14 +87,14 @@ void runTestWithIndependent(PerfTestMarkerBase *walk, int independentValue)
 
    IUtil::GetInstance()->GetUtilStats()->Reset();
 
-   // Init the cache to a standard
-   IUtil::GetInstance()->GetUtilCacheRandomizer()->Init(2097152);
-   IUtil::GetInstance()->GetUtilCacheRandomizer()->ScrambleCache();
-
    // Run it at least a hundred times or 1 second.
    //while(runCount < 1 || (currentTime() - startTime) < 2.0)
-   while( runCount < 10 )
+   while( runCount < gRunNum )
    {
+	   // Init the cache to a standard
+	  IUtil::GetInstance()->GetUtilCacheRandomizer()->Init(8388608);
+      IUtil::GetInstance()->GetUtilCacheRandomizer()->ScrambleCache();
+
       // Run the test.
       double duration = walk->runTest();
 	  fprintf_s(xmlLog, "<DataPoint%d>%f</DataPoint%d>", runCount,duration,runCount);
@@ -126,17 +133,39 @@ int main(int argc, char* argv[])
 
    IUtil::GetInstance();//init utillities
 
-   bool run = false;
+  
+   bool writeHeader = true;
+   bool writeFooter = true;
+   bool createProcess = true;
+   bool fast = false;
+
    for( int i=0;i<argc;i++ )
    {
+		if( strcmp(argv[i],"-force")==0 )
+		{
+			writeHeader = true;
+			writeFooter = true;
+			createProcess = false;
+		}
+
 		if( strcmp(argv[i],"-run")==0 )
 		{
-			run = true;
-			break;
+			writeHeader = false;
+			writeFooter = false;
+			createProcess = false;
 		}
+
+		//aids in debugging
+		if( strcmp(argv[i],"-fast")==0 )
+		{
+			fast=true;
+			gRunNum = 1;
+		}
+
    }
 
-   if( !run )
+
+   if( writeHeader )
    {
 	   
 		   // Open the XML log.
@@ -146,62 +175,44 @@ int main(int argc, char* argv[])
 			fopen_s(&xmlLog, "times.xml", "w+");
 			fputs("<PerformanceTests>\n", xmlLog);
 			fclose(xmlLog);
-
-			STARTUPINFO si;
-			PROCESS_INFORMATION pi;
-
-
-			ZeroMemory( &si, sizeof(si) );
-			si.cb = sizeof(si);
-			ZeroMemory( &pi, sizeof(pi) );
-
-
-			CreateProcess(L"performanceHarness.exe",L"-run basic/graphics/basicClear",0,0,false,0,0,0,&si,&pi);
-			
-			WaitForSingleObject(pi.hProcess,INFINITE);
-			
-   }else
-   {
-	   fopen_s(&xmlLog, "times.xml", "a");
-
-	   for(PerfTestMarkerBase *walk=PerfTestMarkerBase::smHead; walk; walk=walk->mNext)
-	   {
-		  // Check for prefix match...
-		  if(argc > 2 && _strnicmp(argv[2], walk->mName, strlen(argv[2])))
-			 continue;
-
-		  // Check if we have independent variables...
-		  if(walk->getIndependentVariableName() == NULL)
-		  {
-			 // Nope, no independent. So run the test.
-			 runTest(walk);
-		  }
-		  else
-		  {
-			 printf("Running %s with independent value %s (%d to %d)\n", 
-				walk->mName, walk->getIndependentVariableName(), 
-				walk->getIndependentVariableMin(), walk->getIndependentVariableMax());
-
-			 // We have an independent variable. So iterate through it, running
-			 // the test for each value.
-			 for(int independentValue = walk->getIndependentVariableMin(); 
-				independentValue < walk->getIndependentVariableMax(); 
-				independentValue++)
-			 {
-				// Let the test indicate if it wants to skip.
-				if(walk->checkSkipIndependentValue(independentValue))
-				   continue;
-
-				runTestWithIndependent(walk, independentValue);
-			 }
-		  }
-	   }
-
-
    }
 
-   if( !run )
-   {
+	STARTUPINFOA si;
+	PROCESS_INFORMATION pi;
+
+	ZeroMemory( &si, sizeof(si) );
+	si.cb = sizeof(si);
+	ZeroMemory( &pi, sizeof(pi) );
+
+	for(PerfTestMarkerBase *walk=PerfTestMarkerBase::smHead; walk; walk=walk->mNext)
+	{
+		  // Check for prefix match...
+		  if(argc > 2 && _strnicmp(argv[argc-1], walk->mName, strlen(argv[argc-1])))
+			 continue;
+
+		  if( createProcess )
+		  {
+			  char args[512];
+			  if( !fast )
+			  {
+				sprintf_s( args,"-run %s",walk->mName );
+			  }else
+			  {
+				sprintf_s( args,"-run -fast %s",walk->mName );
+			  }
+			  printf("Creating new process: %s\n",args);
+			  CreateProcessA("performanceHarness.exe",(LPSTR)args,0,0,false,0,0,0,&si,&pi);
+			  WaitForSingleObject(pi.hProcess,INFINITE);
+			  printf("Process Closed process\n");
+		  
+		  }else
+		  {
+			 RunTest( walk );
+		  }
+	}
+
+   	if( writeFooter )
+	{
 		// Close the XML output.
 	   fopen_s(&xmlLog, "times.xml", "a");
 	   fputs("</PerformanceTests>\n", xmlLog);
@@ -211,8 +222,42 @@ int main(int argc, char* argv[])
 	   // Give user a chance to respond.
 	   printf("Press ENTER to continue...\n");
 	   getc(stdin);
-   }
+	}
+
    return 0;
+}
+
+void RunTest( PerfTestMarkerBase * walk )
+{
+	fopen_s(&xmlLog, "times.xml", "a");
+	
+    // Check if we have independent variables...
+	if(walk->getIndependentVariableName() == NULL)
+	{
+		 // Nope, no independent. So run the test.
+		 runTest(walk);
+	}
+	else
+	{
+		 printf("Running %s with independent value %s (%d to %d)\n", 
+			walk->mName, walk->getIndependentVariableName(), 
+			walk->getIndependentVariableMin(), walk->getIndependentVariableMax());
+
+		 // We have an independent variable. So iterate through it, running
+		 // the test for each value.
+		 for(int independentValue = walk->getIndependentVariableMin(); 
+			independentValue < walk->getIndependentVariableMax(); 
+			independentValue++)
+		 {
+			// Let the test indicate if it wants to skip.
+			if(walk->checkSkipIndependentValue(independentValue))
+			   continue;
+
+			runTestWithIndependent(walk, independentValue);
+		 }
+	}
+
+	fclose(xmlLog);
 }
 
 unsigned int betterRand()

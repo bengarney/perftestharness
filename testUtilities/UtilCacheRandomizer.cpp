@@ -1,6 +1,7 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include "UtilCacheRandomizer.h"
+int gCacheRandomizer = 0;
 
 UtilCacheRandomizer::UtilCacheRandomizer()
 {
@@ -14,14 +15,15 @@ UtilCacheRandomizer::~UtilCacheRandomizer()
 
 int UtilCacheRandomizer::ScrambleCache()
 {
-	int ret = 0;
+	char ret = 0;
 	for( unsigned int i=0;i<m_NumBytes;i+=8 )
 	{
 		ret+=m_pArray[i];
 	}
 
 	delete[] m_pArray;
-	printf("Cache Scramble  %i", ret );
+	gCacheRandomizer+=ret;
+	printf("Clearing Cache\n");
 
 	return ret;
 }

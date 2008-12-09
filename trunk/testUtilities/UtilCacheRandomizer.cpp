@@ -24,9 +24,10 @@ int UtilCacheRandomizer::ScrambleCache()
 		ret+=m_pArray[i];
 	}
 
+	Sleep(1);
 	gCacheRandomizer+=ret;
 	//printf("Clearing Cache\n");
-    Sleep(1);
+    
 	return ret;
 }
 

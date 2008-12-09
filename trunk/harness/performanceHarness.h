@@ -5,7 +5,12 @@
 #define NULL 0
 #endif
 
+#ifdef VTUNE
+#include "VtuneApi.h"
+#endif
+
 // These are implemented in winTimer.cpp.
+extern void initTimer();
 extern void startTimer();
 extern double stopTimer();
 extern double currentTime();
@@ -139,10 +144,20 @@ public:
 
    double runTest()
    {
+	   #ifdef VTUNE
+	   VTResumeSampling();
+	   #endif
+
       // Run and time the test.
       startTimer();
       testInstance->test();
-      return stopTimer();
+      double timer = stopTimer();
+	  
+	  #ifdef VTUNE
+	  VTResumeSampling();
+	  #endif
+
+	  return timer;
    }
 
    void teardown()

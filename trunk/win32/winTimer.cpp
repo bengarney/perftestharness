@@ -6,17 +6,19 @@
 bool inTimer = false;
 LARGE_INTEGER iStart, iStop, freq;
 
-void startTimer()
+void initTimer()
 {
-   assert(!inTimer);
-   inTimer = true;
-
    if ( freq.QuadPart == 0 )
    {
       QueryPerformanceFrequency(&freq);
       freq.QuadPart /= 1000;
    }
+}
 
+void startTimer()
+{
+   assert(!inTimer);
+   inTimer = true;
    QueryPerformanceCounter(&iStart);
 }
 
@@ -24,6 +26,7 @@ double stopTimer()
 {
    assert(inTimer);
    inTimer = false;
+
 
    QueryPerformanceCounter(&iStop);
    return ((double)iStop.QuadPart - (double)iStart.QuadPart) / (double)freq.QuadPart;

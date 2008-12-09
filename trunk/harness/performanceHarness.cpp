@@ -8,7 +8,7 @@
 
 FILE *xmlLog = NULL;
 
-unsigned int gRunNum = 20;
+unsigned int gRunNum = 30;
 
 //prototype
 void RunTest( PerfTestMarkerBase * walk );
@@ -129,25 +129,34 @@ void runTestWithIndependent(PerfTestMarkerBase *walk, int independentValue)
 // Our main function.
 int main(int argc, char* argv[])
 {
-   // Initialize the random number generator.
-   mt_bestseed();
+	// Initialize the random number generator.
+	mt_bestseed();
 
-   IUtil::GetInstance();//init utillities
+	initTimer();
+	IUtil::GetInstance();//init utillities
 
+	SetThreadPriority( GetCurrentThread(),THREAD_PRIORITY_ABOVE_NORMAL );
+		
+	DWORD ProcessAffinityMask = 0x01;
+	HANDLE hCurrentProcess = GetCurrentProcess();     
+	SetProcessAffinityMask( hCurrentProcess, (DWORD_PTR)&ProcessAffinityMask );
+
+	SetThreadIdealProcessor( GetCurrentThread(),1);
   
-   bool writeHeader = true;
-   bool writeFooter = true;
-   bool createProcess = true;
-   bool fast = false;
+	bool writeHeader = true;
+	bool writeFooter = true;
+	bool createProcess = true;
+	bool fast = false;
+	bool exit = false;
 
-   for( int i=0;i<argc;i++ )
-   {
+	for( int i=0;i<argc;i++ )
+	{
 		if( strcmp(argv[i],"-force")==0 )
 		{
 			writeHeader = true;
 			writeFooter = true;
 			createProcess = false;
-			SetThreadPriority( GetCurrentThread(),THREAD_PRIORITY_ABOVE_NORMAL );
+ 
 		}
 
 		if( strcmp(argv[i],"-run")==0 )
@@ -155,7 +164,6 @@ int main(int argc, char* argv[])
 			writeHeader = false;
 			writeFooter = false;
 			createProcess = false;
-			SetThreadPriority( GetCurrentThread(),THREAD_PRIORITY_ABOVE_NORMAL );
 		}
 
 		//aids in debugging
@@ -163,6 +171,12 @@ int main(int argc, char* argv[])
 		{
 			fast=true;
 			gRunNum = 1;
+		}
+
+		//aids in using v-tune
+		if( strcmp(argv[i],"-exit")==0 )
+		{
+			exit=true;
 		}
 
    }
@@ -221,10 +235,12 @@ int main(int argc, char* argv[])
 	   fputs("</PerformanceTests>\n", xmlLog);
 	   fclose(xmlLog);
   
-
-	   // Give user a chance to respond.
-	   printf("Press ENTER to continue...\n");
-	   getc(stdin);
+       if( !exit )
+	   {
+		   // Give user a chance to respond.
+		   printf("Press ENTER to continue...\n");
+		   getc(stdin);
+	   }
 	}
 
    return 0;

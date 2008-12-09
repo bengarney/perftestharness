@@ -3,7 +3,7 @@
 #include "harness/performanceHarness.h"
 
 #define DATA_SIZE_COLUMN 20
-#define DATA_SIZE_ROW 10000000
+#define DATA_SIZE_ROW 10000
 
 static int gStaticData[DATA_SIZE_COLUMN][DATA_SIZE_ROW];
 static int gStaticDataCopy[DATA_SIZE_COLUMN][DATA_SIZE_ROW];
@@ -20,7 +20,7 @@ public:
 
    void test()
    { 
-	 for(int k=0;k<100;k++)
+	  for(int k=0;k<10;k++ )
 	  for(int j=0; j<m_readNum; j++)
 	  for(int i=0; i<numStream; i++)
 	  {

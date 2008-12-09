@@ -3,34 +3,31 @@
 #include "harness/performanceHarness.h"
 
 #define DATA_SIZE_COLUMN 20
-#define DATA_SIZE_ROW 1000
+#define DATA_SIZE_ROW 10000000
 
-static int gStaticData[DATA_SIZE_ROW];
+static int gStaticData[DATA_SIZE_COLUMN][DATA_SIZE_ROW];
+static int gStaticDataCopy[DATA_SIZE_COLUMN][DATA_SIZE_ROW];
 static int gResult = 0;
+bool m_Init=false;
 
 class MemoryStreamPerformanceTest : public PerformanceTest
 {
 public:
 
    int numStream;
+   int m_readNum;
 
 
    void test()
-   {
-      int sum = 0;
-	  
-	 //int readNum = DATA_SIZE_ROW/(numStream);
-
-	  //for(int i=0; i<numStream; i++)
-      for(int j=0; j<DATA_SIZE_ROW; j++)	  
+   { 
+	 for(int k=0;k<100;k++)
+	  for(int j=0; j<m_readNum; j++)
+	  for(int i=0; i<numStream; i++)
 	  {
-         sum += gStaticData[j];
+		 gResult += gStaticData[i][j];
 	  }
 
-      gResult += sum;
    }
- 
-
 };
 
 #define STREAMMEMORY_PERFORMANCE_TEST(name, className) \
@@ -61,16 +58,21 @@ STREAMMEMORY_PERFORMANCE_TEST("memory/stream/memorystream", MStreamTest)
    void setIndependentVariable(int v)
    {
       numStream = v;
+	  m_readNum = DATA_SIZE_ROW/(numStream);
    }
 
    void initialize()
    {
-      int ctr=0;
-
-	  //for(int i=0; i<DATA_SIZE_COLUMN; i++)
-	  for(int j=0; j<DATA_SIZE_ROW; j++)
+	  if( !m_Init )
 	  {
-         gStaticData[j]=ctr++;
+		  m_Init=true;
+		  int ctr=0;
+		  
+		  for(int i=0; i<DATA_SIZE_COLUMN; i++)
+		  for(int j=0; j<DATA_SIZE_ROW; j++)
+		  {
+			 gStaticData[i][j]=ctr++;
+		  }
 	  }
    }
 };

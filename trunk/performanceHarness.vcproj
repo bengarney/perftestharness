@@ -264,6 +264,10 @@
 				>
 			</File>
 			<File
+				RelativePath=".\tests\memoryDeletion.cpp"
+				>
+			</File>
+			<File
 				RelativePath=".\tests\memoryPrefetch.cpp"
 				>
 			</File>

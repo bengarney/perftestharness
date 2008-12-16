@@ -17,6 +17,7 @@ extern double currentTime();
 
 // Helper function for better random values.
 extern unsigned int betterRand();
+extern float betterRandf();
 
 struct IDirect3DDevice9 ;
 struct IDirect3DDevice10;

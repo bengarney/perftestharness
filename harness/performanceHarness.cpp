@@ -283,3 +283,8 @@ unsigned int betterRand()
 {
    return (unsigned int)mt_lrand();
 }
+
+float betterRandf()
+{
+	return mt_drand();
+}

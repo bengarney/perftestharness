@@ -244,7 +244,7 @@ STATICMEMORY_PERFORMANCE_TEST("memory/traverse/linearStatic", MTRLinearStatic)
 
    static int getIndependentVariableMax()
    {
-      return MAX_MEMORY_STEPS;
+      return 20;//MAX_MEMORY_STEPS;
    }
 
    void setIndependentVariable(int v)
@@ -256,6 +256,41 @@ STATICMEMORY_PERFORMANCE_TEST("memory/traverse/linearStatic", MTRLinearStatic)
    {
       for(int i=0; i<DATA_SIZE; i++)
          accessPattern[i]= i;
+
+	  initStatic();
+   }
+
+};
+
+STATICMEMORY_PERFORMANCE_TEST("memory/traverse/linearLT128byteRandomStatic", MTRLinearStaticLT128byteRandom)
+{
+   static const char * getIndependentVariableName()
+   {
+      return "Data Amount";
+   }
+
+   static int getIndependentVariableMin()
+   {
+      return 4;
+   }
+
+   static int getIndependentVariableMax()
+   {
+      return 20;//MAX_MEMORY_STEPS;
+   }
+
+   void setIndependentVariable(int v)
+   {
+      m_NumReads = DATA_SIZE/MAX_MEMORY_STEPS * v;
+   }
+
+   void initialize()
+   {
+	  int indexCacheLine = 128/sizeof(float);
+      for(int i=0; i<DATA_SIZE; i++)
+	  {
+         accessPattern[i]= (i%indexCacheLine)+(betterRand()%indexCacheLine);;
+	  }
 
 	  initStatic();
    }

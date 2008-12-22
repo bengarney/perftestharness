@@ -204,7 +204,7 @@ int main(int argc, char* argv[])
 	for(PerfTestMarkerBase *walk=PerfTestMarkerBase::smHead; walk; walk=walk->mNext)
 	{
 		  // Check for prefix match...
-		  if(argc > 2 && _strnicmp(argv[argc-1], walk->mName, strlen(argv[argc-1])))
+		  if(argc > 2 && strstr( walk->mName,argv[argc-1])==0)
 			 continue;
 
 		  if( createProcess )

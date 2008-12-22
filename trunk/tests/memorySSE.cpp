@@ -6,7 +6,7 @@
 #include "emmintrin.h"
 
 #define MAX_SEE_TEST 128
-#define DATA_SIZE 1024 * 1024 * 32
+#define DATA_SIZE 512 * 512 * 32
 __declspec(align(16)) static float gStaticSSEData[DATA_SIZE];
 __declspec(align(16)) static float gStaticData[DATA_SIZE];
 static float gResult = 0;

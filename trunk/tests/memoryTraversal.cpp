@@ -2,8 +2,8 @@
 #include <stdlib.h>
 #include "harness/performanceHarness.h"
 
-
-#define DATA_SIZE 1024 * 1024 * 32
+#define MAX_MEMORY_STEPS 128
+#define DATA_SIZE (1024 * 1024 * 32)
 __declspec(align(16)) static float gStaticData[DATA_SIZE];
 static float gResult = 0;
 
@@ -19,18 +19,15 @@ void initStatic()
 class StaticMemoryPerformanceTest : public PerformanceTest
 {
 public:
-   enum
-   {
-      NumReads = 1024*1024*12,
-   };
+   int m_NumReads;
 
-   int accessPattern[NumReads];
+   int accessPattern[DATA_SIZE];
 
    void test()
    {
       float sum = 0;
-      for(int i=0; i<NumReads; i++)
-         sum += gStaticData[accessPattern[i%NumReads]];
+      for(int i=0; i<m_NumReads; i++)
+         sum += gStaticData[accessPattern[i]];
 
       gResult = sum;
    }
@@ -41,19 +38,16 @@ public:
 class HeapMemoryPerformanceTest : public PerformanceTest
 {
 public:
-   enum
-   {
-      NumReads = 1024*12*1024,
-   };
+   int m_NumReads;
 
-   int accessPattern[NumReads];
+   int accessPattern[DATA_SIZE];
    int data[DATA_SIZE];
 
    void test()
    {
       float sum = 0;
-      for(int i=0; i<NumReads; i++)
-         sum += data[accessPattern[i%NumReads]];
+      for(int i=0; i<m_NumReads; i++)
+         sum += data[accessPattern[i]];
 
       gResult = sum;
    }
@@ -71,67 +65,75 @@ struct className##MemoryPerfTest : public HeapMemoryPerformanceTest
 
 
 
-STATICMEMORY_PERFORMANCE_TEST("memory/traverse/randomStatic", MTRRandomStatic)
-{
-   void initialize()
-   {
-      // Generate an access pattern for this run.
-      for(int i=0; i<NumReads; i++)
-         accessPattern[i]=betterRand()%DATA_SIZE;
 
-	  initStatic();
-   }
-};
-
+/*
 HEAPMEMORY_PERFORMANCE_TEST("memory/traverse/randomHeap", MTRRandomHeap)
 {
    void initialize()
    {
       // Generate an access pattern for this run.
-      for(int i=0; i<NumReads; i++)
-         accessPattern[i]=betterRand()%DATA_SIZE;
+      for(int i=0; i<DATA_SIZE; i++)
+         accessPattern[i]=betterRand()%(DATA_SIZE);
    }
 };
 
-STATICMEMORY_PERFORMANCE_TEST("memory/traverse/linearStatic", MTRLinearStatic)
-{
-   void initialize()
-   {
-      for(int i=0; i<NumReads; i++)
-         accessPattern[i]= i % DATA_SIZE;
-
-	  initStatic();
-   }
-
-
-};
 
 HEAPMEMORY_PERFORMANCE_TEST("memory/traverse/linearHeap", MTLinearHeap)
 {
    void initialize()
    {
-      for(int i=0; i<NumReads; i++)
-         accessPattern[i]= i % DATA_SIZE;
+      for(int i=0; i<DATA_SIZE; i++)
+         accessPattern[i]= i % (DATA_SIZE);
    }
 };
 
-STATICMEMORY_PERFORMANCE_TEST("memory/traverse/linearBackwardsStatic", MTRLinearBackwardsStatic)
-{
-   void initialize()
-   {
-      for(int i=0; i<NumReads; i++)
-         accessPattern[i]= (NumReads - i) % DATA_SIZE;
-   }
-};
+
 
 HEAPMEMORY_PERFORMANCE_TEST("memory/traverse/linearBackwardsHeap", MTLinearBackwardsHeap)
 {
    void initialize()
    {
-      for(int i=0; i<NumReads; i++)
-         accessPattern[i]= (NumReads - i) % DATA_SIZE;
+      for(int i=0; i<DATA_SIZE; i++)
+         accessPattern[i]= (DATA_SIZE - i) % (DATA_SIZE);
    }
 };
+
+HEAPMEMORY_PERFORMANCE_TEST("memory/traverse/linearStepHeap", MTLStepHeap)
+{
+   int stepSize;
+
+   static const char * getIndependentVariableName()
+   {
+      return "step size (bytes)";
+   }
+
+   static int getIndependentVariableMin()
+   {
+      return 4;
+   }
+
+   static int getIndependentVariableMax()
+   {
+      return 128;
+   }
+
+
+
+   void setIndependentVariable(int v)
+   {
+      stepSize = v;
+   }
+
+
+
+   void initialize()
+   {
+      for(int i=0; i<DATA_SIZE; i++)
+         accessPattern[i]= (i * stepSize) % (DATA_SIZE);
+   }
+};
+*/
+
 
 STATICMEMORY_PERFORMANCE_TEST("memory/traverse/linearStepStatic", MTLStepStatic)
 {
@@ -155,23 +157,22 @@ STATICMEMORY_PERFORMANCE_TEST("memory/traverse/linearStepStatic", MTLStepStatic)
 
    void setIndependentVariable(int v)
    {
-      stepSize = v;
+      stepSize = v*4;
    }
 
    void initialize()
    {
-      for(int i=0; i<NumReads; i++)
-         accessPattern[i]= (i * stepSize) % DATA_SIZE;
+      for(int i=0; i<DATA_SIZE; i++)
+         accessPattern[i]= (i * stepSize) % (DATA_SIZE);
    }
 };
 
-STATICMEMORY_PERFORMANCE_TEST("memory/traverse/linearStepHeap", MTLStepHeap)
-{
-   int stepSize;
 
+STATICMEMORY_PERFORMANCE_TEST("memory/traverse/linearBackwardsStatic", MTRLinearBackwardsStatic)
+{
    static const char * getIndependentVariableName()
    {
-      return "step size (bytes)";
+      return "Data Amount";
    }
 
    static int getIndependentVariableMin()
@@ -181,23 +182,114 @@ STATICMEMORY_PERFORMANCE_TEST("memory/traverse/linearStepHeap", MTLStepHeap)
 
    static int getIndependentVariableMax()
    {
-      return 128;
+      return MAX_MEMORY_STEPS;
    }
-
-
 
    void setIndependentVariable(int v)
    {
-      stepSize = v;
+      m_NumReads = DATA_SIZE/MAX_MEMORY_STEPS * v;
    }
-
-
 
    void initialize()
    {
-      for(int i=0; i<NumReads; i++)
-         accessPattern[i]= (i * stepSize) % DATA_SIZE;
+      for(int i=0; i<DATA_SIZE; i++)
+         accessPattern[i]= (DATA_SIZE - i);
+
+	  initStatic();
    }
 };
 
+STATICMEMORY_PERFORMANCE_TEST("memory/traverse/randomStatic", MTRRandomStatic)
+{
+   static const char * getIndependentVariableName()
+   {
+      return "Data Amount";
+   }
 
+   static int getIndependentVariableMin()
+   {
+      return 4;
+   }
+
+   static int getIndependentVariableMax()
+   {
+      return MAX_MEMORY_STEPS;
+   }
+
+   void setIndependentVariable(int v)
+   {
+      m_NumReads = DATA_SIZE/MAX_MEMORY_STEPS * v;
+   }
+
+   void initialize()
+   {
+      for(int i=0; i<DATA_SIZE; i++)
+         accessPattern[i]=betterRand()%(DATA_SIZE);
+
+	  initStatic();
+   }
+};
+
+STATICMEMORY_PERFORMANCE_TEST("memory/traverse/linearStatic", MTRLinearStatic)
+{
+   static const char * getIndependentVariableName()
+   {
+      return "Data Amount";
+   }
+
+   static int getIndependentVariableMin()
+   {
+      return 4;
+   }
+
+   static int getIndependentVariableMax()
+   {
+      return MAX_MEMORY_STEPS;
+   }
+
+   void setIndependentVariable(int v)
+   {
+      m_NumReads = DATA_SIZE/MAX_MEMORY_STEPS * v;
+   }
+
+   void initialize()
+   {
+      for(int i=0; i<DATA_SIZE; i++)
+         accessPattern[i]= i;
+
+	  initStatic();
+   }
+
+};
+
+STATICMEMORY_PERFORMANCE_TEST("memory/traverse/linearStep512ByteStatic", MTRLinearStep512Static)
+{
+   static const char * getIndependentVariableName()
+   {
+      return "Data Amount";
+   }
+
+   static int getIndependentVariableMin()
+   {
+      return 4;
+   }
+
+   static int getIndependentVariableMax()
+   {
+      return MAX_MEMORY_STEPS;
+   }
+
+   void setIndependentVariable(int v)
+   {
+      m_NumReads = DATA_SIZE/MAX_MEMORY_STEPS * v;
+   }
+
+   void initialize()
+   {
+      for(unsigned int i=0; i<DATA_SIZE; i++)
+         accessPattern[i]= (i*512)%(DATA_SIZE);
+
+	  initStatic();
+   }
+
+};

@@ -4,7 +4,7 @@
 #include "UtilCacheRandomizer.h"
 int gCacheRandomizer = 0;
 
-unsigned char m_pArray[8388608];
+unsigned char m_pArray[1024000];
 
 UtilCacheRandomizer::UtilCacheRandomizer()
 {

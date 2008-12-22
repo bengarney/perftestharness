@@ -264,11 +264,19 @@
 				>
 			</File>
 			<File
+				RelativePath=".\tests\memoryAlignment.cpp"
+				>
+			</File>
+			<File
 				RelativePath=".\tests\memoryDeletion.cpp"
 				>
 			</File>
 			<File
 				RelativePath=".\tests\memoryPrefetch.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\tests\memorySSE.cpp"
 				>
 			</File>
 			<File

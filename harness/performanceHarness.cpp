@@ -38,7 +38,7 @@ void runTest(PerfTestMarkerBase *walk)
    while(runCount < gRunNum )
    {
 	      // Init the cache to a standard
-	   IUtil::GetInstance()->GetUtilCacheRandomizer()->Init(8388608);
+	   IUtil::GetInstance()->GetUtilCacheRandomizer()->Init(1024000);
 	   IUtil::GetInstance()->GetUtilCacheRandomizer()->ScrambleCache();
 
       // Run the test.
@@ -92,7 +92,7 @@ void runTestWithIndependent(PerfTestMarkerBase *walk, int independentValue)
    while( runCount < gRunNum )
    {
 	   // Init the cache to a standard
-	  IUtil::GetInstance()->GetUtilCacheRandomizer()->Init(8388608);
+	  IUtil::GetInstance()->GetUtilCacheRandomizer()->Init(1024000);
       IUtil::GetInstance()->GetUtilCacheRandomizer()->ScrambleCache();
 	  
 

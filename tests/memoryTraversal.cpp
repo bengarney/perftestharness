@@ -244,7 +244,7 @@ STATICMEMORY_PERFORMANCE_TEST("memory/traverse/linearStatic", MTRLinearStatic)
 
    static int getIndependentVariableMax()
    {
-      return 20;//MAX_MEMORY_STEPS;
+      return MAX_MEMORY_STEPS;
    }
 
    void setIndependentVariable(int v)
@@ -276,7 +276,7 @@ STATICMEMORY_PERFORMANCE_TEST("memory/traverse/linearLT128byteRandomStatic", MTR
 
    static int getIndependentVariableMax()
    {
-      return 20;//MAX_MEMORY_STEPS;
+      return MAX_MEMORY_STEPS;
    }
 
    void setIndependentVariable(int v)

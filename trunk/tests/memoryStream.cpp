@@ -3,7 +3,7 @@
 #include "harness/performanceHarness.h"
 
 #define DATA_SIZE_COLUMN 20
-#define DATA_SIZE_ROW 10000
+#define DATA_SIZE_ROW (1023*1024*4)
 
 static int gStaticData[DATA_SIZE_COLUMN][DATA_SIZE_ROW];
 static int gStaticDataCopy[DATA_SIZE_COLUMN][DATA_SIZE_ROW];

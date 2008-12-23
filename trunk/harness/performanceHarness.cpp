@@ -8,7 +8,7 @@
 
 FILE *xmlLog = NULL;
 
-unsigned int gRunNum = 30;
+unsigned int gRunNum = 10;
 
 //prototype
 void RunTest( PerfTestMarkerBase * walk );
@@ -38,7 +38,7 @@ void runTest(PerfTestMarkerBase *walk)
    while(runCount < gRunNum )
    {
 	      // Init the cache to a standard
-	   IUtil::GetInstance()->GetUtilCacheRandomizer()->Init(1024000);
+	   IUtil::GetInstance()->GetUtilCacheRandomizer()->Init();
 	   IUtil::GetInstance()->GetUtilCacheRandomizer()->ScrambleCache();
 
       // Run the test.
@@ -92,7 +92,7 @@ void runTestWithIndependent(PerfTestMarkerBase *walk, int independentValue)
    while( runCount < gRunNum )
    {
 	   // Init the cache to a standard
-	  IUtil::GetInstance()->GetUtilCacheRandomizer()->Init(1024000);
+	  IUtil::GetInstance()->GetUtilCacheRandomizer()->Init();
       IUtil::GetInstance()->GetUtilCacheRandomizer()->ScrambleCache();
 	  
 
@@ -129,6 +129,7 @@ void runTestWithIndependent(PerfTestMarkerBase *walk, int independentValue)
 // Our main function.
 int main(int argc, char* argv[])
 {
+	
 	// Initialize the random number generator.
 	mt_bestseed();
 
@@ -141,7 +142,7 @@ int main(int argc, char* argv[])
 	HANDLE hCurrentProcess = GetCurrentProcess();     
 	SetProcessAffinityMask( hCurrentProcess, (DWORD_PTR)&ProcessAffinityMask );
 
-	SetThreadIdealProcessor( GetCurrentThread(),1);
+	//SetThreadIdealProcessor( GetCurrentThread(),1);
   
 	bool writeHeader = true;
 	bool writeFooter = true;
@@ -204,7 +205,7 @@ int main(int argc, char* argv[])
 	for(PerfTestMarkerBase *walk=PerfTestMarkerBase::smHead; walk; walk=walk->mNext)
 	{
 		  // Check for prefix match...
-		  if(argc > 2 && strstr( walk->mName,argv[argc-1])==0)
+		  if( strstr( walk->mName,argv[argc-1])==0)
 			 continue;
 
 		  if( createProcess )
@@ -218,9 +219,17 @@ int main(int argc, char* argv[])
 				sprintf_s( args,"-run -fast %s",walk->mName );
 			  }
 			  printf("Creating new process: %s\n",args);
-			  CreateProcessA("performanceHarness.exe",(LPSTR)args,0,0,false,0,0,0,&si,&pi);
+
+
+			  if( !CreateProcessA("performanceHarness.exe",(LPSTR)args,0,0,false,0,0,0,&si,&pi))
+			  {
+					printf("Please set your working directory and try again.");
+			  }
+
+
 			  WaitForSingleObject(pi.hProcess,INFINITE);
 			  printf("Process Closed process\n");
+			  
 		  
 		  }else
 		  {

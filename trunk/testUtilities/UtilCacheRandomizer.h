@@ -1,5 +1,5 @@
 
-
+#define MAX_CACHE_SCRAMBLE 1024*1024*4
 
 class UtilCacheRandomizer
 {
@@ -8,7 +8,7 @@ class UtilCacheRandomizer
 		~UtilCacheRandomizer();
 
 	int ScrambleCache( );
-	void Init( unsigned int numBytes );
+	void Init( unsigned int numBytes=MAX_CACHE_SCRAMBLE );
 
 	protected:
 	unsigned int m_NumBytes;

@@ -3,7 +3,7 @@
 #include "harness/performanceHarness.h"
 
 #define MAX_ALIGMENT_TEST 64
-#define DATA_SIZE 1024 * 1024 * 32
+#define DATA_SIZE 1024 * 1024 * 10
 __declspec(align(16)) static char gStaticDataAligment[DATA_SIZE*sizeof(int)];
 static int gResult = 0;
 
@@ -24,7 +24,7 @@ public:
 
    void test()
    {
-      int* pInt = (int*)&gStaticDataAligment[1];
+      int* pInt = (int*)&gStaticDataAligment[3];
       for(int i=0; i<m_NumReads-1; i++)
 	  {
 	    gResult+= *pInt;
@@ -76,7 +76,7 @@ UALIGNMENTMEMORY_PERFORMANCE_TEST("memory/alignment/linearUnalignedStatic", MTUn
 
    static int getIndependentVariableMax()
    {
-      return 50;
+      return MAX_ALIGMENT_TEST;
    }
 
    void setIndependentVariable(int v)
@@ -106,7 +106,7 @@ ALIGNMENTMEMORY_PERFORMANCE_TEST("memory/alignment/linearAlignedStatic", MTAlign
 
    static int getIndependentVariableMax()
    {
-      return 50;
+      return MAX_ALIGMENT_TEST;
    }
 
    void setIndependentVariable(int v)

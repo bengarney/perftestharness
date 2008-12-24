@@ -13,7 +13,7 @@ public:
    void startTestWithIndependent(PerfTestMarkerBase *test, int independent);
    void noteRun(double duration);
    void endTest(UtilStats *statistics);
-   void endTestWithIndependent(UtilStats *statistics);
+   void endTestWithIndependent(UtilStats *statistics, int independent);
 
    void startIndependentGroup(PerfTestMarkerBase *test);
    void endIndependentGroup();

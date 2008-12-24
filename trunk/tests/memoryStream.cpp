@@ -37,9 +37,7 @@ struct className##MemoryPerfTest : public MemoryStreamPerformanceTest
 
 STREAMMEMORY_PERFORMANCE_TEST("memory/stream/memorystream", MStreamTest)
 {
-   
-
-   static const char * getIndependentVariableName()
+   static const char *getIndependentVariableName()
    {
       return "number of streams through cache";
    }
@@ -54,25 +52,24 @@ STREAMMEMORY_PERFORMANCE_TEST("memory/stream/memorystream", MStreamTest)
       return DATA_SIZE_COLUMN;
    }
 
-
    void setIndependentVariable(int v)
    {
       numStream = v;
-	  m_readNum = DATA_SIZE_ROW/(numStream);
+      m_readNum = DATA_SIZE_ROW/(numStream);
    }
 
    void initialize()
    {
-	  if( !m_Init )
+	  if( m_Init )
+        return;
+	  m_Init=true;
+
+     int ctr=0;
+	  
+	  for(int i=0; i<DATA_SIZE_COLUMN; i++)
+	  for(int j=0; j<DATA_SIZE_ROW; j++)
 	  {
-		  m_Init=true;
-		  int ctr=0;
-		  
-		  for(int i=0; i<DATA_SIZE_COLUMN; i++)
-		  for(int j=0; j<DATA_SIZE_ROW; j++)
-		  {
-			 gStaticData[i][j]=ctr++;
-		  }
+		 gStaticData[i][j]=ctr++;
 	  }
    }
 };

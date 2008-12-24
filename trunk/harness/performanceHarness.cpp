@@ -97,7 +97,7 @@ void runTestWithIndependent(PerfTestMarkerBase *walk, int independentValue)
    walk->teardown();
 
    // Note completion of test.
-   IUtil::Get()->GetUtilLogger()->endTestWithIndependent(IUtil::Get()->GetUtilStats());
+   IUtil::Get()->GetUtilLogger()->endTestWithIndependent(IUtil::Get()->GetUtilStats(), independentValue);
 }
 
 /************************************************************************/
@@ -200,7 +200,7 @@ int main(int argc, char* argv[])
    for(PerfTestMarkerBase *walk=PerfTestMarkerBase::smHead; walk; walk=walk->mNext)
    {
       // Check for prefix match...
-      if( strstr( walk->mName,argv[argc-1])==0)
+      if( argv[argc-1][0] != '-' && strstr( walk->mName,argv[argc-1])==0)
          continue;
 
       if( createProcess )
@@ -223,11 +223,6 @@ int main(int argc, char* argv[])
       {
          runTest( walk );
       }
-   }
-
-   if(writeFooter)
-   {
-
    }
 
    if( writeFooter )

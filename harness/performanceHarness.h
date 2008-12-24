@@ -19,10 +19,8 @@ extern double currentTime();
 extern unsigned int betterRand();
 extern float betterRandf();
 
-struct IDirect3DDevice9 ;
+struct IDirect3DDevice9;
 struct IDirect3DDevice10;
-
-
 
 /// Base class for performance tests.
 ///

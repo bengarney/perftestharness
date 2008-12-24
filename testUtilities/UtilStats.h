@@ -1,20 +1,21 @@
-
 #include <vector>
 
 class UtilStats
 {
-	public:
-		UtilStats();
-		~UtilStats();
+public:
+	UtilStats();
+	~UtilStats();
 
-	void Reset();
-	double GetStdDeviation();
+   void Reset();
+
+   void AddDataPoint( double dataPoint );
+
+   unsigned int GetCount();
+   double GetStdDeviation();
 	double GetMean();
-	unsigned int GetCount();
-	void AddDataPoint( double dataPoint );
+   double GetMin();
+   double GetMax();
 	
-
-	protected:
+private:
 	std::vector<double> m_Data;
-
 };

@@ -448,6 +448,14 @@
 				>
 			</File>
 			<File
+				RelativePath=".\testUtilities\UtilLogger.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\testUtilities\UtilLogger.h"
+				>
+			</File>
+			<File
 				RelativePath=".\testUtilities\UtilStats.cpp"
 				>
 			</File>

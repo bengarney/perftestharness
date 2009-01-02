@@ -1,12 +1,13 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include "testUtilities/Iutil.h"
 #include "harness/performanceHarness.h"
 
+#define DATA_SIZE (1024*1024)
 #define MAX_MEMORY_STEPS 64
-#define DATA_SIZE (1024 * 1024)
-__declspec(align(16)) static float gStaticData[DATA_SIZE];
-static float gResult = 0;
 
+static float gResult = 0;
+static float* gStaticData = IUtil::Get()->GetUtilMemory()->GetStatic1024x1024_16_Aligned();
 
 void initCriticalStride()
 {
@@ -34,7 +35,7 @@ public:
 
    static const char * getIndependentVariableName()
    {
-      return "Data Amount";
+      return "sizeof(DATA_SIZE/MAX_MEMORY_STEPS) * ";
    }
 
    static int getIndependentVariableMin()
@@ -120,13 +121,39 @@ CSMEMORY_PERFORMANCE_TEST("memory/criticalStride/4096", MCSStatic4096)
    void initialize()
    {
       for(int i=0; i<DATA_SIZE; i++)
-         accessPattern[i]=(i*1041)%(DATA_SIZE);
+         accessPattern[i]=(i*1048)%(DATA_SIZE);
 
 	  initCriticalStride();
    }
 };
 
-CSMEMORY_PERFORMANCE_TEST("memory/criticalStride/1", MCSStatic1)
+CSMEMORY_PERFORMANCE_TEST("memory/criticalStride/8192", MCSStatic8192)
+{
+
+
+   void initialize()
+   {
+      for(int i=0; i<DATA_SIZE; i++)
+         accessPattern[i]=(i*2046)%(DATA_SIZE);
+
+	  initCriticalStride();
+   }
+};
+
+CSMEMORY_PERFORMANCE_TEST("memory/criticalStride/16384", MCSStatic16384)
+{
+
+
+   void initialize()
+   {
+      for(int i=0; i<DATA_SIZE; i++)
+         accessPattern[i]=(i*4096)%(DATA_SIZE);
+
+	  initCriticalStride();
+   }
+};
+
+CSMEMORY_PERFORMANCE_TEST("memory/criticalStride/4", MCSStatic1)
 {
 
 

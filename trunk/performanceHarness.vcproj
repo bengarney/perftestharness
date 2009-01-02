@@ -448,6 +448,10 @@
 				>
 			</File>
 			<File
+				RelativePath=".\testUtilities\UtilDefines.h"
+				>
+			</File>
+			<File
 				RelativePath=".\testUtilities\UtilFullScreenQuad.cpp"
 				>
 			</File>
@@ -461,6 +465,14 @@
 			</File>
 			<File
 				RelativePath=".\testUtilities\UtilLogger.h"
+				>
+			</File>
+			<File
+				RelativePath=".\testUtilities\UtilMemory.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\testUtilities\UtilMemory.h"
 				>
 			</File>
 			<File

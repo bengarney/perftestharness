@@ -256,6 +256,10 @@
 				>
 			</File>
 			<File
+				RelativePath=".\tests\criticalStride.cpp"
+				>
+			</File>
+			<File
 				RelativePath=".\tests\exampleTests.cpp"
 				>
 			</File>
@@ -285,6 +289,10 @@
 			</File>
 			<File
 				RelativePath=".\tests\memoryTraversal.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\tests\pointerAliasing.cpp"
 				>
 			</File>
 		</Filter>

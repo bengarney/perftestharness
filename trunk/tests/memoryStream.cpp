@@ -2,12 +2,11 @@
 #include <stdlib.h>
 #include "harness/performanceHarness.h"
 
-#define DATA_SIZE_COLUMN 20
-#define DATA_SIZE_ROW (1023*1024*4)
+#define DATA_SIZE_COLUMN 40
+#define DATA_SIZE_ROW ((1024*1024)-17)
 
-static int gStaticData[DATA_SIZE_COLUMN][DATA_SIZE_ROW];
-static int gStaticDataCopy[DATA_SIZE_COLUMN][DATA_SIZE_ROW];
-static int gResult = 0;
+__declspec(align(64)) static unsigned int gStaticData[DATA_SIZE_COLUMN][DATA_SIZE_ROW];
+static unsigned int gResult = 0;
 bool m_Init=false;
 
 class MemoryStreamPerformanceTest : public PerformanceTest
@@ -20,7 +19,6 @@ public:
 
    void test()
    { 
-	  for(int k=0;k<10;k++ )
 	  for(int j=0; j<m_readNum; j++)
 	  for(int i=0; i<numStream; i++)
 	  {
@@ -55,7 +53,8 @@ STREAMMEMORY_PERFORMANCE_TEST("memory/stream/memorystream", MStreamTest)
    void setIndependentVariable(int v)
    {
       numStream = v;
-      m_readNum = DATA_SIZE_ROW/(numStream);
+
+	  m_readNum = (DATA_SIZE_ROW)/(numStream);
    }
 
    void initialize()

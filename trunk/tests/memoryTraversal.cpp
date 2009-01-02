@@ -3,7 +3,7 @@
 #include "harness/performanceHarness.h"
 
 #define MAX_MEMORY_STEPS 64
-#define DATA_SIZE (1024 * 1024 * 10)
+#define DATA_SIZE (1024 * 1024)
 __declspec(align(16)) static float gStaticData[DATA_SIZE];
 static float gResult = 0;
 
@@ -296,8 +296,10 @@ STATICMEMORY_PERFORMANCE_TEST("memory/traverse/linearStatic", MTRLinearStatic)
 
 };
 
-STATICMEMORY_PERFORMANCE_TEST("memory/traverse/linearLT128byteRandomStatic", MTRLinearStaticLT128byteRandom)
+STATICMEMORY_PERFORMANCE_TEST("memory/traverse/linearPseudoRandomStatic", MTRLinearStaticLT64byteRandom)
 {
+   int m_Stride;
+
    static const char * getIndependentVariableName()
    {
       return "Data Amount";
@@ -310,20 +312,28 @@ STATICMEMORY_PERFORMANCE_TEST("memory/traverse/linearLT128byteRandomStatic", MTR
 
    static int getIndependentVariableMax()
    {
-      return MAX_MEMORY_STEPS;
+      return MAX_MEMORY_STEPS*2;
    }
 
    void setIndependentVariable(int v)
    {
-      m_NumReads = DATA_SIZE/MAX_MEMORY_STEPS * v;
+	  m_Stride = v;    
    }
 
    void initialize()
    {
-	  int indexCacheLine = 128/sizeof(float);
-      for(int i=0; i<DATA_SIZE; i++)
+      m_NumReads = DATA_SIZE;
+
+	  int ctr = 0;
+      for(int i=0; i<DATA_SIZE; i+=m_Stride)
 	  {
-         accessPattern[i]= (i%indexCacheLine)+(betterRand()%indexCacheLine);;
+	     for( int j=0;j<m_Stride;j++ )
+		 {
+		    if( ctr<DATA_SIZE )
+			{
+				accessPattern[ctr++] = (i+((betterRand()*480)%m_Stride))%(DATA_SIZE);
+			}
+		 }
 	  }
 
 	  initStatic();

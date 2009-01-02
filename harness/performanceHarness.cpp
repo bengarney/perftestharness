@@ -26,7 +26,7 @@ PerfTestMarkerBase *PerfTestMarkerBase::smHead = NULL;
 void doTestRun(PerfTestMarkerBase *walk)
 {
    double avgTime = 0.0, minTime = 100000000.0, maxTime = 0.0;
-   int runCount = 0;
+   unsigned int runCount = 0;
 
    double startTime = currentTime();
 
@@ -65,7 +65,7 @@ void doTestRun(PerfTestMarkerBase *walk)
 void runTestWithIndependent(PerfTestMarkerBase *walk, int independentValue)
 {
    double avgTime = 0.0, minTime = 100000000.0, maxTime = 0.0;
-   int runCount = 0;
+   unsigned int runCount = 0;
 
    IUtil::Get()->GetUtilLogger()->startTestWithIndependent(walk, independentValue);
 

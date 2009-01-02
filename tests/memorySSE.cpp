@@ -5,8 +5,8 @@
 #include "xmmintrin.h"
 #include "emmintrin.h"
 
-#define MAX_SEE_TEST 128
-#define DATA_SIZE 512 * 512 * 32
+#define MAX_SEE_TEST 64
+#define DATA_SIZE 1024*1024
 __declspec(align(16)) static float gStaticSSEData[DATA_SIZE];
 __declspec(align(16)) static float gStaticData[DATA_SIZE];
 static float gResult = 0;
@@ -112,7 +112,7 @@ NONSSEMEMORY_PERFORMANCE_TEST("memory/sse/NonSSElinearStepStatic", MTNONSSELStep
 
    static int getIndependentVariableMax()
    {
-      return 128;
+      return MAX_SEE_TEST;
    }
 
    void setIndependentVariable(int v)

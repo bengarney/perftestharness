@@ -4,7 +4,7 @@
 #include "harness/performanceHarness.h"
 
 
-#define DATA_SIZE_ROW 1000000
+#define DATA_SIZE_ROW (1024*1024)
 
 static int gStaticData[DATA_SIZE_ROW];
 static int gResult = 0;
@@ -19,7 +19,6 @@ public:
    { 
       int loc = 0;
 
-	  for(int k=0;k<100;k++)
 	  for(int i=0; i<DATA_SIZE_ROW; i++)
 	  {
 		 _mm_prefetch((char*)&gStaticData[loc+m_Stride],_MM_HINT_T0); 
@@ -88,7 +87,6 @@ public:
    { 
       int loc = 0;
 
-	  for(int k=0;k<100;k++)
 	  for(int i=0; i<DATA_SIZE_ROW; i++)
 	  {
 		 loc = gStaticData[loc];

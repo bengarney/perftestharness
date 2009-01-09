@@ -24,7 +24,7 @@ public:
 
    void test()
    {
-      int* pInt = (int*)&gStaticDataAligment[3];
+      int* pInt = (int*)&gStaticDataAligment[1];
       for(int i=0; i<m_NumReads-1; i++)
 	  {
 	    gResult+= *pInt;

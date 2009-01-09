@@ -200,7 +200,8 @@ int main(int argc, char* argv[])
    for(PerfTestMarkerBase *walk=PerfTestMarkerBase::smHead; walk; walk=walk->mNext)
    {
       // Check for prefix match...
-      if( argv[argc-1][0] != '-' && strstr( walk->mName,argv[argc-1])==0)
+      if( argc!=1 )
+      if( argv[argc-1][0] != '-' && strstr( walk->mName,argv[argc-1])==0 )
          continue;
 
       if( createProcess )

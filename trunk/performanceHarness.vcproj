@@ -135,7 +135,7 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="dxerr.lib dxguid.lib d3dx9d.lib d3dx10d.lib d3d9.lib winmm.lib comctl32.lib"
+				AdditionalDependencies="dxerr.lib dxguid.lib d3dx9.lib d3dx10d.lib d3d9.lib winmm.lib comctl32.lib"
 				LinkIncremental="1"
 				GenerateDebugInformation="true"
 				SubSystem="1"

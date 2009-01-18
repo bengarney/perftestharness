@@ -256,6 +256,10 @@
 				>
 			</File>
 			<File
+				RelativePath=".\tests\computeLoopUnrolling.cpp"
+				>
+			</File>
+			<File
 				RelativePath=".\tests\criticalStride.cpp"
 				>
 			</File>

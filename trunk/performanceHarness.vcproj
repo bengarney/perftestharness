@@ -256,6 +256,10 @@
 				>
 			</File>
 			<File
+				RelativePath=".\tests\computeBitwise.cpp"
+				>
+			</File>
+			<File
 				RelativePath=".\tests\computeLoopUnrolling.cpp"
 				>
 			</File>

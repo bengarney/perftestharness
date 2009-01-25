@@ -237,7 +237,6 @@ PERFORMANCE_TEST("compute/bitwise/equal_sign/non_bit", equal_sign_non_bit)
 		for( int i=0;i<15;i++ )
 		{
 			int x = intSwapArray[i];
-			//gBool = (x^y>=0);
 			gBool = (x*y>0);
 		}
    }
@@ -258,7 +257,6 @@ PERFORMANCE_TEST("compute/bitwise/equal_sign/bit", equal_sign_bit)
 		{
 			int x = intSwapArray[i];
 			gBool = (x^y>=0);
-			//gBool = (x*y>0);
 		}
    }
 };

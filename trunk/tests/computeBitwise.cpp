@@ -254,8 +254,10 @@ PERFORMANCE_TEST("compute/bitwise/equal_sign/bit", equal_sign_bit)
 	    for( int j=0;j<100000;j++)
 		for( int i=0;i<15;i++ )
 		{
+
 			int x = intBitwiseArray[i];
 			gBoolBitwise = ((x^y)>=0);
+
 		}
    }
 };

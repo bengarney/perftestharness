@@ -3,28 +3,27 @@
 #include "testUtilities/IUtil.h"
 #include "harness/performanceHarness.h"
 
-int* intSwapArray = IUtil::Get()->GetUtilMemory()->GetIStatic64Bytes();
+int* intBitwiseArray = IUtil::Get()->GetUtilMemory()->GetIStatic64Bytes();
+int giBitwiseSum = 0;
+bool gBoolBitwise = false;
 
-int giSwapSum = 0;
-bool gBool = false;
-
-void gIInitSwapArray()
+void gIInitBitwiseArray()
 {
 	for(int i=0;i<16;i++ )
 	{
-		intSwapArray[i]=rand();
+		intBitwiseArray[i]=rand();
 		if(rand()%2==0)
 		{	
-			intSwapArray[i]*=-1;
+			intBitwiseArray[i]*=-1;
 		}	
 	}
 }
 
-PERFORMANCE_TEST("compute/bitwise/swapint_non_bit", swapint_non_bit)
+PERFORMANCE_TEST("compute/bitwise/swapint/non_bit", swapint_non_bit)
 {
    void initialize()
    {
-		gIInitSwapArray();
+		gIInitBitwiseArray();
    }
 
    void test()
@@ -33,31 +32,31 @@ PERFORMANCE_TEST("compute/bitwise/swapint_non_bit", swapint_non_bit)
 	    for( int j=0;j<100000;j++)
 		for( int i=0;i<15;i++ )
 		{
-			t=intSwapArray[i];
-			intSwapArray[i]=intSwapArray[i+1];
-			intSwapArray[i+1]=t;
+			t=intBitwiseArray[i];
+			intBitwiseArray[i]=intBitwiseArray[i+1];
+			intBitwiseArray[i+1]=t;
 		}
    }
 };
 
-PERFORMANCE_TEST("compute/bitwise/swapint_bit", swapint_bit)
+PERFORMANCE_TEST("compute/bitwise/swapint/bit", swapint_bit)
 {
    void initialize()
    {
-		gIInitSwapArray();
+		gIInitBitwiseArray();
    }
 
    void test()
    {
-		int t = 0;
 	    for( int j=0;j<100000;j++)
 		for( int i=0;i<15;i++ )
 		{
-			t=intSwapArray[i];
-			intSwapArray[i]=intSwapArray[i+1];
-			intSwapArray[i+1]=t;
+			intBitwiseArray[i]^=intBitwiseArray[i+1];
+			intBitwiseArray[i+1]^=intBitwiseArray[i];
+			intBitwiseArray[i]^=intBitwiseArray[i+1];
 		}
    }
+
 };
 
 
@@ -65,12 +64,12 @@ PERFORMANCE_TEST("compute/bitwise/bitmask/bit", bitmask_bit)
 {
    void initialize()
    {
-		gIInitSwapArray();
+		gIInitBitwiseArray();
    }
 
    void test()
    {
-		int t=intSwapArray[0];
+		int t=intBitwiseArray[0];
 		int shift = 1;
 
 
@@ -94,7 +93,7 @@ PERFORMANCE_TEST("compute/bitwise/bitmask/non_bit", bitmask_non_bit)
 {
    void initialize()
    {
-		gIInitSwapArray();
+		gIInitBitwiseArray();
    }
 
    void test()
@@ -103,10 +102,10 @@ PERFORMANCE_TEST("compute/bitwise/bitmask/non_bit", bitmask_non_bit)
 	    for( int j=0;j<100000;j++)
 		for( int i=0;i<15;i++ )
 		{
-			int val = intSwapArray[i];
+			int val = intBitwiseArray[i];
 			__asm
 			{
-				mov giSwapSum,eax;
+				mov giBitwiseSum,eax;
 			}
 		}
    }
@@ -116,7 +115,7 @@ PERFORMANCE_TEST("compute/bitwise/bitmodulo/non_bit", bitmodulo_non_bit)
 {
    void initialize()
    {
-		gIInitSwapArray();
+		gIInitBitwiseArray();
    }
 
    void test()
@@ -124,7 +123,7 @@ PERFORMANCE_TEST("compute/bitwise/bitmodulo/non_bit", bitmodulo_non_bit)
 	    for( int j=0;j<100000;j++)
 		for( int i=0;i<15;i++ )
 		{
-			giSwapSum = intSwapArray[i]%256;
+			giBitwiseSum = intBitwiseArray[i]%256;
 		}
    }
 };
@@ -133,7 +132,7 @@ PERFORMANCE_TEST("compute/bitwise/bitmodulo/bit", bitmodulo_bit)
 {
    void initialize()
    {
-		gIInitSwapArray();
+		gIInitBitwiseArray();
    }
 
    void test()
@@ -141,7 +140,7 @@ PERFORMANCE_TEST("compute/bitwise/bitmodulo/bit", bitmodulo_bit)
 	    for( int j=0;j<100000;j++)
 		for( int i=0;i<15;i++ )
 		{
-			giSwapSum = intSwapArray[i]&255;
+			giBitwiseSum += intBitwiseArray[i]&255;
 		}
    }
 };
@@ -151,7 +150,7 @@ PERFORMANCE_TEST("compute/bitwise/absolute_value/non_bit", absolute_non_bit)
 {
    void initialize()
    {
-		gIInitSwapArray();
+		gIInitBitwiseArray();
    }
 
    void test()
@@ -159,9 +158,9 @@ PERFORMANCE_TEST("compute/bitwise/absolute_value/non_bit", absolute_non_bit)
 	    for( int j=0;j<100000;j++)
 		for( int i=0;i<15;i++ )
 		{
-			int x = intSwapArray[i];
+			int x = intBitwiseArray[i];
 			x < 0 ? -x : x; 
-			giSwapSum += x;
+			giBitwiseSum += x;
 		}
    }
 };
@@ -170,7 +169,7 @@ PERFORMANCE_TEST("compute/bitwise/absolute_value/bit", absolute_bit)
 {
    void initialize()
    {
-		gIInitSwapArray();
+		gIInitBitwiseArray();
    }
 
    void test()
@@ -178,8 +177,8 @@ PERFORMANCE_TEST("compute/bitwise/absolute_value/bit", absolute_bit)
 	    for( int j=0;j<100000;j++)
 		for( int i=0;i<15;i++ )
 		{
-			int x = intSwapArray[i];
-			giSwapSum += (x ^ (x >> 31)) - (x >> 31);
+			int x = intBitwiseArray[i];
+			giBitwiseSum += (x ^ (x >> 31)) - (x >> 31);
 		}
    }
 };
@@ -190,7 +189,7 @@ PERFORMANCE_TEST("compute/bitwise/evenness/non_bit", evenness_non_bit)
 {
    void initialize()
    {
-		gIInitSwapArray();
+		gIInitBitwiseArray();
    }
 
    void test()
@@ -198,8 +197,8 @@ PERFORMANCE_TEST("compute/bitwise/evenness/non_bit", evenness_non_bit)
 	    for( int j=0;j<100000;j++)
 		for( int i=0;i<15;i++ )
 		{
-			int x = intSwapArray[i];
-			gBool = ((x % 2) == 0);
+			int x = intBitwiseArray[i];
+			gBoolBitwise = ((x % 2) == 0);
 		}
    }
 };
@@ -208,7 +207,7 @@ PERFORMANCE_TEST("compute/bitwise/evenness/bit", eveness_bit)
 {
    void initialize()
    {
-		gIInitSwapArray();
+		gIInitBitwiseArray();
    }
 
    void test()
@@ -216,8 +215,8 @@ PERFORMANCE_TEST("compute/bitwise/evenness/bit", eveness_bit)
 	    for( int j=0;j<100000;j++)
 		for( int i=0;i<15;i++ )
 		{
-			int x = intSwapArray[i];
-			gBool = ( (x&1)==0 );
+			int x = intBitwiseArray[i];
+			gBoolBitwise = ( (x&1)==0 );
 		}
    }
 };
@@ -227,7 +226,7 @@ PERFORMANCE_TEST("compute/bitwise/equal_sign/non_bit", equal_sign_non_bit)
 {
    void initialize()
    {
-		gIInitSwapArray();
+		gIInitBitwiseArray();
    }
 
    void test()
@@ -236,8 +235,8 @@ PERFORMANCE_TEST("compute/bitwise/equal_sign/non_bit", equal_sign_non_bit)
 	    for( int j=0;j<100000;j++)
 		for( int i=0;i<15;i++ )
 		{
-			int x = intSwapArray[i];
-			gBool = (x*y>0);
+			int x = intBitwiseArray[i];
+			gBoolBitwise = (x*y>0);
 		}
    }
 };
@@ -246,7 +245,7 @@ PERFORMANCE_TEST("compute/bitwise/equal_sign/bit", equal_sign_bit)
 {
    void initialize()
    {
-		gIInitSwapArray();
+		gIInitBitwiseArray();
    }
 
    void test()
@@ -255,8 +254,8 @@ PERFORMANCE_TEST("compute/bitwise/equal_sign/bit", equal_sign_bit)
 	    for( int j=0;j<100000;j++)
 		for( int i=0;i<15;i++ )
 		{
-			int x = intSwapArray[i];
-			gBool = (x^y>=0);
+			int x = intBitwiseArray[i];
+			gBoolBitwise = ((x^y)>=0);
 		}
    }
 };

@@ -120,6 +120,7 @@
 				PreprocessorDefinitions="WIN32;NDEBUG;_CONSOLE"
 				RuntimeLibrary="2"
 				EnableFunctionLevelLinking="true"
+				FloatingPointModel="2"
 				UsePrecompiledHeader="0"
 				WarningLevel="3"
 				DebugInformationFormat="3"
@@ -257,6 +258,10 @@
 			</File>
 			<File
 				RelativePath=".\tests\computeBitwise.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\tests\computeConversions.cpp"
 				>
 			</File>
 			<File

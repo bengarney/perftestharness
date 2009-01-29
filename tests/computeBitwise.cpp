@@ -1,10 +1,17 @@
 #include <stdio.h>
 #include "windows.h"
 #include "testUtilities/IUtil.h"
+#include "math.h"
 #include "harness/performanceHarness.h"
 
+#define FLOATING_POINT_ONE_POINT_ZERO 0x3f800000
+
 int* intBitwiseArray = IUtil::Get()->GetUtilMemory()->GetIStatic64Bytes();
+float* floatBitwiseArray = IUtil::Get()->GetUtilMemory()->GetFStatic64Bytes();
+
 int giBitwiseSum = 0;
+float gfBitwiseSum = 0;
+
 bool gBoolBitwise = false;
 
 void gIInitBitwiseArray()
@@ -12,6 +19,18 @@ void gIInitBitwiseArray()
 	for(int i=0;i<16;i++ )
 	{
 		intBitwiseArray[i]=rand();
+		if(rand()%2==0)
+		{	
+			intBitwiseArray[i]*=-1;
+		}	
+	}
+}
+
+void gFInitBitwiseArray()
+{
+	for(int i=0;i<16;i++ )
+	{
+		floatBitwiseArray[i]=(rand()*10.0f)/((float)rand());
 		if(rand()%2==0)
 		{	
 			intBitwiseArray[i]*=-1;
@@ -258,6 +277,47 @@ PERFORMANCE_TEST("compute/bitwise/equal_sign/bit", equal_sign_bit)
 			int x = intBitwiseArray[i];
 			gBoolBitwise = ((x^y)>=0);
 
+		}
+   }
+};
+
+
+PERFORMANCE_TEST("compute/bitwise/square_root/non_bit", square_root_non_bit )
+{
+   void initialize()
+   {
+		gFInitBitwiseArray();
+   }
+
+   void test()
+   {
+	    for( int j=0;j<100000;j++)
+		for( int i=0;i<15;i++ )
+		{
+			float x = floatBitwiseArray[i];
+			gfBitwiseSum += sqrtf(x);
+		}
+   }
+};
+
+PERFORMANCE_TEST("compute/bitwise/square_root/bit", square_root_bit )
+{
+   void initialize()
+   {
+		gFInitBitwiseArray();
+   }
+
+   void test()
+   {
+	    for( int j=0;j<100000;j++)
+		for( int i=0;i<15;i++ )
+		{
+			int temp = *(int*)&floatBitwiseArray[i];
+			temp -= FLOATING_POINT_ONE_POINT_ZERO;
+			temp >>= 1;
+			temp += FLOATING_POINT_ONE_POINT_ZERO;
+			gfBitwiseSum += *(float*)&temp;
+			
 		}
    }
 };

@@ -6,8 +6,21 @@
 #include "mtwist/mtwist.h"
 #include "testUtilities/IUtil.h"
 
+#define TURN_ON_ALL_FP_EXCEPTIONS 0
+
 // How many times to run tests?
 unsigned int gRunNum = 10;
+
+//unmask everything but precision
+void UnMaskFPExceptions()
+{
+	DWORD cw=0;
+	__asm
+	{
+		mov cw, 0020h;
+		FLDCW cw;
+	}
+}
 
 // Rand helper code.
 unsigned int betterRand()
@@ -135,6 +148,11 @@ void runTest( PerfTestMarkerBase * walk )
 // Our main function.
 int main(int argc, char* argv[])
 {	
+
+#ifdef TURN_ON_ALL_FP_EXCEPTIONS
+	UnMaskFPExceptions();
+#endif
+
    // Initialize the random number generator.
    mt_bestseed();
 
@@ -240,3 +258,4 @@ int main(int argc, char* argv[])
 
    return 0;
 }
+

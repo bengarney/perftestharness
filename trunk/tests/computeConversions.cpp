@@ -9,7 +9,11 @@ float* floatConversionArray = IUtil::Get()->GetUtilMemory()->GetFStatic64Bytes()
 int gIntConversion = 0;
 float gFloatConversion = 0;
 
-void gIInitConversionArray()
+#define FLOAT_FTOI_MAGIC_NUM (float)(3<<21)
+#define IT_FTOI_MAGIC_NUM 0x4ac00000
+
+
+void gInitConversionArray()
 {
 	for(int i=0;i<16;i++ )
 	{
@@ -23,11 +27,29 @@ void gIInitConversionArray()
 	}
 }
 
+PERFORMANCE_TEST("compute/conversions/ftoi_fast", ftoi_fast )
+{
+   void initialize()
+   {
+		gInitConversionArray();
+   }
+
+   void test()
+   {
+	    for( int j=0;j<100000;j++)
+		for( int i=0;i<15;i++ )
+		{
+			float f = floatConversionArray[i]+FLOAT_FTOI_MAGIC_NUM;
+			gFloatConversion += (*((int *)&f) - IT_FTOI_MAGIC_NUM) >> 1;
+		}
+   }
+};
+
 PERFORMANCE_TEST("compute/conversions/ftoi", ftoi)
 {
    void initialize()
    {
-		gIInitConversionArray();
+		gInitConversionArray();
    }
 
    void test()
@@ -46,7 +68,7 @@ PERFORMANCE_TEST("compute/conversions/itof", itof)
 {
    void initialize()
    {
-		gIInitConversionArray();
+		gInitConversionArray();
    }
 
    void test()
@@ -58,3 +80,4 @@ PERFORMANCE_TEST("compute/conversions/itof", itof)
 		}
    }
 };
+

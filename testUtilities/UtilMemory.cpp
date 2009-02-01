@@ -8,6 +8,7 @@ __declspec(align(16)) static float gStaticData1024x1024[(1024 * 1024)];
 
 static int gIStaticData64Bytes[16];
 static float gFStaticData64Bytes[16];
+__declspec(align(16)) static float gFStaticData64ABytes[16];
 
 UtilMemory::UtilMemory()
 {
@@ -32,4 +33,9 @@ int* UtilMemory::GetIStatic64Bytes()
 float* UtilMemory::GetFStatic64Bytes()
 {
 	return gFStaticData64Bytes;
+}
+
+float* UtilMemory::GetFStatic64BytesAligned()
+{
+	return gFStaticData64ABytes;
 }

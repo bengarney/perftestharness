@@ -2,7 +2,7 @@
 #include <stdlib.h>
 #include "harness/performanceHarness.h"
 
-#define DATA_SIZE_COLUMN 40
+#define DATA_SIZE_COLUMN 41
 #define DATA_SIZE_ROW ((1024*1024)-17)
 
 __declspec(align(64)) static unsigned int gStaticData[DATA_SIZE_COLUMN][DATA_SIZE_ROW];

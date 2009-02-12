@@ -5,7 +5,7 @@
 #include "xmmintrin.h"
 #include "emmintrin.h"
 
-#define MAX_SEE_TEST 64
+#define MAX_SEE_TEST 65
 #define DATA_SIZE 1024*1024
 __declspec(align(16)) static float gStaticSSEData[DATA_SIZE];
 __declspec(align(16)) static float gStaticData[DATA_SIZE];
@@ -39,6 +39,11 @@ public:
 	  _mm_store_ps(vecOut,gVecResult);
 	  gResult+=vecOut[1];
    }
+
+   static bool checkSkipIndependentValue(int independentValue)
+   {
+		return!( independentValue%4==0 );
+   }
 };
 
 class StaticLinearPerformanceTest : public PerformanceTest
@@ -54,6 +59,11 @@ public:
 	  {
 	     gResult += gStaticData[i];
 	  }
+   }
+
+   static bool checkSkipIndependentValue(int independentValue)
+   {
+		return!( independentValue%4==0 );
    }
 };
 
@@ -87,7 +97,7 @@ SSEMEMORY_PERFORMANCE_TEST("memory/sse/SSElinearStepStatic", MTSSELStepStatic)
 
    void setIndependentVariable(int v)
    {
-      m_NumReads = (DATA_SIZE)/(MAX_SEE_TEST) * v;
+      m_NumReads = (DATA_SIZE)/(MAX_SEE_TEST-1) * v;
    }
 
    void initialize()
@@ -117,7 +127,7 @@ NONSSEMEMORY_PERFORMANCE_TEST("memory/sse/NonSSElinearStepStatic", MTNONSSELStep
 
    void setIndependentVariable(int v)
    {
-      m_NumReads = (DATA_SIZE)/(MAX_SEE_TEST) * v;
+      m_NumReads = (DATA_SIZE)/(MAX_SEE_TEST-1) * v;
    }
 
    void initialize()

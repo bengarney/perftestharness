@@ -2,8 +2,8 @@
 #include <stdlib.h>
 #include "harness/performanceHarness.h"
 
-#define MAX_ALIGMENT_TEST 64
-#define DATA_SIZE 1024 * 1024 * 10
+#define MAX_ALIGMENT_TEST 65
+#define DATA_SIZE (1024 * 1024)
 __declspec(align(16)) static char gStaticDataAligment[DATA_SIZE*sizeof(int)];
 static int gResult = 0;
 
@@ -12,7 +12,7 @@ void initStaticAlignment()
 {
 	for( int i=0;i<DATA_SIZE;i++ )
 	{
-		gStaticDataAligment[i]=rand();
+		((int*)gStaticDataAligment)[i]=rand();
 	}
 }
 
@@ -81,7 +81,12 @@ UALIGNMENTMEMORY_PERFORMANCE_TEST("memory/alignment/linearUnalignedStatic", MTUn
 
    void setIndependentVariable(int v)
    {
-      m_NumReads = (DATA_SIZE)/(MAX_ALIGMENT_TEST) * v;
+      m_NumReads = (DATA_SIZE)/(MAX_ALIGMENT_TEST-1) * v;
+   }
+
+    static bool checkSkipIndependentValue(int independentValue)
+   {
+		return!( independentValue%4==0 );
    }
 
    void initialize()
@@ -111,11 +116,16 @@ ALIGNMENTMEMORY_PERFORMANCE_TEST("memory/alignment/linearAlignedStatic", MTAlign
 
    void setIndependentVariable(int v)
    {
-      m_NumReads = (DATA_SIZE)/(MAX_ALIGMENT_TEST) * v;
+      m_NumReads = (DATA_SIZE)/(MAX_ALIGMENT_TEST-1) * v;
    }
 
    void initialize()
    {
 	  initStaticAlignment();
+   }
+
+   static bool checkSkipIndependentValue(int independentValue)
+   {
+		return!( independentValue%4==0 );
    }
 };

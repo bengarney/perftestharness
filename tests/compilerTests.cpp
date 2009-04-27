@@ -1,7 +1,8 @@
 
 #include "harness/performanceHarness.h"
 
-extern float gCommon = 0.0f;
+float gCommon = 0.0f;
+int gCommonI = 0;
 
 PERFORMANCE_TEST("compilerTest/sameFunction", sameFunction)
 {
@@ -31,5 +32,21 @@ PERFORMANCE_TEST("compilerTest/sameFunction", sameFunction)
 		}
 
 		return test2;
+   }
+};
+
+PERFORMANCE_TEST("compilerTest/invarient", invarient)
+{
+   inline void test()
+   {
+        float j=0;
+		float k=22/(float)7;
+		for( int i=0;i<100;i++ ) 
+		{
+			j=10.0f;
+			k+= j;
+		}
+
+		gCommon = k;
    }
 };

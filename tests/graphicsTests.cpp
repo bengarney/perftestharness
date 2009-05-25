@@ -12,7 +12,7 @@ GRAPHICS_PERFORMANCE_TEST("basic/graphics/basicClear", GraphicsBasicClear)
    {
       frameCount = 0;
       Parent::initialize();
-	  IUtil::Get()->GetUtilFullScreenQuad()->Init( &(iDevice)Parent::m_Device,Parent::m_ScreenWidth,Parent::m_ScreenHeight );
+	  IUtil::GetUtilFullScreenQuad()->Init( &(iDevice)Parent::m_Device,Parent::m_ScreenWidth,Parent::m_ScreenHeight );
    }
 
    void renderFrame(IDirect3DDevice9* pd3dDevice, double fTime, float fElapsedTime)
@@ -22,7 +22,7 @@ GRAPHICS_PERFORMANCE_TEST("basic/graphics/basicClear", GraphicsBasicClear)
 	  pd3dDevice->Clear(0, NULL, D3DCLEAR_TARGET, 0x00000000, 0, 0);
 	  
 
-	  IUtil::Get()->GetUtilFullScreenQuad()->RenderFullScreenQuad( &iDevice(pd3dDevice) );
+	  IUtil::GetUtilFullScreenQuad()->RenderFullScreenQuad( &iDevice(pd3dDevice) );
    }
 };
 

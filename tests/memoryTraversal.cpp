@@ -1,20 +1,21 @@
 #include <stdio.h>
+#include <assert.h>
 #include <stdlib.h>
 #include "harness/performanceHarness.h"
 
 #define MAX_MEMORY_STEPS 65
 #define DATA_SIZE (1024*1024)
+
 __declspec(align(16)) static float gStaticData[DATA_SIZE];
 static float gResult = 0;
-
 
 void initStatic()
 {
 	for( int i=0;i<DATA_SIZE;i++ )
-	{
 		gStaticData[i]=betterRandf();
-	}
 }
+
+static int last = 0;
 
 class StaticMemoryPerformanceTest : public PerformanceTest
 {
@@ -22,6 +23,12 @@ public:
    int m_NumReads;
 
    int accessPattern[DATA_SIZE];
+
+   StaticMemoryPerformanceTest()
+   {
+      m_NumReads = 0;
+      initStatic();
+   }
 
    void test()
    {
@@ -33,8 +40,6 @@ public:
    }
 };
 
-
-
 class HeapMemoryPerformanceTest : public PerformanceTest
 {
 public:
@@ -43,7 +48,16 @@ public:
    int accessPattern[DATA_SIZE];
    float* data;
 
-   virtual ~HeapMemoryPerformanceTest(){delete[] data;}
+   HeapMemoryPerformanceTest()
+   {
+      m_NumReads = 0;
+      data = NULL;
+   }
+
+   virtual ~HeapMemoryPerformanceTest()
+   {
+      delete[] data;
+   }
 
    void test()
    {
@@ -59,9 +73,7 @@ public:
 		data = new float[DATA_SIZE];
 
 		for( int i=0;i<DATA_SIZE;i++ )
-		{
-			gResult +=data[i];
-		}
+			gResult += data[i];
    }
 };
 
@@ -75,10 +87,6 @@ struct className##MemoryPerfTest; \
 static PerfTestMarker<className##MemoryPerfTest> className##PerfTestMarkerInstance(name); \
 struct className##MemoryPerfTest : public HeapMemoryPerformanceTest
 
-
-
-
-/*
 HEAPMEMORY_PERFORMANCE_TEST("memory/traverse/randomHeap", MTRRandomHeap)
 {
    void initialize()
@@ -88,7 +96,6 @@ HEAPMEMORY_PERFORMANCE_TEST("memory/traverse/randomHeap", MTRRandomHeap)
          accessPattern[i]=betterRand()%(DATA_SIZE);
    }
 };
-*/
 
 HEAPMEMORY_PERFORMANCE_TEST("memory/traverse/linearHeap", MTLinearHeap)
 {
@@ -155,7 +162,7 @@ STATICMEMORY_PERFORMANCE_TEST("memory/traverse/linearBackwardsStatic", MTRLinear
    void initialize()
    {
       for(int i=0; i<DATA_SIZE; i++)
-         accessPattern[i]= (DATA_SIZE - i);
+         accessPattern[i]= (DATA_SIZE - i - 1);
 
 	  initStatic();
    }

@@ -3,8 +3,8 @@
 #include "xmmintrin.h"
 #include "harness/performanceHarness.h"
 
-float* floatSSEArray = IUtil::Get()->GetUtilMemory()->GetFStatic64Bytes();
-float* floatSSEArrayA = IUtil::Get()->GetUtilMemory()->GetFStatic64BytesAligned();
+float* floatSSEArray = IUtil::GetUtilMemory()->GetFStatic64Bytes();
+float* floatSSEArrayA = IUtil::GetUtilMemory()->GetFStatic64BytesAligned();
 
 __m128 gSum;
 

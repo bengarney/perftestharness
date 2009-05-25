@@ -1,28 +1,27 @@
-
 #include "UtilMemory.h"
-
-
-
-
-__declspec(align(16)) static float gStaticData1024x1024[(1024 * 1024)];
 
 static int gIStaticData64Bytes[16];
 static float gFStaticData64Bytes[16];
 __declspec(align(16)) static float gFStaticData64ABytes[16];
+__declspec(align(16)) static char gData[128*(1024 * 1024)];
+__declspec(align(16)) static char gAccess[128*(1024 * 1024)];
 
 UtilMemory::UtilMemory()
 {
-
 }
 
 UtilMemory::~UtilMemory()
 {
-
 }
 
-float* UtilMemory::GetStatic1024x1024_16_Aligned()
+void* UtilMemory::Get16ByteAlignedDataBuffer()
 {
-	return gStaticData1024x1024;
+	return gData;
+}
+
+void* UtilMemory::Get16ByteAlignedAccessBuffer()
+{
+   return gAccess;
 }
 
 int* UtilMemory::GetIStatic64Bytes()

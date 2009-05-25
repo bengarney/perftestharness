@@ -6,8 +6,8 @@
 float gfSum = 0.0f;
 int giSum = 0;
 
-int* intArray = IUtil::Get()->GetUtilMemory()->GetIStatic64Bytes();
-float* floatArray = IUtil::Get()->GetUtilMemory()->GetFStatic64Bytes();
+int* intArray = IUtil::GetUtilMemory()->GetIStatic64Bytes();
+float* floatArray = IUtil::GetUtilMemory()->GetFStatic64Bytes();
 
 
 void gIInitLoopUnrolling()

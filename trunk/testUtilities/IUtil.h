@@ -8,47 +8,35 @@
 class IUtil
 {
 public:
-	static IUtil* Get();
-	
-   UtilFullScreenQuad *GetUtilFullScreenQuad()
+   static UtilFullScreenQuad *GetUtilFullScreenQuad()
    {
 		return &m_FullScreenQuad;
    }
 
-	UtilCacheRandomizer *GetUtilCacheRandomizer()
+	static UtilCacheRandomizer *GetUtilCacheRandomizer()
    {
 		return &m_CacheRandomizer;
    }
 
-	UtilStats *GetUtilStats()
+	static UtilStats *GetUtilStats()
    {
 		return &m_UtilStats;
    }
 
-   UtilLogger *GetUtilLogger()
+   static UtilLogger *GetUtilLogger()
    {
 		return &m_UtilLogger;
    }
 
-   UtilMemory *GetUtilMemory()
+   static UtilMemory *GetUtilMemory()
    {
 		return &m_UtilMemory;
    }
 
 private:
-	static IUtil* m_Instance;
-
-	UtilFullScreenQuad m_FullScreenQuad;
-	UtilCacheRandomizer m_CacheRandomizer;
-	UtilStats m_UtilStats;
-    UtilLogger m_UtilLogger;
-	UtilMemory m_UtilMemory;
+	static UtilFullScreenQuad m_FullScreenQuad;
+	static UtilCacheRandomizer m_CacheRandomizer;
+	static UtilStats m_UtilStats;
+   static UtilLogger m_UtilLogger;
+	static UtilMemory m_UtilMemory;
 };
-
-inline IUtil* IUtil::Get()
-{
-	if( m_Instance==0 )
-		m_Instance = new IUtil();
-
-	return m_Instance;
-}

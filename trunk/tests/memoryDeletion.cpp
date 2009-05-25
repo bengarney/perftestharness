@@ -34,8 +34,6 @@ struct className##MemoryPerfTest : public MemoryNewDeleteTest
 
 NEWDELETE_PERFORMANCE_TEST("memory/allocation/newdelete", MNewDeleteTest)
 {
-   
-
    static const char * getIndependentVariableName()
    {
       return "DATA_SIZE_ROW/MAX_TESTS * ";

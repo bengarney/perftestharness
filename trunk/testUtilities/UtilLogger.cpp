@@ -127,10 +127,41 @@ void printIntegerLabels(int min, int max, int numSteps, const char *units="")
       fprintf_s(reportHtml, "%s%d%s", (i==min) ? "" : "|", (int)floor(i), units);
 }
 
+void smartPrintIndependentLabels(PerfTestMarkerBase *test)
+{
+   std::vector<int> independentValues;
+
+   // Build list of independent values.
+   for(int i=test->getIndependentVariableMin(); i<test->getIndependentVariableMax(); i++)
+      if(test->checkSkipIndependentValue(i) == false)
+         independentValues.push_back(i);
+
+   /* // Filter the list to about 20 items somehow.
+   while(independentValues.size() > 15 && false)
+   {
+      // Skip by half.
+      for(int i=0; i<independentValues.size(); i+=2)
+      {
+         independentValues.erase(independentValues.begin() + i);
+         i--;
+      }
+   } */
+
+   // Output selected values with their positions.
+   fprintf_s(reportHtml, "||1:");
+   for(int i=0; i<independentValues.size(); i++)
+      fprintf_s(reportHtml, "%s%d", "|", independentValues[i]);
+   
+   // Position is actually a bad idea, it just makes it hard to read.
+   /*fprintf_s(reportHtml, "&chxp=1");
+   for(int i=0; i<independentValues.size(); i++)
+      fprintf_s(reportHtml, ",%d", (int)floor(double(i) / double(independentValues.size()) * 100.0)); */
+}
+
 void UtilLogger::endIndependentGroup()
 {
    // Kick out an image showing the means. 500px wide, 300px tall
-   fprintf_s(reportHtml, "<img src='http://chart.apis.google.com/chart?cht=lc&chs=500x300");
+   fprintf_s(reportHtml, "<img src='http://chart.apis.google.com/chart?cht=bvs&chs=600x400");
 
    // Title.
    fprintf_s(reportHtml, "&chtt=Results for %s", gCurrentTest->mName);
@@ -178,8 +209,7 @@ void UtilLogger::endIndependentGroup()
    */
    fprintf_s(reportHtml, "&chxt=y,x&chxl=0:|");
    printDoubleLabels(min, max, 10, "ms");
-   fprintf_s(reportHtml, "|1:|");
-   printIntegerLabels(gCurrentTest->getIndependentVariableMin(), gCurrentTest->getIndependentVariableMax(), 20);
+   smartPrintIndependentLabels(gCurrentTest);
 
    // Close the tag.
    fprintf_s(reportHtml, "'><br>\n");

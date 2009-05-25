@@ -43,26 +43,26 @@ void doTestRun(PerfTestMarkerBase *walk)
 
    double startTime = currentTime();
 
-   IUtil::Get()->GetUtilLogger()->startTest(walk);
+   IUtil::GetUtilLogger()->startTest(walk);
 
    walk->initialize();
 
-   IUtil::Get()->GetUtilStats()->Reset();
+   IUtil::GetUtilStats()->Reset();
 
    // Run it at least 10 times or 1 second.
    //while(runCount < 1 || (currentTime() - startTime) < 2.0)
    while(runCount < gRunNum )
    {
       // Init the cache to a standard
-      IUtil::Get()->GetUtilCacheRandomizer()->Init();
-      IUtil::Get()->GetUtilCacheRandomizer()->ScrambleCache();
+      IUtil::GetUtilCacheRandomizer()->Init();
+      IUtil::GetUtilCacheRandomizer()->ScrambleCache();
 
       // Run the test.
       double duration = walk->runTest();
 
       // Record results.
-      IUtil::Get()->GetUtilLogger()->noteRun(duration);
-      IUtil::Get()->GetUtilStats()->AddDataPoint(duration);
+      IUtil::GetUtilLogger()->noteRun(duration);
+      IUtil::GetUtilStats()->AddDataPoint(duration);
 
       // Track so we can terminate.
       runCount++;
@@ -72,7 +72,7 @@ void doTestRun(PerfTestMarkerBase *walk)
    walk->teardown();
 
    // Note completion of test.
-   IUtil::Get()->GetUtilLogger()->endTest(IUtil::Get()->GetUtilStats());
+   IUtil::GetUtilLogger()->endTest(IUtil::GetUtilStats());
 }
 
 void runTestWithIndependent(PerfTestMarkerBase *walk, int independentValue)
@@ -80,28 +80,28 @@ void runTestWithIndependent(PerfTestMarkerBase *walk, int independentValue)
    double avgTime = 0.0, minTime = 100000000.0, maxTime = 0.0;
    unsigned int runCount = 0;
 
-   IUtil::Get()->GetUtilLogger()->startTestWithIndependent(walk, independentValue);
+   IUtil::GetUtilLogger()->startTestWithIndependent(walk, independentValue);
 
    double startTime = currentTime();
 
    walk->initializeWithIndependent(independentValue);
 
-   IUtil::Get()->GetUtilStats()->Reset();
+   IUtil::GetUtilStats()->Reset();
 
    // Run it at least a hundred times or 1 second.
-   //while(runCount < 1 || (currentTime() - startTime) < 2.0)
-   while( runCount < gRunNum )
+   while(runCount < 1 || (currentTime() - startTime) < 2.0)
+   //while( runCount < gRunNum )
    {
       // Init the cache to a standard
-      IUtil::Get()->GetUtilCacheRandomizer()->Init();
-      IUtil::Get()->GetUtilCacheRandomizer()->ScrambleCache();
+      IUtil::GetUtilCacheRandomizer()->Init();
+      IUtil::GetUtilCacheRandomizer()->ScrambleCache();
 
       // Run the test.
       double duration = walk->runTest();
 
       // Record results.
-      IUtil::Get()->GetUtilLogger()->noteRun(duration);
-      IUtil::Get()->GetUtilStats()->AddDataPoint(duration);
+      IUtil::GetUtilLogger()->noteRun(duration);
+      IUtil::GetUtilStats()->AddDataPoint(duration);
 
       // Track so we can terminate.
       runCount++;
@@ -110,7 +110,7 @@ void runTestWithIndependent(PerfTestMarkerBase *walk, int independentValue)
    walk->teardown();
 
    // Note completion of test.
-   IUtil::Get()->GetUtilLogger()->endTestWithIndependent(IUtil::Get()->GetUtilStats(), independentValue);
+   IUtil::GetUtilLogger()->endTestWithIndependent(IUtil::GetUtilStats(), independentValue);
 }
 
 /************************************************************************/
@@ -126,7 +126,7 @@ void runTest( PerfTestMarkerBase * walk )
    }
    else
    {
-      IUtil::Get()->GetUtilLogger()->startIndependentGroup(walk);
+      IUtil::GetUtilLogger()->startIndependentGroup(walk);
 
       // We have an independent variable. So iterate through it, running
       // the test for each value.
@@ -141,7 +141,7 @@ void runTest( PerfTestMarkerBase * walk )
          runTestWithIndependent(walk, independentValue);
       }
 
-      IUtil::Get()->GetUtilLogger()->endIndependentGroup();
+      IUtil::GetUtilLogger()->endIndependentGroup();
    }
 }
 
@@ -157,9 +157,6 @@ int main(int argc, char* argv[])
    mt_bestseed();
 
    initTimer();
-
-   // Initialize the utilities.
-   IUtil::Get();
 
    // Try to run just so, so that we are consistent.
    SetThreadPriority( GetCurrentThread(),THREAD_PRIORITY_ABOVE_NORMAL );
@@ -206,7 +203,7 @@ int main(int argc, char* argv[])
    }
 
    if( writeHeader )
-      IUtil::Get()->GetUtilLogger()->printHeader();
+      IUtil::GetUtilLogger()->printHeader();
 
    STARTUPINFOA si;
    PROCESS_INFORMATION pi;
@@ -246,7 +243,7 @@ int main(int argc, char* argv[])
 
    if( writeFooter )
    {
-      IUtil::Get()->GetUtilLogger()->printFooter();
+      IUtil::GetUtilLogger()->printFooter();
 
       if( !exit )
       {

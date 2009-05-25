@@ -36,8 +36,6 @@ struct className##MemoryPerfTest : public MemoryPrefetchTest
 
 PREFETCH_PERFORMANCE_TEST("memory/prefetch/prefetch", MPrefetchTest)
 {
-   
-
    static const char * getIndependentVariableName()
    {
       return "distance of prefetch";
@@ -53,7 +51,6 @@ PREFETCH_PERFORMANCE_TEST("memory/prefetch/prefetch", MPrefetchTest)
       return 20;
    }
 
-
    void setIndependentVariable(int v)
    {
 		m_Stride = v;
@@ -61,21 +58,14 @@ PREFETCH_PERFORMANCE_TEST("memory/prefetch/prefetch", MPrefetchTest)
 
    void initialize()
    {
-	  
 	  int ctr=0;
 	  
 	  for(int j=0;j<DATA_SIZE_ROW; j++)
 	  {
 		 gStaticData[j]=rand()%DATA_SIZE_ROW;
 	  }
-	  
    }
 };
-
-
-
-
-
 
 class MemoryNoPrefetchTest : public PerformanceTest
 {

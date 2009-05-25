@@ -66,7 +66,7 @@ UALIGNMENTMEMORY_PERFORMANCE_TEST("memory/alignment/linearUnalignedStatic", MTUn
 
    static const char * getIndependentVariableName()
    {
-      return "data ammount";
+      return "data amount";
    }
 
    static int getIndependentVariableMin()

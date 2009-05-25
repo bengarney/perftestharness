@@ -6,8 +6,8 @@
 
 #define FLOATING_POINT_ONE_POINT_ZERO 0x3f800000
 
-int* intBitwiseArray = IUtil::Get()->GetUtilMemory()->GetIStatic64Bytes();
-float* floatBitwiseArray = IUtil::Get()->GetUtilMemory()->GetFStatic64Bytes();
+int* intBitwiseArray = IUtil::GetUtilMemory()->GetIStatic64Bytes();
+float* floatBitwiseArray = IUtil::GetUtilMemory()->GetFStatic64Bytes();
 
 int giBitwiseSum = 0;
 float gfBitwiseSum = 0;

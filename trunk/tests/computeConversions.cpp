@@ -3,8 +3,8 @@
 #include "testUtilities/IUtil.h"
 #include "harness/performanceHarness.h"
 
-int* intConversionArray = IUtil::Get()->GetUtilMemory()->GetIStatic64Bytes();
-float* floatConversionArray = IUtil::Get()->GetUtilMemory()->GetFStatic64Bytes();
+int* intConversionArray = IUtil::GetUtilMemory()->GetIStatic64Bytes();
+float* floatConversionArray = IUtil::GetUtilMemory()->GetFStatic64Bytes();
 
 int gIntConversion = 0;
 float gFloatConversion = 0;

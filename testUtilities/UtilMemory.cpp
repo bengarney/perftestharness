@@ -1,10 +1,11 @@
+#include "mtwist/mtwist.h"
 #include "UtilMemory.h"
 
 static int gIStaticData64Bytes[16];
 static float gFStaticData64Bytes[16];
 __declspec(align(16)) static float gFStaticData64ABytes[16];
-__declspec(align(16)) static char gData[128*(1024 * 1024)];
-__declspec(align(16)) static char gAccess[128*(1024 * 1024)];
+__declspec(align(16)) static char gData[UtilMemory::BufferSize];
+__declspec(align(16)) static char gAccess[UtilMemory::BufferSize];
 
 UtilMemory::UtilMemory()
 {
@@ -19,9 +20,9 @@ void* UtilMemory::Get16ByteAlignedDataBuffer()
 	return gData;
 }
 
-void* UtilMemory::Get16ByteAlignedAccessBuffer()
+int* UtilMemory::Get16ByteAlignedAccessBuffer()
 {
-   return gAccess;
+   return (int*)gAccess;
 }
 
 int* UtilMemory::GetIStatic64Bytes()
@@ -37,4 +38,19 @@ float* UtilMemory::GetFStatic64Bytes()
 float* UtilMemory::GetFStatic64BytesAligned()
 {
 	return gFStaticData64ABytes;
+}
+
+void UtilMemory::FillAccessBufferWithRandomRange( int min, int max, int count)
+{
+   mt_bestseed();
+   int *accessPattern = (int*)gAccess;
+   for(int i=0; i<count; i++)
+      accessPattern[i] = (mt_lrand() % (max - min)) + min;
+}
+
+void UtilMemory::FillDataBufferWithRandomFloats( int count /*= BufferSize / sizeof(float)*/ )
+{
+   float *data = (float*)gData;
+   for(int i=0; i<count; i++)
+      data[i] = (float)mt_drand();
 }

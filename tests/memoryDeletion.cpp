@@ -1,29 +1,34 @@
 #include "harness/performanceHarness.h"
+#include "testUtilities/IUtil.h"
 
-
-#define DATA_SIZE_ROW 1000000
-#define MAX_TESTS 20
-
-static int* gStaticData;
-static int gResult = 0;
+#define MAX_FLOATING_ALLOCATIONS 1024
+void *gMemPtrs[MAX_FLOATING_ALLOCATIONS];
 
 class MemoryNewDeleteTest : public PerformanceTest
 {
 public:
 
-	int m_Ammount;
+	int m_NumberOfActiveAllocations;
 
    void test()
-   { 
-      int loc = 0;
+   {
+      int *allocPattern = (int*)IUtil::GetUtilMemory()->Get16ByteAlignedAccessBuffer();
+      memset(gMemPtrs, 0, MAX_FLOATING_ALLOCATIONS);
 
-	  for(int k=0;k<100;k++)
-	  {
-		 gStaticData = new int[m_Ammount];
-		 delete[] gStaticData;
-	  }
+      // Keep 1024 floating allocations
+      for(int curAlloc=0; curAlloc < 10000; /*UtilMemory::BufferSize / sizeof(int) ; */ curAlloc++)
+      {
+         if(gMemPtrs[curAlloc % m_NumberOfActiveAllocations]) 
+            free(gMemPtrs[curAlloc % m_NumberOfActiveAllocations]);
 
-	  gResult +=loc;
+         gMemPtrs[curAlloc % m_NumberOfActiveAllocations] = malloc(allocPattern[curAlloc]);
+      }
+
+      // Clear out remaining allocations.
+      for(int i=0; i<MAX_FLOATING_ALLOCATIONS; i++)
+      {
+         SAFE_FREE(gMemPtrs[i]);
+      }
    }
 };
 
@@ -32,11 +37,11 @@ struct className##MemoryPerfTest; \
 static PerfTestMarker<className##MemoryPerfTest> className##PerfTestMarkerInstance(name); \
 struct className##MemoryPerfTest : public MemoryNewDeleteTest
 
-NEWDELETE_PERFORMANCE_TEST("memory/allocation/newdelete", MNewDeleteTest)
+NEWDELETE_PERFORMANCE_TEST("memory/allocation/varyActiveAllocations", MNewDeleteTest)
 {
    static const char * getIndependentVariableName()
    {
-      return "DATA_SIZE_ROW/MAX_TESTS * ";
+      return "# of active allocations";
    }
 
    static int getIndependentVariableMin()
@@ -46,17 +51,22 @@ NEWDELETE_PERFORMANCE_TEST("memory/allocation/newdelete", MNewDeleteTest)
 
    static int getIndependentVariableMax()
    {
-      return MAX_TESTS;
+      return MAX_FLOATING_ALLOCATIONS;
    }
 
+   static bool checkSkipIndependentValue(int v)
+   {
+      // Let's just do powers of 2.
+      return (v & (v - 1)) != 0;
+   }
 
    void setIndependentVariable(int v)
    {
-		m_Ammount =  DATA_SIZE_ROW/MAX_TESTS *(v);
+      m_NumberOfActiveAllocations = v;
    }
 
    void initialize()
    {
-	  
+      IUtil::GetUtilMemory()->FillAccessBufferWithRandomRange(1, 999999, 100000);
    }
 };

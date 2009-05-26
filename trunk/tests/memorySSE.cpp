@@ -2,24 +2,15 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include "harness/performanceHarness.h"
+#include "testUtilities/IUtil.h"
+
 #include "xmmintrin.h"
 #include "emmintrin.h"
 
-#define MAX_SEE_TEST 65
-#define DATA_SIZE 1024*1024
-__declspec(align(16)) static float gStaticSSEData[DATA_SIZE];
-__declspec(align(16)) static float gStaticData[DATA_SIZE];
+//#define MAX_SEE_TEST 65
+#define DATA_SIZE (UtilMemory::BufferSize / sizeof(float))
 static float gResult = 0;
 __m128 gVecResult;
-
-
-void initStaticSSE()
-{
-	for( int i=0;i<DATA_SIZE;i++ )
-	{
-		gStaticData[i]=betterRandf();
-	}
-}
 
 class StaticMemorySSEPerformanceTest : public PerformanceTest
 {
@@ -29,10 +20,12 @@ public:
 
    void test()
    {
+      float *data = (float*)IUtil::GetUtilMemory()->Get16ByteAlignedDataBuffer();
       __declspec(align(16)) float vecOut[4];
+
       for(int i=0; i<m_NumReads; i+=4)
 	  {
-	     __m128 vec = _mm_load_ps(&gStaticSSEData[i]);
+	     __m128 vec = _mm_load_ps(&data[i]);
          gVecResult = _mm_add_ps(vec,gVecResult);
 	  }
 
@@ -55,10 +48,11 @@ public:
 
    void test()
    {
+      float *data = (float*)IUtil::GetUtilMemory()->Get16ByteAlignedDataBuffer();
       for(int i=0; i<m_NumReads; i++)
-	  {
-	     gResult += gStaticData[i];
-	  }
+      {
+         gResult += data[i];
+      }
    }
 
    static bool checkSkipIndependentValue(int independentValue)
@@ -82,7 +76,7 @@ SSEMEMORY_PERFORMANCE_TEST("memory/sse/SSElinearStepStatic", MTSSELStepStatic)
 
    static const char * getIndependentVariableName()
    {
-      return "data ammount";
+      return "data amount";
    }
 
    static int getIndependentVariableMin()
@@ -92,27 +86,25 @@ SSEMEMORY_PERFORMANCE_TEST("memory/sse/SSElinearStepStatic", MTSSELStepStatic)
 
    static int getIndependentVariableMax()
    {
-      return MAX_SEE_TEST;
+      return 64;
    }
 
    void setIndependentVariable(int v)
    {
-      m_NumReads = (DATA_SIZE)/(MAX_SEE_TEST-1) * v;
+      m_NumReads = DATA_SIZE/65 * v;
    }
 
    void initialize()
    {
-	  initStaticSSE();
+      IUtil::GetUtilMemory()->FillDataBufferWithRandomFloats();
    }
 };
 
 NONSSEMEMORY_PERFORMANCE_TEST("memory/sse/NonSSElinearStepStatic", MTNONSSELStepStatic)
 {
- 
-
    static const char * getIndependentVariableName()
    {
-      return "data ammount";
+      return "data amount";
    }
 
    static int getIndependentVariableMin()
@@ -122,16 +114,16 @@ NONSSEMEMORY_PERFORMANCE_TEST("memory/sse/NonSSElinearStepStatic", MTNONSSELStep
 
    static int getIndependentVariableMax()
    {
-      return MAX_SEE_TEST;
+      return 65;
    }
 
    void setIndependentVariable(int v)
    {
-      m_NumReads = (DATA_SIZE)/(MAX_SEE_TEST-1) * v;
+      m_NumReads = DATA_SIZE/65 * v;
    }
 
    void initialize()
    {
-	  initStaticSSE();
+      IUtil::GetUtilMemory()->FillDataBufferWithRandomFloats();
    }
 };

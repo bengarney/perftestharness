@@ -9,6 +9,11 @@
 #include "VtuneApi.h"
 #endif
 
+// Some utilities.
+#ifndef SAFE_FREE
+#define SAFE_FREE(x) if(x) free(x); x = NULL;
+#endif
+
 // These are implemented in winTimer.cpp.
 extern void initTimer();
 extern void startTimer();

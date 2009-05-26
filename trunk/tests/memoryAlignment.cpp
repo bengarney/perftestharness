@@ -101,7 +101,7 @@ ALIGNMENTMEMORY_PERFORMANCE_TEST("memory/alignment/linearAlignedStatic", MTAlign
 
    static const char * getIndependentVariableName()
    {
-      return "data ammount";
+      return "data amount";
    }
 
    static int getIndependentVariableMin()

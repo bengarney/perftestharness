@@ -14,87 +14,46 @@ float gfBitwiseSum = 0;
 
 bool gBoolBitwise = false;
 
-void gIInitBitwiseArray()
-{
-	for(int i=0;i<16;i++ )
-	{
-		intBitwiseArray[i]=rand();
-		if(rand()%2==0)
-		{	
-			intBitwiseArray[i]*=-1;
-		}	
-	}
-}
-
-void gFInitBitwiseArray()
-{
-	for(int i=0;i<16;i++ )
-	{
-		floatBitwiseArray[i]=(rand()*10.0f)/((float)rand());
-		if(rand()%2==0)
-		{	
-			intBitwiseArray[i]*=-1;
-		}	
-	}
-}
-
 PERFORMANCE_TEST("compute/bitwise/swapint/non_bit", swapint_non_bit)
 {
-   void initialize()
-   {
-		gIInitBitwiseArray();
-   }
-
    void test()
    {
 		int t = 0;
-	    for( int j=0;j<100000;j++)
-		for( int i=0;i<15;i++ )
+      int *data = (int*)IUtil::GetUtilMemory()->Get16ByteAlignedDataBuffer();
+
+      for(int i=0; i<UtilMemory::BufferSize / sizeof(int); i++)
 		{
-			t=intBitwiseArray[i];
-			intBitwiseArray[i]=intBitwiseArray[i+1];
-			intBitwiseArray[i+1]=t;
+			t = data[i];
+			data[i] = data[i+1];
+			data[i+1] = t;
 		}
    }
 };
 
 PERFORMANCE_TEST("compute/bitwise/swapint/bit", swapint_bit)
 {
-   void initialize()
-   {
-		gIInitBitwiseArray();
-   }
-
    void test()
    {
-	    for( int j=0;j<100000;j++)
-		for( int i=0;i<15;i++ )
-		{
-			intBitwiseArray[i]^=intBitwiseArray[i+1];
-			intBitwiseArray[i+1]^=intBitwiseArray[i];
-			intBitwiseArray[i]^=intBitwiseArray[i+1];
+      int *data = (int*)IUtil::GetUtilMemory()->Get16ByteAlignedDataBuffer();
+
+      for(int i=0; i<UtilMemory::BufferSize / sizeof(int); i++)
+      {
+         data[i]   ^= data[i+1];
+			data[i+1] ^= data[i];
+			data[i]   ^= data[i+1];
 		}
    }
-
 };
-
 
 PERFORMANCE_TEST("compute/bitwise/bitmask/bit", bitmask_bit)
 {
-   void initialize()
-   {
-		gIInitBitwiseArray();
-   }
-
    void test()
    {
 		int t=intBitwiseArray[0];
 		int shift = 1;
 
-
-
-	    for( int j=0;j<100000;j++)
-		for( int i=0;i<15;i++ )
+      int *data = (int*)IUtil::GetUtilMemory()->Get16ByteAlignedDataBuffer();
+      for(int i=0; i<UtilMemory::BufferSize / sizeof(int); i++)
 		{
 			__asm
 			{
@@ -110,21 +69,15 @@ PERFORMANCE_TEST("compute/bitwise/bitmask/bit", bitmask_bit)
 
 PERFORMANCE_TEST("compute/bitwise/bitmask/non_bit", bitmask_non_bit)
 {
-   void initialize()
-   {
-		gIInitBitwiseArray();
-   }
-
    void test()
    {
-		int t = 0;
-	    for( int j=0;j<100000;j++)
-		for( int i=0;i<15;i++ )
+      int *data = (int*)IUtil::GetUtilMemory()->Get16ByteAlignedDataBuffer();
+      for(int i=0; i<UtilMemory::BufferSize / sizeof(int); i++)
 		{
-			int val = intBitwiseArray[i];
+			int val = data[i];
 			__asm
 			{
-				mov giBitwiseSum,eax;
+				mov giBitwiseSum, eax;
 			}
 		}
    }
@@ -134,15 +87,15 @@ PERFORMANCE_TEST("compute/bitwise/bitmodulo/non_bit", bitmodulo_non_bit)
 {
    void initialize()
    {
-		gIInitBitwiseArray();
+      IUtil::GetUtilMemory()->FillDataBufferWithRandomFloats();
    }
 
    void test()
    {
-	    for( int j=0;j<100000;j++)
-		for( int i=0;i<15;i++ )
+      int *data = (int*)IUtil::GetUtilMemory()->Get16ByteAlignedDataBuffer();
+      for(int i=0; i<UtilMemory::BufferSize / sizeof(int); i++)
 		{
-			giBitwiseSum = intBitwiseArray[i]%256;
+			giBitwiseSum = data[i]%256;
 		}
    }
 };
@@ -151,15 +104,15 @@ PERFORMANCE_TEST("compute/bitwise/bitmodulo/bit", bitmodulo_bit)
 {
    void initialize()
    {
-		gIInitBitwiseArray();
+      IUtil::GetUtilMemory()->FillDataBufferWithRandomFloats();
    }
 
    void test()
    {
-	    for( int j=0;j<100000;j++)
-		for( int i=0;i<15;i++ )
+      int *data = (int*)IUtil::GetUtilMemory()->Get16ByteAlignedDataBuffer();
+      for(int i=0; i<UtilMemory::BufferSize / sizeof(int); i++)
 		{
-			giBitwiseSum += intBitwiseArray[i]&255;
+			giBitwiseSum += data[i]&255;
 		}
    }
 };
@@ -169,17 +122,16 @@ PERFORMANCE_TEST("compute/bitwise/absolute_value/non_bit", absolute_non_bit)
 {
    void initialize()
    {
-		gIInitBitwiseArray();
+      IUtil::GetUtilMemory()->FillDataBufferWithRandomFloats();
    }
 
    void test()
    {
-	    for( int j=0;j<100000;j++)
-		for( int i=0;i<15;i++ )
+      int *data = (int*)IUtil::GetUtilMemory()->Get16ByteAlignedDataBuffer();
+      for(int i=0; i<UtilMemory::BufferSize / sizeof(int); i++)
 		{
-			int x = intBitwiseArray[i];
-			x < 0 ? -x : x; 
-			giBitwiseSum += x;
+			int x = data[i];
+			giBitwiseSum += x < 0 ? -x : x; 
 		}
    }
 };
@@ -188,15 +140,15 @@ PERFORMANCE_TEST("compute/bitwise/absolute_value/bit", absolute_bit)
 {
    void initialize()
    {
-		gIInitBitwiseArray();
+      IUtil::GetUtilMemory()->FillDataBufferWithRandomFloats();
    }
 
    void test()
    {
-	    for( int j=0;j<100000;j++)
-		for( int i=0;i<15;i++ )
+      int *data = (int*)IUtil::GetUtilMemory()->Get16ByteAlignedDataBuffer();
+      for(int i=0; i<UtilMemory::BufferSize / sizeof(int); i++)
 		{
-			int x = intBitwiseArray[i];
+			int x = data[i];
 			giBitwiseSum += (x ^ (x >> 31)) - (x >> 31);
 		}
    }
@@ -208,15 +160,15 @@ PERFORMANCE_TEST("compute/bitwise/evenness/non_bit", evenness_non_bit)
 {
    void initialize()
    {
-		gIInitBitwiseArray();
+      IUtil::GetUtilMemory()->FillDataBufferWithRandomFloats();
    }
 
    void test()
    {
-	    for( int j=0;j<100000;j++)
-		for( int i=0;i<15;i++ )
+      int *data = (int*)IUtil::GetUtilMemory()->Get16ByteAlignedDataBuffer();
+      for(int i=0; i<UtilMemory::BufferSize / sizeof(float); i++)
 		{
-			int x = intBitwiseArray[i];
+			int x = data[i];
 			gBoolBitwise = ((x % 2) == 0);
 		}
    }
@@ -226,15 +178,15 @@ PERFORMANCE_TEST("compute/bitwise/evenness/bit", eveness_bit)
 {
    void initialize()
    {
-		gIInitBitwiseArray();
+      IUtil::GetUtilMemory()->FillDataBufferWithRandomFloats();
    }
 
    void test()
    {
-	    for( int j=0;j<100000;j++)
-		for( int i=0;i<15;i++ )
+      int *data = (int*)IUtil::GetUtilMemory()->Get16ByteAlignedDataBuffer();
+      for(int i=0; i<UtilMemory::BufferSize / sizeof(float); i++)
 		{
-			int x = intBitwiseArray[i];
+			int x = data[i];
 			gBoolBitwise = ( (x&1)==0 );
 		}
    }
@@ -245,17 +197,18 @@ PERFORMANCE_TEST("compute/bitwise/equal_sign/non_bit", equal_sign_non_bit)
 {
    void initialize()
    {
-		gIInitBitwiseArray();
+      IUtil::GetUtilMemory()->FillDataBufferWithRandomFloats();
    }
 
    void test()
    {
 		int y=-3;
-	    for( int j=0;j<100000;j++)
-		for( int i=0;i<15;i++ )
+
+      int *data = (int*)IUtil::GetUtilMemory()->Get16ByteAlignedDataBuffer();
+      for(int i=0; i<UtilMemory::BufferSize / sizeof(int); i++)
 		{
-			int x = intBitwiseArray[i];
-			gBoolBitwise = (x*y>0);
+			int x = data[i];
+			gBoolBitwise ^= (x*y>0);
 		}
    }
 };
@@ -264,18 +217,19 @@ PERFORMANCE_TEST("compute/bitwise/equal_sign/bit", equal_sign_bit)
 {
    void initialize()
    {
-		gIInitBitwiseArray();
+      IUtil::GetUtilMemory()->FillDataBufferWithRandomFloats();
    }
 
    void test()
    {
 		int y=-3;
-	    for( int j=0;j<100000;j++)
-		for( int i=0;i<15;i++ )
+
+      int *data = (int*)IUtil::GetUtilMemory()->Get16ByteAlignedDataBuffer();
+      for(int i=0; i<UtilMemory::BufferSize / sizeof(int); i++)
 		{
 
-			int x = intBitwiseArray[i];
-			gBoolBitwise = ((x^y)>=0);
+			int x = data[i];
+			gBoolBitwise ^= ((x^y)>=0);
 
 		}
    }
@@ -286,17 +240,14 @@ PERFORMANCE_TEST("compute/bitwise/square_root/non_bit", square_root_non_bit )
 {
    void initialize()
    {
-		gFInitBitwiseArray();
+      IUtil::GetUtilMemory()->FillDataBufferWithRandomFloats();
    }
 
    void test()
    {
-	    for( int j=0;j<100000;j++)
-		for( int i=0;i<15;i++ )
-		{
-			float x = floatBitwiseArray[i];
-			gfBitwiseSum += sqrtf(x);
-		}
+      float *data = (float*)IUtil::GetUtilMemory()->Get16ByteAlignedDataBuffer();
+      for(int i=0; i<UtilMemory::BufferSize / sizeof(float); i++)
+			gfBitwiseSum += sqrtf(data[i]);
    }
 };
 
@@ -304,20 +255,19 @@ PERFORMANCE_TEST("compute/bitwise/square_root/bit", square_root_bit )
 {
    void initialize()
    {
-		gFInitBitwiseArray();
+      IUtil::GetUtilMemory()->FillDataBufferWithRandomFloats();
    }
 
    void test()
    {
-	    for( int j=0;j<100000;j++)
-		for( int i=0;i<15;i++ )
+      float *data = (float*)IUtil::GetUtilMemory()->Get16ByteAlignedDataBuffer();
+      for(int i=0; i<UtilMemory::BufferSize / sizeof(float); i++)
 		{
-			int temp = *(int*)&floatBitwiseArray[i];
+			int temp = *(int*)&data[i];
 			temp -= FLOATING_POINT_ONE_POINT_ZERO;
 			temp >>= 1;
 			temp += FLOATING_POINT_ONE_POINT_ZERO;
 			gfBitwiseSum += *(float*)&temp;
-			
 		}
    }
 };

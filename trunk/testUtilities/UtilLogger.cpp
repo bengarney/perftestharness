@@ -19,6 +19,80 @@ struct SeriesData
 PerfTestMarkerBase *gCurrentTest = NULL;
 std::vector<SeriesData> gSeries;
 
+
+/************************************************************************/
+/*
+The following copyright message applies to curl_escape:
+
+COPYRIGHT AND PERMISSION NOTICE
+
+Copyright (c) 1996 - 2009, Daniel Stenberg, <daniel@haxx.se>.
+
+All rights reserved.
+
+Permission to use, copy, modify, and distribute this software for any purpose
+with or without fee is hereby granted, provided that the above copyright
+notice and this permission notice appear in all copies.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT OF THIRD PARTY RIGHTS. IN
+NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM,
+DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR
+OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE
+OR OTHER DEALINGS IN THE SOFTWARE.
+
+Except as contained in this notice, the name of a copyright holder shall not
+be used in advertising or otherwise to promote the sale, use or other dealings
+in this Software without prior written authorization of the copyright holder. */
+/************************************************************************/
+char *curl_escape(const char *string, int inlength = 0)
+{
+   size_t alloc = (inlength?(size_t)inlength:strlen(string))+1;
+   char *ns;
+   char *testing_ptr = NULL;
+   unsigned char in;
+   size_t newlen = alloc;
+   int strindex=0;
+   size_t length;
+
+   ns = (char*)malloc(alloc);
+   if(!ns)
+      return NULL;
+
+   length = alloc-1;
+   while(length--) {
+      in = *string;
+      if(!(in >= 'a' && in <= 'z') &&
+         !(in >= 'A' && in <= 'Z') &&
+         !(in >= '0' && in <= '9')) {
+            /* encode it */
+            newlen += 2; /* the size grows with two, since this'll become a %XX */
+            if(newlen > alloc) {
+               alloc *= 2;
+               testing_ptr = (char*)realloc(ns, alloc);
+               if(!testing_ptr) {
+                  free( ns );
+                  return NULL;
+               }
+               else {
+                  ns = testing_ptr;
+               }
+            }
+            sprintf_s(&ns[strindex], 4, "%%%02X", in);
+
+            strindex+=3;
+      }
+      else {
+         /* just copy this */
+         ns[strindex++]=in;
+      }
+      string++;
+   }
+   ns[strindex]=0; /* terminate it */
+   return ns;
+}
+
 void UtilLogger::printHeader()
 {
    // Open the XML log.
@@ -48,6 +122,8 @@ void UtilLogger::startTest( PerfTestMarkerBase *test )
 
    fopen_s(&xmlLog, "times.xml", "a");
    fprintf_s(xmlLog, "<Entry><Title>%s</Title>", test->mName);
+
+   fprintf_s(reportHtml, "<p><b>%s:</b> ", test->mName);
 }
 
 void UtilLogger::startTestWithIndependent(PerfTestMarkerBase *test, int independent)
@@ -76,6 +152,10 @@ void UtilLogger::endTest( UtilStats *statistics )
 
    printf("   - Ran performance test %d times.\n", statistics->GetCount());
    printf("   - Timing: avg %lfms, min %lfms, max %lfms, stddev %lf\n", 
+      statistics->GetMean(), statistics->GetMin(), statistics->GetMax(),statistics->GetStdDeviation());
+
+   fprintf_s(reportHtml, "<br>Ran performance test %d times.", statistics->GetCount());
+   fprintf_s(reportHtml, "<br>Timing: avg %lfms, min %lfms, max %lfms, stddev %lf</p>", 
       statistics->GetMean(), statistics->GetMin(), statistics->GetMax(),statistics->GetStdDeviation());
 }
 
@@ -164,7 +244,7 @@ void UtilLogger::endIndependentGroup()
    fprintf_s(reportHtml, "<img src='http://chart.apis.google.com/chart?cht=bvs&chs=600x400");
 
    // Title.
-   fprintf_s(reportHtml, "&chtt=Results for %s", gCurrentTest->mName);
+   fprintf_s(reportHtml, "&chtt=Results for %s", curl_escape(gCurrentTest->mName));
 
    // Include the datapoints.
    // &chd=t:30,-60,50,120,80,-90
@@ -197,7 +277,7 @@ void UtilLogger::endIndependentGroup()
    fprintf_s(reportHtml, "&chds=%.2Lf,%.2Lf", min, max);
 
    // Series labels.
-   fprintf_s(reportHtml, "&chdlp=b&chdl=%s", gCurrentTest->getIndependentVariableName());
+   fprintf_s(reportHtml, "&chdlp=b&chdl=%s", curl_escape(gCurrentTest->getIndependentVariableName()));
 
    /* Axis labels.
    chxt=x,y,r,x

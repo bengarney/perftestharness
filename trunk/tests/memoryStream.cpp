@@ -9,32 +9,21 @@ __declspec(align(64)) static unsigned int gStaticData[DATA_SIZE_COLUMN][DATA_SIZ
 static unsigned int gResult = 0;
 bool m_Init=false;
 
-class MemoryStreamPerformanceTest : public PerformanceTest
+PERFORMANCE_TEST("memory/stream/memorystream", MStreamTest, 8000)
 {
-public:
-
    int numStream;
    int m_readNum;
 
 
    void test()
    { 
-	  for(int j=0; j<m_readNum; j++)
-	  for(int i=0; i<numStream; i++)
-	  {
-		 gResult += gStaticData[i][j];
-	  }
-
+      for(int j=0; j<m_readNum; j++)
+         for(int i=0; i<numStream; i++)
+         {
+            gResult += gStaticData[i][j];
+         }
    }
-};
 
-#define STREAMMEMORY_PERFORMANCE_TEST(name, className) \
-struct className##MemoryPerfTest; \
-static PerfTestMarker<className##MemoryPerfTest> className##PerfTestMarkerInstance(name); \
-struct className##MemoryPerfTest : public MemoryStreamPerformanceTest
-
-STREAMMEMORY_PERFORMANCE_TEST("memory/stream/memorystream", MStreamTest)
-{
    static const char *getIndependentVariableName()
    {
       return "number of streams through cache";

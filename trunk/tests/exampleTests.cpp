@@ -5,7 +5,7 @@
 
       1. Prepare the test header macro:
 
-            PERFORMANCE_TEST("examples/basicTest", ExampleTest)
+            PERFORMANCE_TEST("examples/basicTest", ExampleTest, 0)
 
          The first parameter is the display name. Group them by category
          and delimit with slashes.
@@ -14,10 +14,13 @@
          internally. It needs to be unique, ought to be descriptive, and
          is otherwise not used.
 
+         The third parameter is an order index. We group tests by chapter
+         using thousands, and in book order via the remaining digits.
+
       2. Fill in the actual test. An empty version of the above test will
          look like:
 
-            PERFORMANCE_TEST("examples/basicTest", ExampleTest)
+            PERFORMANCE_TEST("examples/basicTest", ExampleTest, 0)
             {
                void test()
                {
@@ -33,7 +36,7 @@
 
 *************************************************************************/
 
-PERFORMANCE_TEST("examples/basicTest", ExampleTest)
+PERFORMANCE_TEST("examples/basicTest", ExampleTest, 0)
 {
    void test()
    {

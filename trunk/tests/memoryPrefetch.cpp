@@ -3,39 +3,28 @@
 #include "xmmintrin.h"
 #include "harness/performanceHarness.h"
 
-
 #define DATA_SIZE_ROW (1024*1024)
 
 static int gStaticData[DATA_SIZE_ROW];
 static int gResult = 0;
 
-class MemoryPrefetchTest : public PerformanceTest
+PERFORMANCE_TEST("memory/prefetch/prefetch", MPrefetchTest, 8000)
 {
-public:
-
-	int m_Stride;
+   int m_Stride;
 
    void test()
    { 
       int loc = 0;
 
-	  for(int i=0; i<DATA_SIZE_ROW; i++)
-	  {
-		 _mm_prefetch((char*)&gStaticData[loc+m_Stride],_MM_HINT_T0); 
-		 loc = gStaticData[loc];
-	  }
+      for(int i=0; i<DATA_SIZE_ROW; i++)
+      {
+         _mm_prefetch((char*)&gStaticData[loc+m_Stride],_MM_HINT_T0); 
+         loc = gStaticData[loc];
+      }
 
-	  gResult +=loc;
+      gResult +=loc;
    }
-};
 
-#define PREFETCH_PERFORMANCE_TEST(name, className) \
-struct className##MemoryPerfTest; \
-static PerfTestMarker<className##MemoryPerfTest> className##PerfTestMarkerInstance(name); \
-struct className##MemoryPerfTest : public MemoryPrefetchTest
-
-PREFETCH_PERFORMANCE_TEST("memory/prefetch/prefetch", MPrefetchTest)
-{
    static const char * getIndependentVariableName()
    {
       return "distance of prefetch";
@@ -67,32 +56,22 @@ PREFETCH_PERFORMANCE_TEST("memory/prefetch/prefetch", MPrefetchTest)
    }
 };
 
-class MemoryNoPrefetchTest : public PerformanceTest
+PERFORMANCE_TEST("memory/prefetch/noprefetch", MNoPrefetchTest, 8000)
 {
-public:
-
-	int m_Stride;
+   int m_Stride;
 
    void test()
    { 
       int loc = 0;
 
-	  for(int i=0; i<DATA_SIZE_ROW; i++)
-	  {
-		 loc = gStaticData[loc];
-	  }
+      for(int i=0; i<DATA_SIZE_ROW; i++)
+      {
+         loc = gStaticData[loc];
+      }
 
-	  gResult +=loc;
+      gResult +=loc;
    }
-};
 
-#define NOPREFETCH_PERFORMANCE_TEST(name, className) \
-struct className##MemoryPerfTest; \
-static PerfTestMarker<className##MemoryPerfTest> className##PerfTestMarkerInstance(name); \
-struct className##MemoryPerfTest : public MemoryNoPrefetchTest
-
-NOPREFETCH_PERFORMANCE_TEST("memory/prefetch/noprefetch", MNoPrefetchTest)
-{
    static const char * getIndependentVariableName()
    {
       return "distance of prefetch";

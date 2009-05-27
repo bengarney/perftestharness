@@ -7,7 +7,6 @@
 __declspec(align(16)) static char gStaticDataAligment[DATA_SIZE*sizeof(int)];
 static int gResult = 0;
 
-
 void initStaticAlignment()
 {
 	for( int i=0;i<DATA_SIZE;i++ )
@@ -16,53 +15,19 @@ void initStaticAlignment()
 	}
 }
 
-class StaticMemoryUnAlignedPerformanceTest : public PerformanceTest
+PERFORMANCE_TEST("memory/alignment/linearUnalignedStatic", MTUnalignedStepStatic, 8000)
 {
-public:
-
    int m_NumReads;
 
    void test()
    {
       int* pInt = (int*)&gStaticDataAligment[1];
       for(int i=0; i<m_NumReads-1; i++)
-	  {
-	    gResult+= *pInt;
-		pInt++;
-	  }
+      {
+         gResult+= *pInt;
+         pInt++;
+      }
    }
-};
-
-class StaticAlignedPerformanceTest : public PerformanceTest
-{
-
-public:
-
-   int m_NumReads;
-
-   void test()
-   {
-      int* pInt = (int*)&gStaticDataAligment;
-      for(int i=0; i<m_NumReads-1; i++)
-	  {
-	    gResult+= *pInt;
-		pInt++;
-	  }
-   }
-};
-
-#define UALIGNMENTMEMORY_PERFORMANCE_TEST(name, className) \
-struct className##MemoryPerfTest; \
-static PerfTestMarker<className##MemoryPerfTest> className##PerfTestMarkerInstance(name); \
-struct className##MemoryPerfTest : public StaticMemoryUnAlignedPerformanceTest
-
-#define ALIGNMENTMEMORY_PERFORMANCE_TEST(name, className) \
-struct className##MemoryPerfTest; \
-static PerfTestMarker<className##MemoryPerfTest> className##PerfTestMarkerInstance(name); \
-struct className##MemoryPerfTest : public StaticAlignedPerformanceTest
-
-UALIGNMENTMEMORY_PERFORMANCE_TEST("memory/alignment/linearUnalignedStatic", MTUnalignedStepStatic)
-{
 
    static const char * getIndependentVariableName()
    {
@@ -95,9 +60,19 @@ UALIGNMENTMEMORY_PERFORMANCE_TEST("memory/alignment/linearUnalignedStatic", MTUn
    }
 };
 
-ALIGNMENTMEMORY_PERFORMANCE_TEST("memory/alignment/linearAlignedStatic", MTAlignedLStepStatic)
+PERFORMANCE_TEST("memory/alignment/linearAlignedStatic", MTAlignedLStepStatic, 8000)
 {
- 
+   int m_NumReads;
+
+   void test()
+   {
+      int* pInt = (int*)&gStaticDataAligment;
+      for(int i=0; i<m_NumReads-1; i++)
+      {
+         gResult+= *pInt;
+         pInt++;
+      }
+   }
 
    static const char * getIndependentVariableName()
    {

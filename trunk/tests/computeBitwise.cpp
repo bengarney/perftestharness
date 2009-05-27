@@ -14,7 +14,7 @@ float gfBitwiseSum = 0;
 
 bool gBoolBitwise = false;
 
-PERFORMANCE_TEST("compute/bitwise/swapint/non_bit", swapint_non_bit)
+PERFORMANCE_TEST("compute/bitwise/swapint/non_bit", swapint_non_bit, 8000)
 {
    void test()
    {
@@ -30,7 +30,7 @@ PERFORMANCE_TEST("compute/bitwise/swapint/non_bit", swapint_non_bit)
    }
 };
 
-PERFORMANCE_TEST("compute/bitwise/swapint/bit", swapint_bit)
+PERFORMANCE_TEST("compute/bitwise/swapint/bit", swapint_bit, 8000)
 {
    void test()
    {
@@ -45,7 +45,7 @@ PERFORMANCE_TEST("compute/bitwise/swapint/bit", swapint_bit)
    }
 };
 
-PERFORMANCE_TEST("compute/bitwise/bitmask/bit", bitmask_bit)
+PERFORMANCE_TEST("compute/bitwise/bitmask/bit", bitmask_bit, 8000)
 {
    void test()
    {
@@ -67,7 +67,7 @@ PERFORMANCE_TEST("compute/bitwise/bitmask/bit", bitmask_bit)
    }
 };
 
-PERFORMANCE_TEST("compute/bitwise/bitmask/non_bit", bitmask_non_bit)
+PERFORMANCE_TEST("compute/bitwise/bitmask/non_bit", bitmask_non_bit, 8000)
 {
    void test()
    {
@@ -83,7 +83,7 @@ PERFORMANCE_TEST("compute/bitwise/bitmask/non_bit", bitmask_non_bit)
    }
 };
 
-PERFORMANCE_TEST("compute/bitwise/bitmodulo/non_bit", bitmodulo_non_bit)
+PERFORMANCE_TEST("compute/bitwise/bitmodulo/non_bit", bitmodulo_non_bit, 8000)
 {
    void initialize()
    {
@@ -100,7 +100,7 @@ PERFORMANCE_TEST("compute/bitwise/bitmodulo/non_bit", bitmodulo_non_bit)
    }
 };
 
-PERFORMANCE_TEST("compute/bitwise/bitmodulo/bit", bitmodulo_bit)
+PERFORMANCE_TEST("compute/bitwise/bitmodulo/bit", bitmodulo_bit, 8000)
 {
    void initialize()
    {
@@ -118,7 +118,7 @@ PERFORMANCE_TEST("compute/bitwise/bitmodulo/bit", bitmodulo_bit)
 };
 
 
-PERFORMANCE_TEST("compute/bitwise/absolute_value/non_bit", absolute_non_bit)
+PERFORMANCE_TEST("compute/bitwise/absolute_value/non_bit", absolute_non_bit, 8000)
 {
    void initialize()
    {
@@ -136,7 +136,7 @@ PERFORMANCE_TEST("compute/bitwise/absolute_value/non_bit", absolute_non_bit)
    }
 };
 
-PERFORMANCE_TEST("compute/bitwise/absolute_value/bit", absolute_bit)
+PERFORMANCE_TEST("compute/bitwise/absolute_value/bit", absolute_bit, 8000)
 {
    void initialize()
    {
@@ -156,7 +156,7 @@ PERFORMANCE_TEST("compute/bitwise/absolute_value/bit", absolute_bit)
 
 
 
-PERFORMANCE_TEST("compute/bitwise/evenness/non_bit", evenness_non_bit)
+PERFORMANCE_TEST("compute/bitwise/evenness/non_bit", evenness_non_bit, 8000)
 {
    void initialize()
    {
@@ -174,7 +174,7 @@ PERFORMANCE_TEST("compute/bitwise/evenness/non_bit", evenness_non_bit)
    }
 };
 
-PERFORMANCE_TEST("compute/bitwise/evenness/bit", eveness_bit)
+PERFORMANCE_TEST("compute/bitwise/evenness/bit", eveness_bit, 8000)
 {
    void initialize()
    {
@@ -193,7 +193,7 @@ PERFORMANCE_TEST("compute/bitwise/evenness/bit", eveness_bit)
 };
 
 
-PERFORMANCE_TEST("compute/bitwise/equal_sign/non_bit", equal_sign_non_bit)
+PERFORMANCE_TEST("compute/bitwise/equal_sign/non_bit", equal_sign_non_bit, 8000)
 {
    void initialize()
    {
@@ -213,7 +213,7 @@ PERFORMANCE_TEST("compute/bitwise/equal_sign/non_bit", equal_sign_non_bit)
    }
 };
 
-PERFORMANCE_TEST("compute/bitwise/equal_sign/bit", equal_sign_bit)
+PERFORMANCE_TEST("compute/bitwise/equal_sign/bit", equal_sign_bit, 8000)
 {
    void initialize()
    {
@@ -236,7 +236,7 @@ PERFORMANCE_TEST("compute/bitwise/equal_sign/bit", equal_sign_bit)
 };
 
 
-PERFORMANCE_TEST("compute/bitwise/square_root/non_bit", square_root_non_bit )
+PERFORMANCE_TEST("compute/bitwise/square_root/non_bit", square_root_non_bit, 8000)
 {
    void initialize()
    {
@@ -251,7 +251,7 @@ PERFORMANCE_TEST("compute/bitwise/square_root/non_bit", square_root_non_bit )
    }
 };
 
-PERFORMANCE_TEST("compute/bitwise/square_root/bit", square_root_bit )
+PERFORMANCE_TEST("compute/bitwise/square_root/bit", square_root_bit, 8000)
 {
    void initialize()
    {

@@ -4,11 +4,9 @@
 #define MAX_FLOATING_ALLOCATIONS 1024
 void *gMemPtrs[MAX_FLOATING_ALLOCATIONS];
 
-class MemoryNewDeleteTest : public PerformanceTest
+PERFORMANCE_TEST("memory/allocation/varyActiveAllocations", MNewDeleteTest, 8000)
 {
-public:
-
-	int m_NumberOfActiveAllocations;
+   int m_NumberOfActiveAllocations;
 
    void test()
    {
@@ -30,15 +28,7 @@ public:
          SAFE_FREE(gMemPtrs[i]);
       }
    }
-};
 
-#define NEWDELETE_PERFORMANCE_TEST(name, className) \
-struct className##MemoryPerfTest; \
-static PerfTestMarker<className##MemoryPerfTest> className##PerfTestMarkerInstance(name); \
-struct className##MemoryPerfTest : public MemoryNewDeleteTest
-
-NEWDELETE_PERFORMANCE_TEST("memory/allocation/varyActiveAllocations", MNewDeleteTest)
-{
    static const char * getIndependentVariableName()
    {
       return "# of active allocations";

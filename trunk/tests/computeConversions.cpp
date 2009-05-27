@@ -27,7 +27,7 @@ void gInitConversionArray()
 	}
 }
 
-PERFORMANCE_TEST("compute/conversions/ftoi_fast", ftoi_fast )
+PERFORMANCE_TEST("compute/conversions/ftoi_fast", ftoi_fast, 8000 )
 {
    void initialize()
    {
@@ -45,7 +45,7 @@ PERFORMANCE_TEST("compute/conversions/ftoi_fast", ftoi_fast )
    }
 };
 
-PERFORMANCE_TEST("compute/conversions/ftoi", ftoi)
+PERFORMANCE_TEST("compute/conversions/ftoi", ftoi, 8000)
 {
    void initialize()
    {
@@ -64,7 +64,7 @@ PERFORMANCE_TEST("compute/conversions/ftoi", ftoi)
 };
 
 
-PERFORMANCE_TEST("compute/conversions/itof", itof)
+PERFORMANCE_TEST("compute/conversions/itof", itof, 8000)
 {
    void initialize()
    {

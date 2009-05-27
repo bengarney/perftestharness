@@ -28,7 +28,7 @@ static int criticalStride[STRIDE_COUNT][2] =
    { 8209, 8209 },
 };
 
-PERFORMANCE_TEST("memory/traversal/criticalStride", MemoryTraverseCriticalStride)
+PERFORMANCE_TEST("memory/traversal/criticalStride", MemoryTraverseCriticalStride, 8000)
 {
    void test()
    {

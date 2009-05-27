@@ -12,10 +12,8 @@
 static float gResult = 0;
 __m128 gVecResult;
 
-class StaticMemorySSEPerformanceTest : public PerformanceTest
+PERFORMANCE_TEST("memory/sse/SSElinearStepStatic", MTSSELStepStatic, 8000)
 {
-public:
-
    int m_NumReads;
 
    void test()
@@ -24,55 +22,19 @@ public:
       __declspec(align(16)) float vecOut[4];
 
       for(int i=0; i<m_NumReads; i+=4)
-	  {
-	     __m128 vec = _mm_load_ps(&data[i]);
-         gVecResult = _mm_add_ps(vec,gVecResult);
-	  }
-
-	  _mm_store_ps(vecOut,gVecResult);
-	  gResult+=vecOut[1];
-   }
-
-   static bool checkSkipIndependentValue(int independentValue)
-   {
-		return!( independentValue%4==0 );
-   }
-};
-
-class StaticLinearPerformanceTest : public PerformanceTest
-{
-
-public:
-
-   int m_NumReads;
-
-   void test()
-   {
-      float *data = (float*)IUtil::GetUtilMemory()->Get16ByteAlignedDataBuffer();
-      for(int i=0; i<m_NumReads; i++)
       {
-         gResult += data[i];
+         __m128 vec = _mm_load_ps(&data[i]);
+         gVecResult = _mm_add_ps(vec,gVecResult);
       }
+
+      _mm_store_ps(vecOut,gVecResult);
+      gResult+=vecOut[1];
    }
 
    static bool checkSkipIndependentValue(int independentValue)
    {
-		return!( independentValue%4==0 );
+      return!( independentValue%4==0 );
    }
-};
-
-#define SSEMEMORY_PERFORMANCE_TEST(name, className) \
-struct className##MemoryPerfTest; \
-static PerfTestMarker<className##MemoryPerfTest> className##PerfTestMarkerInstance(name); \
-struct className##MemoryPerfTest : public StaticMemorySSEPerformanceTest
-
-#define NONSSEMEMORY_PERFORMANCE_TEST(name, className) \
-struct className##MemoryPerfTest; \
-static PerfTestMarker<className##MemoryPerfTest> className##PerfTestMarkerInstance(name); \
-struct className##MemoryPerfTest : public StaticLinearPerformanceTest
-
-SSEMEMORY_PERFORMANCE_TEST("memory/sse/SSElinearStepStatic", MTSSELStepStatic)
-{
 
    static const char * getIndependentVariableName()
    {
@@ -100,8 +62,25 @@ SSEMEMORY_PERFORMANCE_TEST("memory/sse/SSElinearStepStatic", MTSSELStepStatic)
    }
 };
 
-NONSSEMEMORY_PERFORMANCE_TEST("memory/sse/NonSSElinearStepStatic", MTNONSSELStepStatic)
+PERFORMANCE_TEST("memory/sse/NonSSElinearStepStatic", MTNONSSELStepStatic, 8000)
 {
+
+   int m_NumReads;
+
+   void test()
+   {
+      float *data = (float*)IUtil::GetUtilMemory()->Get16ByteAlignedDataBuffer();
+      for(int i=0; i<m_NumReads; i++)
+      {
+         gResult += data[i];
+      }
+   }
+
+   static bool checkSkipIndependentValue(int independentValue)
+   {
+      return!( independentValue%4==0 );
+   }
+
    static const char * getIndependentVariableName()
    {
       return "data amount";

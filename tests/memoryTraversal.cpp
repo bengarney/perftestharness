@@ -82,12 +82,8 @@ struct className##MemoryPerfTest; \
 static PerfTestMarker<className##MemoryPerfTest> className##PerfTestMarkerInstance(name); \
 struct className##MemoryPerfTest : public StaticMemoryPerformanceTest
 
-#define HEAPMEMORY_PERFORMANCE_TEST(name, className) \
-struct className##MemoryPerfTest; \
-static PerfTestMarker<className##MemoryPerfTest> className##PerfTestMarkerInstance(name); \
-struct className##MemoryPerfTest : public HeapMemoryPerformanceTest
 
-HEAPMEMORY_PERFORMANCE_TEST("memory/traverse/randomHeap", MTRRandomHeap)
+PERFORMANCE_TEST_SPECIALIZED("memory/traverse/randomHeap", MTRRandomHeap, HeapMemoryPerformanceTest, 8000)
 {
    void initialize()
    {
@@ -97,7 +93,7 @@ HEAPMEMORY_PERFORMANCE_TEST("memory/traverse/randomHeap", MTRRandomHeap)
    }
 };
 
-HEAPMEMORY_PERFORMANCE_TEST("memory/traverse/linearHeap", MTLinearHeap)
+PERFORMANCE_TEST_SPECIALIZED("memory/traverse/linearHeap", MTLinearHeap, HeapMemoryPerformanceTest, 8000)
 {
    static const char * getIndependentVariableName()
    {
@@ -137,7 +133,7 @@ HEAPMEMORY_PERFORMANCE_TEST("memory/traverse/linearHeap", MTLinearHeap)
 
 
 
-STATICMEMORY_PERFORMANCE_TEST("memory/traverse/linearBackwardsStatic", MTRLinearBackwardsStatic)
+PERFORMANCE_TEST_SPECIALIZED("memory/traverse/linearBackwardsStatic", MTRLinearBackwardsStatic, StaticMemoryPerformanceTest, 8001)
 {
    static const char * getIndependentVariableName()
    {
@@ -173,7 +169,7 @@ STATICMEMORY_PERFORMANCE_TEST("memory/traverse/linearBackwardsStatic", MTRLinear
    }
 };
 
-STATICMEMORY_PERFORMANCE_TEST("memory/traverse/randomStatic", MTRRandomStatic)
+PERFORMANCE_TEST_SPECIALIZED("memory/traverse/randomStatic", MTRRandomStatic, StaticMemoryPerformanceTest, 8001)
 {
    static const char * getIndependentVariableName()
    {
@@ -209,7 +205,7 @@ STATICMEMORY_PERFORMANCE_TEST("memory/traverse/randomStatic", MTRRandomStatic)
    }
 };
 
-STATICMEMORY_PERFORMANCE_TEST("memory/traverse/linearStatic", MTRLinearStatic)
+PERFORMANCE_TEST_SPECIALIZED("memory/traverse/linearStatic", MTRLinearStatic, StaticMemoryPerformanceTest, 8001)
 {
    static const char * getIndependentVariableName()
    {
@@ -246,7 +242,7 @@ STATICMEMORY_PERFORMANCE_TEST("memory/traverse/linearStatic", MTRLinearStatic)
 
 };
 
-STATICMEMORY_PERFORMANCE_TEST("memory/traverse/linearPseudoRandomStatic", MTRLinearStaticLT64byteRandom)
+PERFORMANCE_TEST_SPECIALIZED("memory/traverse/linearPseudoRandomStatic", MTRLinearStaticLT64byteRandom, StaticMemoryPerformanceTest, 8001)
 {
    int m_Stride;
 
@@ -295,7 +291,7 @@ STATICMEMORY_PERFORMANCE_TEST("memory/traverse/linearPseudoRandomStatic", MTRLin
    }
 };
 
-STATICMEMORY_PERFORMANCE_TEST("memory/traverse/linearStep4ByteStatic", MTRLinearStep4Static)
+PERFORMANCE_TEST_SPECIALIZED("memory/traverse/linearStep4ByteStatic", MTRLinearStep4Static, StaticMemoryPerformanceTest, 8001)
 {
    static const char * getIndependentVariableName()
    {
@@ -333,7 +329,7 @@ STATICMEMORY_PERFORMANCE_TEST("memory/traverse/linearStep4ByteStatic", MTRLinear
 };
 
 
-STATICMEMORY_PERFORMANCE_TEST("memory/traverse/linearLT512byteRandomStatic", MTLT512byteRandomStatic)
+PERFORMANCE_TEST_SPECIALIZED("memory/traverse/linearLT512byteRandomStatic", MTLT512byteRandomStatic, StaticMemoryPerformanceTest, 8001)
 {
    int m_stride;
 

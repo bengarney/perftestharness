@@ -47,13 +47,7 @@ public:
    }
 };
 
-
-#define ALIASED_PERFORMANCE_TEST(name, className) \
-struct className##AliasedPerfTest; \
-static PerfTestMarker<className##AliasedPerfTest> className##PerfTestMarkerInstance(name); \
-struct className##AliasedPerfTest : public AliasedPointer
-
-ALIASED_PERFORMANCE_TEST("memory/Aliasing/aliased", MAAliased)
+PERFORMANCE_TEST_SPECIALIZED("memory/Aliasing/aliased", MAAliased, AliasedPointer, 8000)
 {
    virtual void test()
    {
@@ -67,7 +61,7 @@ ALIASED_PERFORMANCE_TEST("memory/Aliasing/aliased", MAAliased)
    }
 };
 
-ALIASED_PERFORMANCE_TEST("memory/Aliasing/unaliased", MAUNAliased)
+PERFORMANCE_TEST_SPECIALIZED("memory/Aliasing/unaliased", MAUNAliased, AliasedPointer, 8000)
 {
    virtual void test()
    {

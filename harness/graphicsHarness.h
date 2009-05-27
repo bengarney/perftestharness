@@ -52,9 +52,9 @@ public:
 
 /// Just like PERFORMANCE_TEST, but it makes a subclass of GraphicsPerformanceTest
 /// instead.
-#define GRAPHICS_PERFORMANCE_TEST(name, className) \
+#define GRAPHICS_PERFORMANCE_TEST(name, className, id) \
    struct className##PerfTest; \
-   static PerfTestMarker<className##PerfTest> className##PerfTestMarkerInstance(name); \
+   static PerfTestMarker<className##PerfTest> className##PerfTestMarkerInstance(name, id); \
    struct className##PerfTest : public GraphicsPerformanceTest
 
 #endif

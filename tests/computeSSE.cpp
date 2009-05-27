@@ -17,7 +17,7 @@ void gfInitSSEArray()
 	}
 }
 
-PERFORMANCE_TEST("compute/sse/sse_aligned", sse_aligned)
+PERFORMANCE_TEST("compute/sse/sse_aligned", sse_aligned, 8000)
 {
    void initialize()
    {
@@ -36,7 +36,7 @@ PERFORMANCE_TEST("compute/sse/sse_aligned", sse_aligned)
    }
 };
 
-PERFORMANCE_TEST("compute/sse/sse_unaligned", sse_unaligned)
+PERFORMANCE_TEST("compute/sse/sse_unaligned", sse_unaligned, 8000)
 {
    void initialize()
    {

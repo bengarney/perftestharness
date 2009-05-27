@@ -2,7 +2,7 @@
 #include "windows.h"
 #include "harness/performanceHarness.h"
 
-PERFORMANCE_TEST("basic/delay/10ms", Delay10ms)
+PERFORMANCE_TEST("basic/delay/10ms", Delay10ms, 0)
 {
    void test()
    {
@@ -10,7 +10,7 @@ PERFORMANCE_TEST("basic/delay/10ms", Delay10ms)
    }
 };
 
-PERFORMANCE_TEST("basic/delay/1ms", Delay1ms)
+PERFORMANCE_TEST("basic/delay/1ms", Delay1ms, 0)
 {
    void test()
    {
@@ -18,7 +18,7 @@ PERFORMANCE_TEST("basic/delay/1ms", Delay1ms)
    }
 };
 
-PERFORMANCE_TEST("basic/control/100000rand", RandomControl)
+PERFORMANCE_TEST("basic/control/100000rand", RandomControl, 0)
 {
    void test()
    {
@@ -31,7 +31,7 @@ PERFORMANCE_TEST("basic/control/100000rand", RandomControl)
    }
 };
 
-PERFORMANCE_TEST("basic/control/100000sum", SumControl)
+PERFORMANCE_TEST("basic/control/100000sum", SumControl, 0)
 {
    void test()
    {

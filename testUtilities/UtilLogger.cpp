@@ -19,7 +19,6 @@ struct SeriesData
 PerfTestMarkerBase *gCurrentTest = NULL;
 std::vector<SeriesData> gSeries;
 
-
 /************************************************************************/
 /*
 The following copyright message applies to curl_escape:
@@ -123,7 +122,8 @@ void UtilLogger::startTest( PerfTestMarkerBase *test )
    fopen_s(&xmlLog, "times.xml", "a");
    fprintf_s(xmlLog, "<Entry><Title>%s</Title>", test->mName);
 
-   fprintf_s(reportHtml, "<p><b>%s:</b> ", test->mName);
+   fopen_s(&reportHtml, "report.html", "a");
+   fprintf_s(reportHtml, "<p><b>#%d %s:</b> ", test->mTestID, test->mName);
 }
 
 void UtilLogger::startTestWithIndependent(PerfTestMarkerBase *test, int independent)
@@ -141,7 +141,7 @@ void UtilLogger::noteRun( double duration )
    fprintf_s(xmlLog, "<DataPoint%d>%f</DataPoint%d>", runCount,duration,runCount);
 }
 
-void UtilLogger::endTest( UtilStats *statistics )
+void UtilLogger::endTest( UtilStats *statistics, bool suppressHtml )
 {
    fprintf_s(xmlLog, "<RunCount>%d</RunCount>", statistics->GetCount() );
    fprintf_s(xmlLog, "<Average>%f</Average><Min>%f</Min><Max>%f</Max><stdDev>%f</stdDev>", 
@@ -154,14 +154,18 @@ void UtilLogger::endTest( UtilStats *statistics )
    printf("   - Timing: avg %lfms, min %lfms, max %lfms, stddev %lf\n", 
       statistics->GetMean(), statistics->GetMin(), statistics->GetMax(),statistics->GetStdDeviation());
 
-   fprintf_s(reportHtml, "<br>Ran performance test %d times.", statistics->GetCount());
-   fprintf_s(reportHtml, "<br>Timing: avg %lfms, min %lfms, max %lfms, stddev %lf</p>", 
-      statistics->GetMean(), statistics->GetMin(), statistics->GetMax(),statistics->GetStdDeviation());
+   if(!suppressHtml)
+   {
+      fprintf_s(reportHtml, "<br>Ran performance test %d times.", statistics->GetCount());
+      fprintf_s(reportHtml, "<br>Timing: avg %lfms, min %lfms, max %lfms, stddev %lf</p>", 
+         statistics->GetMean(), statistics->GetMin(), statistics->GetMax(),statistics->GetStdDeviation());
+      fclose(reportHtml);
+   }
 }
 
 void UtilLogger::endTestWithIndependent( UtilStats *statistics, int independent )
 {
-   endTest(statistics);
+   endTest(statistics, true);
 
    // Note the results for printing a chart.
    SeriesData sd;
@@ -244,7 +248,7 @@ void UtilLogger::endIndependentGroup()
    fprintf_s(reportHtml, "<img src='http://chart.apis.google.com/chart?cht=bvs&chs=600x400");
 
    // Title.
-   fprintf_s(reportHtml, "&chtt=Results for %s", curl_escape(gCurrentTest->mName));
+   fprintf_s(reportHtml, "&chtt=No. %d %s", gCurrentTest->mTestID, curl_escape(gCurrentTest->mName));
 
    // Include the datapoints.
    // &chd=t:30,-60,50,120,80,-90

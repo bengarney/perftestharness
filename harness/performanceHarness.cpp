@@ -50,8 +50,8 @@ void doTestRun(PerfTestMarkerBase *walk)
    IUtil::GetUtilStats()->Reset();
 
    // Run it at least 10 times or 1 second.
-   //while(runCount < 1 || (currentTime() - startTime) < 2.0)
-   while(runCount < gRunNum )
+   while(runCount < 10 || (currentTime() - startTime) < 2.0)
+   //while(runCount < gRunNum )
    {
       // Init the cache to a standard
       IUtil::GetUtilCacheRandomizer()->Init();
@@ -89,7 +89,7 @@ void runTestWithIndependent(PerfTestMarkerBase *walk, int independentValue)
    IUtil::GetUtilStats()->Reset();
 
    // Run it at least a hundred times or 1 second.
-   while(runCount < 1 || (currentTime() - startTime) < 2.0)
+   while(runCount < 10 || (currentTime() - startTime) < 2.0)
    //while( runCount < gRunNum )
    {
       // Init the cache to a standard
@@ -158,7 +158,7 @@ int main(int argc, char* argv[])
 
    initTimer();
 
-   // Try to run just so, so that we are consistent.
+   // Up our priority for more consistent behavior.
    SetThreadPriority( GetCurrentThread(),THREAD_PRIORITY_ABOVE_NORMAL );
 
    DWORD ProcessAffinityMask = 0x01;
@@ -178,7 +178,6 @@ int main(int argc, char* argv[])
          writeHeader = true;
          writeFooter = true;
          createProcess = false;
-
       }
 
       if( strcmp(argv[i],"-run")==0 )
@@ -188,7 +187,7 @@ int main(int argc, char* argv[])
          createProcess = false;
       }
 
-      //aids in debugging
+      
       if( strcmp(argv[i],"-fast")==0 )
       {
          fast=true;
@@ -212,13 +211,25 @@ int main(int argc, char* argv[])
    si.cb = sizeof(si);
    ZeroMemory( &pi, sizeof(pi) );
 
+   // Collect the tests.
+   std::vector<PerfTestMarkerBase*> tests;
    for(PerfTestMarkerBase *walk=PerfTestMarkerBase::smHead; walk; walk=walk->mNext)
+      tests.push_back(walk);
+
+   // Now, sort them by ID.
+   qsort(&tests[0], tests.size(), sizeof(PerfTestMarkerBase*), PerfTestMarkerBase::cmpTestId);
+
+   // Finally, run them in order.
+   for(int i=0; i<tests.size(); i++)
    {
+      PerfTestMarkerBase *walk = tests[i];
+
       // Check for prefix match...
-      if( argc!=1 )
-      if( argv[argc-1][0] != '-' && strstr( walk->mName,argv[argc-1])==0 )
+      if( argc!=1 
+         && argv[argc-1][0] != '-' && strstr( walk->mName,argv[argc-1])==0 )
          continue;
 
+      // Run the test.
       if( createProcess )
       {
          char args[512];
@@ -256,3 +267,11 @@ int main(int argc, char* argv[])
    return 0;
 }
 
+
+int PerfTestMarkerBase::cmpTestId( const void *a, const void *b )
+{
+   const PerfTestMarkerBase *aMarker = (const PerfTestMarkerBase*)a;
+   const PerfTestMarkerBase *bMarker = (const PerfTestMarkerBase*)b;
+
+   return aMarker->mTestID - bMarker->mTestID;
+}

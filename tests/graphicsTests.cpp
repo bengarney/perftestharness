@@ -4,7 +4,7 @@
 /************************************************************************/
 /* Bare minimum test that shows discernable graphics.                   */
 /************************************************************************/
-GRAPHICS_PERFORMANCE_TEST("basic/graphics/basicClear", GraphicsBasicClear)
+GRAPHICS_PERFORMANCE_TEST("basic/graphics/basicClear", GraphicsBasicClear, 8000)
 {
    int frameCount;
 
@@ -29,7 +29,7 @@ GRAPHICS_PERFORMANCE_TEST("basic/graphics/basicClear", GraphicsBasicClear)
 /************************************************************************/
 /* Do a lot of clears so things are arbitrarily slower.                 */
 /************************************************************************/
-GRAPHICS_PERFORMANCE_TEST("basic/graphics/extraClears", GraphicsExtraClear)
+GRAPHICS_PERFORMANCE_TEST("basic/graphics/extraClears", GraphicsExtraClear, 8000)
 {
    int frameCount;
 
@@ -50,7 +50,7 @@ GRAPHICS_PERFORMANCE_TEST("basic/graphics/extraClears", GraphicsExtraClear)
 /**************************************************************************/
 /* Do a lot of clears so things are arbitrarily slower, with varying MSAA Quality level */
 /**************************************************************************/
-GRAPHICS_PERFORMANCE_TEST("basic/graphics/extraClearsMSAAQuality", GraphicsExtraClearMSAAQuality)
+GRAPHICS_PERFORMANCE_TEST("basic/graphics/extraClearsMSAAQuality", GraphicsExtraClearMSAAQuality, 8000)
 {
    int frameCount;
 
@@ -92,7 +92,7 @@ GRAPHICS_PERFORMANCE_TEST("basic/graphics/extraClearsMSAAQuality", GraphicsExtra
 /**************************************************************************/
 /* Do a lot of clears so things are arbitrarily slower, with varying MSAA level */
 /**************************************************************************/
-GRAPHICS_PERFORMANCE_TEST("basic/graphics/extraClearsMSAA", GraphicsExtraClearMSAA)
+GRAPHICS_PERFORMANCE_TEST("basic/graphics/extraClearsMSAA", GraphicsExtraClearMSAA, 8000)
 {
    int frameCount;
 

@@ -81,9 +81,10 @@ public:
    static PerfTestMarkerBase *smHead;
    PerfTestMarkerBase *mNext;
    const char *mName;
+   const int mTestID;
 
-   PerfTestMarkerBase(const char *name)
-      : mName(name)
+   PerfTestMarkerBase(const char *name, const int id)
+      : mName(name), mTestID(id)
    {
       mNext = smHead;
       smHead = this;
@@ -98,6 +99,8 @@ public:
    virtual void initializeWithIndependent(int v)=0;
    virtual double runTest()=0;
    virtual void teardown()=0;
+
+   static int cmpTestId(const void *a, const void *b);
 };
 
 /// Type specific class to allow us to query information about a 
@@ -108,8 +111,8 @@ public:
 
    T *testInstance;
 
-   PerfTestMarker(const char *name)
-      : PerfTestMarkerBase(name)
+   PerfTestMarker(const char *name, const int id)
+      : PerfTestMarkerBase(name, id)
    {
    }
 
@@ -175,9 +178,24 @@ public:
 ///
 /// @param name Display name for the test. Set up like a file folder, for
 ///             instance "basic/test/myTest".
-#define PERFORMANCE_TEST(name, className) \
+/// @param testId Test index, used for ordering test results. We use 1000's 
+///             to indicate book chapter, and go in order in each chapter.
+#define PERFORMANCE_TEST(name, className, testId) \
    struct className##PerfTest; \
-   static PerfTestMarker<className##PerfTest> className##PerfTestMarkerInstance(name); \
+   static PerfTestMarker<className##PerfTest> className##PerfTestMarkerInstance(name, testId); \
    struct className##PerfTest : public PerformanceTest
+
+/// Macro to declare and register a performance test based on a custom subclass.
+///
+/// @param name Display name for the test. Set up like a file folder, for
+///             instance "basic/test/myTest".
+/// @param testId Test index, used for ordering test results. We use 1000's 
+///             to indicate book chapter, and go in order in each chapter.
+/// @param baseClass The base class to use for this test; baseClass should be
+///             a subclass of PerformanceTest.
+#define PERFORMANCE_TEST_SPECIALIZED(name, className, baseClass, testId) \
+   struct className##PerfTest; \
+   static PerfTestMarker<className##PerfTest> className##PerfTestMarkerInstance(name, testId); \
+   struct className##PerfTest : public baseClass
 
 #endif

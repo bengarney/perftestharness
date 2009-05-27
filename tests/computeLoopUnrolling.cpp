@@ -26,7 +26,7 @@ void gFInitLoopUnrolling()
 	}
 }
 
-PERFORMANCE_TEST("compute/loopunrolling/rolledI", rolledLoop)
+PERFORMANCE_TEST("compute/loopunrolling/rolledI", rolledLoop, 8000)
 {
    void initialize()
    {
@@ -43,7 +43,7 @@ PERFORMANCE_TEST("compute/loopunrolling/rolledI", rolledLoop)
    }
 };
 
-PERFORMANCE_TEST("compute/loopunrolling/unrolledI", unrolledLoop)
+PERFORMANCE_TEST("compute/loopunrolling/unrolledI", unrolledLoop, 8000)
 {
 
    void initialize()
@@ -64,7 +64,7 @@ PERFORMANCE_TEST("compute/loopunrolling/unrolledI", unrolledLoop)
    }
 };
 
-PERFORMANCE_TEST("compute/loopunrolling/unrolledEI", unrolledELoop)
+PERFORMANCE_TEST("compute/loopunrolling/unrolledEI", unrolledELoop, 8000)
 {
 
    void initialize()
@@ -89,7 +89,7 @@ PERFORMANCE_TEST("compute/loopunrolling/unrolledEI", unrolledELoop)
    }
 };
 
-PERFORMANCE_TEST("compute/loopunrolling/rolledF", FrolledLoop)
+PERFORMANCE_TEST("compute/loopunrolling/rolledF", FrolledLoop, 8000)
 {
    void initialize()
    {
@@ -106,7 +106,7 @@ PERFORMANCE_TEST("compute/loopunrolling/rolledF", FrolledLoop)
    }
 };
 
-PERFORMANCE_TEST("compute/loopunrolling/unrolledF", FunrolledLoop)
+PERFORMANCE_TEST("compute/loopunrolling/unrolledF", FunrolledLoop, 8000)
 {
 
    void initialize()
@@ -127,7 +127,7 @@ PERFORMANCE_TEST("compute/loopunrolling/unrolledF", FunrolledLoop)
    }
 };
 
-PERFORMANCE_TEST("compute/loopunrolling/unrolledEF", FunrolledELoop)
+PERFORMANCE_TEST("compute/loopunrolling/unrolledEF", FunrolledELoop, 8000)
 {
 
    void initialize()

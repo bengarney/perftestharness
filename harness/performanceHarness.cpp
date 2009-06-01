@@ -9,7 +9,7 @@
 #define TURN_ON_ALL_FP_EXCEPTIONS 0
 
 // How many times to run tests?
-unsigned int gRunNum = 10;
+unsigned int gRunNum = 1;
 
 //unmask everything but precision
 void UnMaskFPExceptions()
@@ -89,8 +89,9 @@ void runTestWithIndependent(PerfTestMarkerBase *walk, int independentValue)
    IUtil::GetUtilStats()->Reset();
 
    // Run it at least a hundred times or 1 second.
-   while(runCount < 10 || (currentTime() - startTime) < 2.0)
-   //while( runCount < gRunNum )
+   //while(runCount < 10 || (currentTime() - startTime) < 100.0)
+   
+   while( runCount < gRunNum )
    {
       // Init the cache to a standard
       IUtil::GetUtilCacheRandomizer()->Init();
@@ -251,6 +252,7 @@ int main(int argc, char* argv[])
          runTest( walk );
       }
    }
+
 
    if( writeFooter )
    {

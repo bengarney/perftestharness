@@ -1,3 +1,4 @@
 <PerformanceTests>
-<Entry><Title>memory/criticalStride/2048 sizeof(DATA_SIZE/MAX_MEMORY_STEPS) * =1</Title><DataPoint1>0.158424</DataPoint1><DataPoint2>0.145851</DataPoint2><DataPoint3>0.152557</DataPoint3><DataPoint4>0.165689</DataPoint4><DataPoint5>0.167924</DataPoint5><DataPoint6>0.157027</DataPoint6><DataPoint7>0.151160</DataPoint7><DataPoint8>0.142219</DataPoint8><DataPoint9>0.155909</DataPoint9><DataPoint10>0.146410</DataPoint10><RunCount>10</RunCount><Average>0.154317</Average><Min>0.142219</Min><Max>0.167924</Max><stdDev>0.025196</stdDev></Entry>
-</PerformanceTests>
+<Entry><Title>threading/threadCount NumThreads=1</Title><DataPoint1>5210.975098</DataPoint1><RunCount>1</RunCount><Average>5210.975098</Average><Min>5210.975098</Min><Max>5210.975098</Max><stdDev>0.000000</stdDev></Entry>
+<Entry><Title>threading/threadCount NumThreads=2</Title><DataPoint1>4898.465820</DataPoint1><RunCount>1</RunCount><Average>4898.465820</Average><Min>4898.465820</Min><Max>4898.465820</Max><stdDev>0.000000</stdDev></Entry>
+<Entry><Title>threading/threadCount NumThreads=3</Title>

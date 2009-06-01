@@ -4,7 +4,7 @@
 float gCommon = 0.0f;
 int gCommonI = 0;
 
-PERFORMANCE_TEST("compilerTest/sameFunction", sameFunction)
+PERFORMANCE_TEST("compilerTest/sameFunction", sameFunction,8000)
 {
    void test()
    {
@@ -35,7 +35,7 @@ PERFORMANCE_TEST("compilerTest/sameFunction", sameFunction)
    }
 };
 
-PERFORMANCE_TEST("compilerTest/invarient", invarient)
+PERFORMANCE_TEST("compilerTest/invarient", invarient, 8000 )
 {
    inline void test()
    {

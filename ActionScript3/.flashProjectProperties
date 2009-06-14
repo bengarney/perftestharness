@@ -1,0 +1,20 @@
+<projectDescription>
+  <id>1239988513107</id>
+  <name>benchmark</name>
+  <asVersion>0</asVersion>
+  <boundTemplate>file:///Macintosh HD/Users/grant/Library/Application Support/Adobe/Flash CS4/en/Configuration/Project/templates/boundClass_as3.as</boundTemplate>
+  <classTemplate>file:///Macintosh HD/Users/grant/Library/Application Support/Adobe/Flash CS4/en/Configuration/Project/templates/standardClass_as3.as</classTemplate>
+  <classPath>.</classPath>
+  <defaultApp>file:///Macintosh HD/Users/grant/Documents/flash/AS3/Benchmark/benchmark.fla</defaultApp>
+  <rootURI>file:///Macintosh HD/Users/grant/Documents/flash/AS3/Benchmark/</rootURI>
+  <flexSDK/>
+  <sources editable="false"/>
+  <libraries editable="false"/>
+  <externalLibraries editable="false"/>
+  <compileList editable="false"/>
+  <recentFiles editable="false">
+    <uri label="GraphicsTests.as">file:///Macintosh HD/Users/grant/Documents/flash/AS3/Benchmark/benchmarks/GraphicsTests.as</uri>
+    <uri label="Main.as">file:///Macintosh HD/Users/grant/Documents/flash/AS3/Benchmark/Main.as</uri>
+  </recentFiles>
+  <locations editable="false"/>
+</projectDescription>

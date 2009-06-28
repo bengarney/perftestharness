@@ -1,6 +1,8 @@
+#include <process.h>
+#define _WIN32_WINNT 0x400 
+#include <windows.h>
 #include <stdio.h>
 #include <stdlib.h>
-#include <windows.h>
 #include <assert.h>
 
 #include "harness/performanceHarness.h"
@@ -171,16 +173,43 @@ PERFORMANCE_TEST("disk/threads/backgroundThread", DiskReadBackgroundThread, 1300
       DiskReadHelper::DestroyTestFile();
    }
 
+   static const char *getIndependentVariableName()
+   {
+      return "number of IO threads";
+   }
+
+   static int getIndependentVariableMin()
+   {
+      return 1;
+   }
+
+   static int getIndependentVariableMax()
+   {
+      return 9;
+   }
+
+   int threadCount;
+   void setIndependentVariable(int v)
+   {
+      threadCount = v;
+   }
+
    void test()
    {
-      // Kick off background IO thread.
-      HANDLE bgthread = CreateThread(NULL, 0, &BackgroundIO, NULL, 0, 0);
+      HANDLE threads[8];
+
+      // Kick off background IO threads.
+      for(int i=0; i<threadCount; i++)
+         threads[i] = (HANDLE)CreateThread(0, 0, &BackgroundIO, 0,  CREATE_SUSPENDED, NULL);
+
+      for(int i=0; i<threadCount; i++)
+         ResumeThread(threads[i]);
 
       // Solve the mandelbrot set.
       fractalLinear(NULL, MANDELBROT_WORKLOAD);
 
       // Wait for thread.
-      WaitForSingleObject(bgthread, INFINITE);
+      WaitForMultipleObjects(threadCount, threads, true, INFINITE);
    }
 };
 

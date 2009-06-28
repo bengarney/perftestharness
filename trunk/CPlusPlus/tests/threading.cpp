@@ -26,9 +26,6 @@ void initCriticalStride( unsigned int id )
 
 PERFORMANCE_TEST("threading/threadCount", threadCount,13000)
 {
-   
-   
-
    void test()
    {
 	   for( int i=0;i<m_NumThreads;i++ )
@@ -36,8 +33,7 @@ PERFORMANCE_TEST("threading/threadCount", threadCount,13000)
 			ResumeThread( gThreadHandles[i] );
 	   }
 
-	   DWORD ret =WaitForMultipleObjects(m_NumThreads,gThreadHandles,false,INFINITE);
-	   
+	   DWORD ret = WaitForMultipleObjects(m_NumThreads,gThreadHandles,false,INFINITE);
 	   int i=0;
    }
 
@@ -78,7 +74,7 @@ PERFORMANCE_TEST("threading/threadCount", threadCount,13000)
       
    }
 
-    static const char * getIndependentVariableName()
+   static const char * getIndependentVariableName()
    {
       return "NumThreads";
    }
@@ -98,7 +94,6 @@ unsigned __stdcall  MyThreadProc(LPVOID lpParameter)
 	{
 		gThreadSum[id] += ThreadMemArray[id][i];
 	}
-
 
 	return 1;
 }

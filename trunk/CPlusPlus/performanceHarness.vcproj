@@ -282,6 +282,10 @@
 				>
 			</File>
 			<File
+				RelativePath=".\tests\diskAccess.cpp"
+				>
+			</File>
+			<File
 				RelativePath=".\tests\exampleTests.cpp"
 				>
 			</File>
@@ -463,6 +467,14 @@
 			</File>
 			<File
 				RelativePath=".\testUtilities\IUtil.h"
+				>
+			</File>
+			<File
+				RelativePath=".\testUtilities\mandelbrot.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\testUtilities\mandelbrot.h"
 				>
 			</File>
 			<File

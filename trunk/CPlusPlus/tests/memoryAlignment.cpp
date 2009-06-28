@@ -49,7 +49,7 @@ PERFORMANCE_TEST("memory/alignment/linearUnalignedStatic", MTUnalignedStepStatic
       m_NumReads = (DATA_SIZE)/(MAX_ALIGMENT_TEST-1) * v;
    }
 
-    static bool checkSkipIndependentValue(int independentValue)
+   static bool checkSkipIndependentValue(int independentValue)
    {
 		return!( independentValue%4==0 );
    }

@@ -9,7 +9,7 @@
 #define TURN_ON_ALL_FP_EXCEPTIONS 0
 
 // How many times to run tests?
-unsigned int gRunNum = 1;
+unsigned int gRunNum = 5;
 
 //unmask everything but precision
 void UnMaskFPExceptions()
@@ -164,7 +164,7 @@ int main(int argc, char* argv[])
 
    DWORD ProcessAffinityMask = 0x01;
    HANDLE hCurrentProcess = GetCurrentProcess();     
-   SetProcessAffinityMask( hCurrentProcess, (DWORD_PTR)&ProcessAffinityMask );
+   //SetProcessAffinityMask( hCurrentProcess, (DWORD_PTR)&ProcessAffinityMask );
 
    bool writeHeader = true;
    bool writeFooter = true;

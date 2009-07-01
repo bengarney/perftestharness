@@ -322,6 +322,10 @@
 				>
 			</File>
 			<File
+				RelativePath=".\tests\ThreadedStream.cpp"
+				>
+			</File>
+			<File
 				RelativePath=".\tests\threading.cpp"
 				>
 			</File>

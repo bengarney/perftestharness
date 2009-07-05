@@ -14,8 +14,6 @@ unsigned int g_Ctr = 0;
 unsigned __stdcall  MyReader(LPVOID lpParameter);
 unsigned __stdcall  MyWriter(LPVOID lpParameter);
 
-int g_ThreadOut = 0;
-
 #define BLOCK_LENGTH 10
 #define ARRAY_SIZE 10
 
@@ -72,13 +70,13 @@ struct CBlock
 
 	bool RUnLock()
 				{
+
 					if( m_ReadLocked )
 					{	
-						m_Dirty=false;
+
 						m_ReadLocked = false;
 						LeaveCriticalSection(&m_CS);
 						
-
 					}else
 					{
 						return false;//can't unlock the unlocked
@@ -96,7 +94,8 @@ struct CBlock
 			m_Ctr++;
 			return true;
 
-		}else
+		}
+
 		return false;
 	}
 	
@@ -109,6 +108,10 @@ struct CBlock
 			return true;
 
 		}else
+		{
+			m_Dirty=false;
+		}
+
 		return false;
 	}
 };
@@ -129,7 +132,8 @@ public:
 
 	bool WriteInt( int val, int& address );
 	bool ReadInt(  int &retVal, int& block );
-	void CloseStream( int address );
+	void CloseWStream( int address );
+	void CloseRStream( int address );
 };
 
 bool ThreadedStream::WriteInt( int writeVal, int& address )
@@ -143,7 +147,7 @@ bool ThreadedStream::WriteInt( int writeVal, int& address )
 		//acquire the lock
 		if( m_Data[address].WLock() )
 		{
-			printf("WLock %i\n",address);
+			//printf("WLock %i\n",address);
 		}else
 		{
 			address = -1;//failed lock
@@ -156,7 +160,7 @@ bool ThreadedStream::WriteInt( int writeVal, int& address )
 	{	
 		if( m_Data[address].WUnLock() )//this addres is now availble for readers.
 		{	
-			printf("WUnLock %i\n",address);
+			//printf("WUnLock %i\n",address);
 			//allocate a new block
 			address = -1;
 		}else
@@ -169,11 +173,21 @@ bool ThreadedStream::WriteInt( int writeVal, int& address )
 	return true;
 }
 
-void ThreadedStream::CloseStream( int address )
+void ThreadedStream::CloseWStream( int address )
 {
-	if( m_Data[address].WUnLock() )//this addres is now availble for readers.
+	if( address>=0 && m_Data[address].WUnLock() )//this addres is now availble for readers.
 	{	
-		printf("WUnLock %i\n",address);
+		//printf("WUnLock %i\n",address);
+		//allocate a new block
+		address = -1;
+	}
+}
+
+void ThreadedStream::CloseRStream( int address )
+{
+	if( address>=0 && m_Data[address].RUnLock() )//this addres is now availble for readers.
+	{	
+		//printf("RUnLock %i\n",address);
 		//allocate a new block
 		address = -1;
 	}
@@ -181,6 +195,7 @@ void ThreadedStream::CloseStream( int address )
 
 bool ThreadedStream::ReadInt( int &readVal, int& address )
 {
+
 	if( address==-1 )
 	{
 		address = InterlockedIncrement(&m_ReadPos);//make thread safe increment
@@ -189,9 +204,14 @@ bool ThreadedStream::ReadInt( int &readVal, int& address )
 		//acquire the lock
 		if( m_Data[address].RLock() )
 		{
-			printf("RLock %i\n",address);
+			//printf("RLock %i\n",address);
 		}else
 		{
+			if( m_Data[address].m_ReadLocked )
+			{
+				//printf("RLock Failed%i\n",address);
+			}
+
 			address = -1;//
 			return false;
 		}				
@@ -201,7 +221,7 @@ bool ThreadedStream::ReadInt( int &readVal, int& address )
 	{	
 		if( m_Data[address].RUnLock() )//this addres is now availble for writers.
 		{	
-			printf("RUnLock %i\n",address);
+			//printf("RUnLock %i\n",address);
 			//allocate a new block
 			address = -1;
 		}else
@@ -218,7 +238,7 @@ PERFORMANCE_TEST("threading/writeReader", writeReader,13000)
 	ThreadedStream m_ReadWriter;
 
 void test()
-{g_ThreadOut=0;
+{   
 	ResumeThread( g_threadHandleA );
 	ResumeThread( g_threadHandleB );
     ResumeThread( g_threadHandleC );
@@ -228,8 +248,6 @@ void test()
 	WaitForSingleObject(g_threadHandleB,INFINITE);
 	WaitForSingleObject(g_threadHandleC,INFINITE);
 	WaitForSingleObject(g_threadHandleD,INFINITE);
-
-	printf("%i\n",g_ThreadOut);
 }
 
 virtual void initialize()
@@ -237,9 +255,9 @@ virtual void initialize()
 	m_ReadWriter.Init();
 	unsigned int dwThreadID = 0;
 	g_threadHandleA = (HANDLE)_beginthreadex(0, 0, &MyReader, &this->m_ReadWriter,  CREATE_SUSPENDED , &dwThreadID);
-	g_threadHandleB = (HANDLE)_beginthreadex(0, 0, &MyReader, &this->m_ReadWriter,  CREATE_SUSPENDED , &dwThreadID);
+	//g_threadHandleB = (HANDLE)_beginthreadex(0, 0, &MyReader, &this->m_ReadWriter,  CREATE_SUSPENDED , &dwThreadID);
 	g_threadHandleC = (HANDLE)_beginthreadex(0, 0, &MyWriter, &this->m_ReadWriter,  CREATE_SUSPENDED , &dwThreadID);
-	g_threadHandleD = (HANDLE)_beginthreadex(0, 0, &MyWriter, &this->m_ReadWriter,  CREATE_SUSPENDED , &dwThreadID);
+	//g_threadHandleD = (HANDLE)_beginthreadex(0, 0, &MyWriter, &this->m_ReadWriter,  CREATE_SUSPENDED , &dwThreadID);
 }
 
 static int getIndependentVariableMin()
@@ -270,13 +288,16 @@ unsigned __stdcall  MyReader(LPVOID lpParameter)
 
 	int ret = 0;
 	int address = -1;
+	int ctr = 0;
 
-	for( int i=0;i<10000;i++ )
+	while( ctr<1000000 )
 	{
 		while( !q->ReadInt( ret,address )){}
-		g_ThreadOut+=ret;
-
+		ctr++;
 	}
+
+	q->CloseRStream(address);
+	printf("CloseReader %i %i\n",address, ctr);
 
 	return 1;
 }
@@ -286,14 +307,16 @@ unsigned __stdcall  MyWriter(LPVOID lpParameter)
 	ThreadedStream* q = (ThreadedStream*)lpParameter;
 	int address = -1;
 
-	for( int i=0;i<10000;i++ )
+	int ctr = 0;
+
+	while( ctr<1000000 )
 	{
 		while(!q->WriteInt( 1,address )){};
-		g_Ctr++;
+		ctr++;
 	}
-
-	q->CloseStream(address);
-
+	
+	q->CloseWStream(address);
+	printf("CloseWriter %i %i\n",address, ctr);
 	return 1;
 }
 

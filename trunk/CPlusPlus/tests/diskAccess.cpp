@@ -4,12 +4,20 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <assert.h>
+#include <direct.h>
+#include <sys/stat.h>
 
 #include "harness/performanceHarness.h"
 #include "testUtilities/mandelbrot.h"
+#include "testUtilities/IUtil.h"
+
+#define STBI_SIMD 1
+#define STBI_HEADER_FILE_ONLY
+#include "testUtilities/stb_image.c"
 
 #define TEST_FILE_SIZE 50*1024*1024
 #define TEST_FILE_NAME "performanceTestDataFile"
+#define TEST_DIRECTORY "./testFiles"
 
 #define MANDELBROT_WORKLOAD 256
 #define THREAD_READ_SIZE 64
@@ -284,3 +292,229 @@ PERFORMANCE_TEST("disk/threads/foregroundThreadNoCompute", DiskReadForegroundThr
 };
 
 DiskReadHelper *DiskReadForegroundThreadNoComputePerfTest::drh = NULL;
+
+PERFORMANCE_TEST("disk/directoryList", DiskDirectoryList, 13007)
+{
+   static const char *getIndependentVariableName()
+   {
+      return "number of files in directory";
+   }
+
+   static int getIndependentVariableMin()
+   {
+      return 10;
+   }
+
+   static int getIndependentVariableMax()
+   {
+      return 1000000;
+   }
+
+   static bool checkSkipIndependentValue(int v)
+   {
+      return (v % 1000) != 0;
+   }
+
+   int fileCount;
+   void setIndependentVariable(int v)
+   {
+      fileCount = v;
+   }
+
+   void initialize()
+   {
+      // Make a test directory and blast out the appropriate number of files.
+      _mkdir(TEST_DIRECTORY);
+
+      for(int i=0; i<fileCount; i++)
+      {
+         char nameBuff[64];
+         sprintf_s(nameBuff, 64, TEST_DIRECTORY"/file%d", i);
+         FILE *f = fopen(nameBuff, "w");
+         fwrite(&i, sizeof(i), 1, f);
+         fclose(f);
+      }
+   }
+
+   void teardown()
+   {
+      for(int i=0; i<fileCount; i++)
+      {
+         char nameBuff[64];
+         sprintf_s(nameBuff, 64, TEST_DIRECTORY"/file%d", i);
+         unlink(nameBuff);
+      }
+
+      _rmdir(TEST_DIRECTORY);
+   }
+
+   void test()
+   {
+      WIN32_FIND_DATAA ffd;
+      HANDLE hFind = FindFirstFileA(TEST_DIRECTORY"/*", &ffd);
+
+      if (INVALID_HANDLE_VALUE == hFind) 
+         exit(1);
+
+      // List all the files in the directory with some info about them.
+      int n=0;
+      do
+      {
+         // Don't do anything, just read 'em.
+         n++;
+      }
+      while (FindNextFileA(hFind, &ffd) != 0);
+
+      FindClose(hFind);
+
+      // Fail if we didn't find as many as we expected.
+      if(n < fileCount)
+         exit(1);
+   }
+};
+
+
+PERFORMANCE_TEST("disk/openingCostTest", DiskOpeningCostTest, 13008)
+{
+   static const char *getIndependentVariableName()
+   {
+      return "number of files in directory";
+   }
+
+   static int getIndependentVariableMin()
+   {
+      return 10;
+   }
+
+   static int getIndependentVariableMax()
+   {
+      return 1000000;
+   }
+
+   static bool checkSkipIndependentValue(int v)
+   {
+      return (v % 1000) != 0;
+   }
+
+   int fileCount;
+   void setIndependentVariable(int v)
+   {
+      fileCount = v;
+   }
+
+   void initialize()
+   {
+      // Make a test directory and blast out the appropriate number of files.
+      _mkdir(TEST_DIRECTORY);
+
+      for(int i=0; i<fileCount; i++)
+      {
+         char nameBuff[64];
+         sprintf_s(nameBuff, 64, TEST_DIRECTORY"/file%d", i);
+         FILE *f = fopen(nameBuff, "w");
+         fwrite(&i, sizeof(i), 1, f);
+         fclose(f);
+      }
+   }
+
+   void teardown()
+   {
+      for(int i=0; i<fileCount; i++)
+      {
+         char nameBuff[64];
+         sprintf_s(nameBuff, 64, TEST_DIRECTORY"/file%d", i);
+         unlink(nameBuff);
+      }
+
+      _rmdir(TEST_DIRECTORY);
+   }
+
+   void test()
+   {
+      // Try opening 100 files randomly.
+      for(int filesLeft=0; filesLeft<100; filesLeft++)
+      {
+         int fileToOpen = betterRand() % fileCount;
+
+         char nameBuff[64];
+         int fileContents;
+         sprintf_s(nameBuff, 64, TEST_DIRECTORY"/file%d", fileToOpen);
+         FILE *f = fopen(nameBuff, "r");
+         fread(&fileContents, sizeof(fileContents), 1, f);
+         fclose(f);
+      }
+   }
+};
+
+PERFORMANCE_TEST("disk/openingCostComparison/tare", DiskOpeningCostTestTare, 13009)
+{
+   void initialize()
+   {
+      DiskReadHelper::CreateTestFile();
+   }
+
+   void teardown()
+   {
+      DiskReadHelper::DestroyTestFile();
+   }
+
+   void test()
+   {
+      // Try reading 100 ints randomly from the test file.
+      FILE *f = fopen(TEST_FILE_NAME, "r");
+      for(int i=0; i<100; i++)
+      {
+         fseek(f, betterRand() % TEST_FILE_SIZE, SEEK_SET);
+         int garbage;
+         fread(&garbage, sizeof(int), 1, f);
+      }
+      fclose(f);
+   }
+};
+
+PERFORMANCE_TEST("disk/loading/jpeg", DiskLoadingNumbersJpeg, 13011)
+{
+   char *jpegData;
+   int jpegLen;
+
+   void test()
+   {
+      struct stat file_status;
+      stat("lena.jpg", &file_status);
+
+      FILE *f=fopen("lena.jpg", "rb");
+      jpegLen = file_status.st_size;
+      jpegData = (char*)malloc(jpegLen);
+      fread(jpegData, jpegLen, 1, f);
+      fclose(f);
+
+      int x, y, comp;
+      stbi_jpeg_load_from_memory((const unsigned char *)jpegData, jpegLen, &x, &y, &comp, 3 );
+
+      free(jpegData);
+   }
+};
+
+PERFORMANCE_TEST("disk/loading/raw", DiskLoadingNumbersRaw, 13012)
+{
+   char *rawData;
+   int rawLen;
+
+   void test()
+   {
+      struct stat file_status;
+      stat("lena.dds", &file_status);
+
+      FILE *f=fopen("lena.dds", "rb");
+      rawLen = file_status.st_size;
+      rawData = (char*)malloc(rawLen);
+      fread(rawData, rawLen, 1, f);
+      fclose(f);
+
+      int x, y, comp;
+      stbi_jpeg_load_from_memory((const unsigned char *)rawData, rawLen, &x, &y, &comp, 0 );
+
+      free(rawData);
+   }
+};
+

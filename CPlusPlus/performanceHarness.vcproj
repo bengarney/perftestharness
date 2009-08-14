@@ -482,6 +482,10 @@
 				>
 			</File>
 			<File
+				RelativePath=".\testUtilities\stb_image.c"
+				>
+			</File>
+			<File
 				RelativePath=".\testUtilities\UtilCacheRandomizer.cpp"
 				>
 			</File>

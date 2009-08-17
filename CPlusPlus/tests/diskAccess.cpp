@@ -25,7 +25,9 @@
 /// Helper to read from a file in order with a specified read size.
 struct DiskReadHelper
 {
-   DiskReadHelper(int rs = 1<<16)
+   static const int DEFAULT_FILE_SIZE = 1<<16;
+
+   DiskReadHelper(int rs = DEFAULT_FILE_SIZE)
    {
       file = fopen(TEST_FILE_NAME, "rb");
       curOffset = 0;
@@ -476,12 +478,15 @@ PERFORMANCE_TEST("disk/loading/jpeg", DiskLoadingNumbersJpeg, 13011)
 {
    char *jpegData;
    int jpegLen;
+   struct stat file_status;
+
+   void initialize()
+   {
+      stat("lena.jpg", &file_status);
+   }
 
    void test()
    {
-      struct stat file_status;
-      stat("lena.jpg", &file_status);
-
       FILE *f=fopen("lena.jpg", "rb");
       jpegLen = file_status.st_size;
       jpegData = (char*)malloc(jpegLen);
@@ -500,11 +505,15 @@ PERFORMANCE_TEST("disk/loading/raw", DiskLoadingNumbersRaw, 13012)
    char *rawData;
    int rawLen;
 
+   struct stat file_status;
+
+   void initialize()
+   {
+      stat("lena.dds", &file_status);
+   }
+
    void test()
    {
-      struct stat file_status;
-      stat("lena.dds", &file_status);
-
       FILE *f=fopen("lena.dds", "rb");
       rawLen = file_status.st_size;
       rawData = (char*)malloc(rawLen);
@@ -518,3 +527,75 @@ PERFORMANCE_TEST("disk/loading/raw", DiskLoadingNumbersRaw, 13012)
    }
 };
 
+PERFORMANCE_TEST("disk/parsing/raw", DiskParsingRaw, 13013)
+{
+   void initialize()
+   {
+      DiskReadHelper::CreateTestFile();
+   }
+
+   void teardown()
+   {
+      DiskReadHelper::DestroyTestFile();
+   }
+
+   void test()
+   {
+      DiskReadHelper *drh = new DiskReadHelper();
+      int itemCount = DiskReadHelper::DEFAULT_FILE_SIZE/sizeof(int);
+      int *values = new int[itemCount];
+      fread(values, sizeof(int), itemCount, drh->file);
+
+      // Simulate fixup.
+      for(int i=0; i<itemCount; i++)
+         values[i]++;
+
+      delete drh;
+   }
+};
+
+PERFORMANCE_TEST("disk/parsing/scanf", DiskParsingScanf, 13014)
+{
+   void initialize()
+   {
+      int itemCount = DiskReadHelper::DEFAULT_FILE_SIZE/sizeof(int);
+      FILE *f = fopen(TEST_FILE_NAME, "w");
+
+      for(int i=0; i<itemCount; i++)
+         fprintf(f, "%d ", betterRand());
+
+      fclose(f);
+
+      stat(TEST_FILE_NAME, &file_status);
+   }
+
+   void teardown()
+   {
+      unlink(TEST_FILE_NAME);
+   }
+
+   char *rawData;
+   int rawLen;
+   int count;
+   struct stat file_status;
+
+   void test()
+   {
+      FILE *f=fopen(TEST_FILE_NAME, "rb");
+      rawLen = file_status.st_size;
+      rawData = (char*)malloc(rawLen);
+      fread(rawData, 1, rawLen, f);
+      fclose(f);
+
+      int itemCount = DiskReadHelper::DEFAULT_FILE_SIZE/sizeof(int);
+      int bytesRead;
+      char *walk = rawData;
+      for(int i=0; i<itemCount; i++)
+      {
+         sscanf(walk, "%d %n", &count, &bytesRead);
+         walk += bytesRead;
+      }
+
+      free(rawData);
+   }
+};

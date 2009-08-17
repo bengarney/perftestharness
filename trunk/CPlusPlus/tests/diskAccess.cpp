@@ -307,12 +307,12 @@ PERFORMANCE_TEST("disk/directoryList", DiskDirectoryList, 13007)
 
    static int getIndependentVariableMax()
    {
-      return 1000000;
+      return 1<<16;
    }
 
-   static bool checkSkipIndependentValue(int v)
+   static bool checkSkipIndependentValue(int independentValue)
    {
-      return (v % 1000) != 0;
+      return  !(((independentValue != 0) && !(independentValue & (independentValue - 1))));
    }
 
    int fileCount;
@@ -388,12 +388,12 @@ PERFORMANCE_TEST("disk/openingCostTest", DiskOpeningCostTest, 13008)
 
    static int getIndependentVariableMax()
    {
-      return 1000000;
+      return 1<<16;
    }
 
-   static bool checkSkipIndependentValue(int v)
+   static bool checkSkipIndependentValue(int independentValue)
    {
-      return (v % 1000) != 0;
+      return  !(((independentValue != 0) && !(independentValue & (independentValue - 1))));
    }
 
    int fileCount;

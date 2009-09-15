@@ -10,7 +10,7 @@ GraphicsPerformanceTest::GraphicsPerformanceTest()
    m_ScreenHeight = 0;
 }
 
-void GraphicsPerformanceTest::initialize()
+void GraphicsPerformanceTest::initialize(unsigned int Width, unsigned int Height, bool Win, bool autoStencil, D3DFORMAT stencilFormat)
 {
    smCurTest = this;
 
@@ -20,13 +20,18 @@ void GraphicsPerformanceTest::initialize()
    DXUTDeviceSettings deviceSettings;
    ZeroMemory( &deviceSettings, sizeof(DXUTDeviceSettings) );
    deviceSettings.ver = DXUT_D3D9_DEVICE;
-   deviceSettings.d3d9.pp.Windowed         = true;
-   deviceSettings.d3d9.pp.BackBufferWidth  = 800;
-   deviceSettings.d3d9.pp.BackBufferHeight = 600;
+   deviceSettings.d3d9.pp.Windowed = Win;
+   if (!Win)
+	   deviceSettings.d3d9.pp.FullScreen_RefreshRateInHz = 60;
+   deviceSettings.d3d9.pp.BackBufferWidth  = Width;
+   deviceSettings.d3d9.pp.BackBufferHeight = Height;
    deviceSettings.d3d9.pp.PresentationInterval = D3DPRESENT_INTERVAL_IMMEDIATE; 
    deviceSettings.d3d9.pp.SwapEffect           = D3DSWAPEFFECT_DISCARD;
    deviceSettings.d3d9.pp.MultiSampleType      = (D3DMULTISAMPLE_TYPE)desiredMSAAType;
    deviceSettings.d3d9.pp.MultiSampleQuality   = desiredMSAAQuality;
+   deviceSettings.d3d9.pp.EnableAutoDepthStencil = autoStencil;
+   if (autoStencil)
+	   deviceSettings.d3d9.pp.AutoDepthStencilFormat = stencilFormat;
 
    DXUTCreateDeviceFromSettings(&deviceSettings);
 

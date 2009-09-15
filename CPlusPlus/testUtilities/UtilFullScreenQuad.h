@@ -10,7 +10,10 @@ class UtilFullScreenQuad
 		~UtilFullScreenQuad();
 
 	void RenderFullScreenQuad( iDevice* pDevice);
+	void RenderFullScreenQuad( iDevice* pDevice, int test, int test2, int test3);
+	void RenderFullScreenQuadScissor( iDevice* pDevice, int test, int test2, int test3);
 	void Init( iDevice* pDevice, unsigned int screenWidth, unsigned int screenHeight );
+	void Init( iDevice* pDevice, unsigned int screenWidth, unsigned int screenHeight, int test );
 
 	protected:
 	LPD3DXEFFECT m_pEffect;

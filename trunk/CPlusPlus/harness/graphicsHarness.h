@@ -21,7 +21,7 @@ public:
 
    typedef GraphicsPerformanceTest Parent;
 
-   void initialize();
+   void initialize(unsigned int Width = 800, unsigned int Height = 600, bool Win = true, bool autoStencil = false, D3DFORMAT stencilFormat = D3DFMT_D24S8);
 
    /// To be implemented by actual tests. We present after each call to
    /// this.
@@ -48,6 +48,13 @@ public:
    //Screen Resolution
    unsigned int m_ScreenWidth;
    unsigned int m_ScreenHeight;
+
+protected:
+	//unsigned int lWidth;
+	//unsigned int lHeight;
+	//bool lWin;
+	//bool lAStencil;
+	//D3DFORMAT SFormat = D3DFMT_D24S8;
 };
 
 /// Just like PERFORMANCE_TEST, but it makes a subclass of GraphicsPerformanceTest

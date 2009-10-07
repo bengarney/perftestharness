@@ -539,6 +539,10 @@
 				RelativePath=".\testUtilities\UtilStats.h"
 				>
 			</File>
+			<File
+				RelativePath=".\testUtilities\Vertices.h"
+				>
+			</File>
 		</Filter>
 	</Files>
 	<Globals>

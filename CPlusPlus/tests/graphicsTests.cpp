@@ -1288,3 +1288,93 @@ GRAPHICS_PERFORMANCE_TEST("basic/graphics/extraClearsMSAA", GraphicsExtraClearMS
          pd3dDevice->Clear(0, NULL, D3DCLEAR_TARGET, 0xFF000000 | frameCount << 8, 0, 0);
    }
 };
+
+
+/************************************************************************/
+/* Count cost of draw calls per frame.                                  */
+/************************************************************************/
+GRAPHICS_PERFORMANCE_TEST("basic/graphics/drawCalls", GraphicsDrawCallsTests, 8000)
+{
+   int drawsPerFrame;
+   IDirect3DTexture9 * mTextureA;
+   IDirect3DTexture9 * mTextureB;
+   IDirect3DTexture9 * mTextureC;
+
+   static const char * getIndependentVariableName()
+   {
+      return "draw call count";
+   }
+
+   static int getIndependentVariableMin()
+   {
+      return 1;
+   }
+
+   static int getIndependentVariableMax()
+   {
+      return 6000;
+   }
+
+   static bool checkSkipIndependentValue(int v)
+   {
+      if(v==1)
+         return false;
+      return (v%500)!=0;
+   }
+
+   void setIndependentVariable(int v)
+   {
+      drawsPerFrame = v;
+   }
+
+   void initialize()
+   {
+      // Very small so we don't tax fill rate.
+      Parent::initialize(64,64);
+      
+      // Load some textures. This is a leak, but whatever.
+      mTextureA = mTextureB = mTextureC = NULL;
+      D3DXCreateTextureFromFileEx (m_Device.m_Dx9, L"Pharaoh.bmp", 0, 0, 0, D3DUSAGE_RENDERTARGET, 
+         D3DFMT_A8B8G8R8, D3DPOOL_DEFAULT, D3DX_DEFAULT, D3DX_DEFAULT, 0, NULL, NULL, &mTextureA);
+      D3DXCreateTextureFromFileEx (m_Device.m_Dx9, L"lena.jpg", 0, 0, 0, D3DUSAGE_RENDERTARGET, 
+         D3DFMT_A8B8G8R8, D3DPOOL_DEFAULT, D3DX_DEFAULT, D3DX_DEFAULT, 0, NULL, NULL, &mTextureB);
+      D3DXCreateTextureFromFileEx (m_Device.m_Dx9, L"lena.dds", 0, 0, 0, D3DUSAGE_RENDERTARGET, 
+         D3DFMT_A8B8G8R8, D3DPOOL_DEFAULT, D3DX_DEFAULT, D3DX_DEFAULT, 0, NULL, NULL, &mTextureC);
+
+      // Initialize a quad to draw.
+      IUtil::GetUtilFullScreenQuad()->InitTex( &(iDevice)Parent::m_Device,Parent::m_ScreenWidth,Parent::m_ScreenHeight, 0);
+   }
+
+   void teardown()
+   {
+      Parent::teardown();
+
+      SAFE_RELEASE(mTextureA);
+      SAFE_RELEASE(mTextureB);
+      SAFE_RELEASE(mTextureC);
+   }
+
+   void renderFrame(IDirect3DDevice9* pd3dDevice, double fTime, float fElapsedTime)
+   {
+      pd3dDevice->BeginScene();
+
+      for(int i=0; i<drawsPerFrame; i++)
+      {
+         switch((i+drawsPerFrame/500)%3)
+         {
+         case 0:
+            pd3dDevice->SetTexture(0, mTextureA);
+            break;
+         case 1:
+            pd3dDevice->SetTexture(1, mTextureB);
+            break;
+         case 2:
+            pd3dDevice->SetTexture(1, mTextureC);
+            break;
+         }
+         pd3dDevice->DrawPrimitive( D3DPT_TRIANGLELIST, 0, 2 );
+      }
+
+      pd3dDevice->EndScene();
+   }
+};

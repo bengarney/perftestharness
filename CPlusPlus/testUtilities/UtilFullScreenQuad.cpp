@@ -528,7 +528,7 @@ void UtilFullScreenQuad::InitTex( iDevice* pDevice, unsigned int screenWidth, un
 		};*/
 
 		pDevice->m_Dx9->Clear( 0, NULL, D3DCLEAR_TARGET, D3DCOLOR_XRGB( 200, 100, 0 ), 1.0f, 0 );
-		pDevice->m_Dx9->CreateVertexBuffer(sizeof (Vertices) ,0 ,D3DFVF_VERT2,D3DPOOL_DEFAULT,&m_pVB9,NULL);
+      pDevice->m_Dx9->CreateVertexBuffer(sizeof (Vertices) , D3DUSAGE_WRITEONLY,D3DFVF_VERT2,D3DPOOL_DEFAULT,&m_pVB9,NULL);
 		VOID * vertArray;
 		m_pVB9->Lock (0, sizeof (Vertices), (void**)&vertArray, 0);
 		memcpy(vertArray, Vertices, sizeof (Vertices));

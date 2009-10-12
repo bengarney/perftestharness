@@ -41,7 +41,7 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				Optimization="0"
-				AdditionalIncludeDirectories="&quot;C:\Program Files\Microsoft DirectX SDK (March 2009)\Include&quot;;C:\Users\Intel\Documents\TestHarness\CPlusPlus"
+				AdditionalIncludeDirectories="&quot;C:\Program Files\Microsoft DirectX SDK (March 2009)\Include&quot;;."
 				PreprocessorDefinitions="WIN32;_DEBUG;_CONSOLE"
 				MinimalRebuild="true"
 				BasicRuntimeChecks="3"
@@ -118,7 +118,7 @@
 				Optimization="3"
 				EnableIntrinsicFunctions="true"
 				FavorSizeOrSpeed="0"
-				AdditionalIncludeDirectories="&quot;C:\Program Files\Microsoft DirectX SDK (March 2009)\Include&quot;;C:\Users\Intel\Documents\TestHarness\CPlusPlus"
+				AdditionalIncludeDirectories="&quot;C:\Program Files\Microsoft DirectX SDK (March 2009)\Include&quot;;."
 				PreprocessorDefinitions="WIN32;NDEBUG;_CONSOLE"
 				RuntimeLibrary="2"
 				EnableFunctionLevelLinking="true"

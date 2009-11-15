@@ -1293,7 +1293,7 @@ GRAPHICS_PERFORMANCE_TEST("basic/graphics/extraClearsMSAA", GraphicsExtraClearMS
 /************************************************************************/
 /* Count cost of draw calls per frame.                                  */
 /************************************************************************/
-GRAPHICS_PERFORMANCE_TEST("basic/graphics/drawCalls", GraphicsDrawCallsTests, 8000)
+GRAPHICS_PERFORMANCE_TEST("basic/graphics/drawCalls", GraphicsDrawCallsTests, 8001)
 {
    int drawsPerFrame;
    IDirect3DTexture9 * mTextureA;
@@ -1332,6 +1332,75 @@ GRAPHICS_PERFORMANCE_TEST("basic/graphics/drawCalls", GraphicsDrawCallsTests, 80
       // Very small so we don't tax fill rate.
       Parent::initialize(64,64);
       
+      // Load some textures. This is a leak, but whatever.
+      mTextureA = mTextureB = mTextureC = NULL;
+
+      // Initialize a quad to draw.
+      IUtil::GetUtilFullScreenQuad()->InitTex( &(iDevice)Parent::m_Device,Parent::m_ScreenWidth,Parent::m_ScreenHeight, 0);
+   }
+
+   void teardown()
+   {
+      Parent::teardown();
+
+      SAFE_RELEASE(mTextureA);
+      SAFE_RELEASE(mTextureB);
+      SAFE_RELEASE(mTextureC);
+   }
+
+   void renderFrame(IDirect3DDevice9* pd3dDevice, double fTime, float fElapsedTime)
+   {
+      pd3dDevice->BeginScene();
+
+      for(int i=0; i<drawsPerFrame; i++)
+         pd3dDevice->DrawPrimitive( D3DPT_TRIANGLELIST, 0, 2 );
+
+      pd3dDevice->EndScene();
+   }
+};
+
+/************************************************************************/
+/* Count cost of draw calls per frame.                                  */
+/************************************************************************/
+GRAPHICS_PERFORMANCE_TEST("basic/graphics/drawCallsTextureChanges", GraphicsDrawCallsTextureChangesTests, 8002)
+{
+   int drawsPerFrame;
+   IDirect3DTexture9 * mTextureA;
+   IDirect3DTexture9 * mTextureB;
+   IDirect3DTexture9 * mTextureC;
+
+   static const char * getIndependentVariableName()
+   {
+      return "draw call count";
+   }
+
+   static int getIndependentVariableMin()
+   {
+      return 1;
+   }
+
+   static int getIndependentVariableMax()
+   {
+      return 6000;
+   }
+
+   static bool checkSkipIndependentValue(int v)
+   {
+      if(v==1)
+         return false;
+      return (v%500)!=0;
+   }
+
+   void setIndependentVariable(int v)
+   {
+      drawsPerFrame = v;
+   }
+
+   void initialize()
+   {
+      // Very small so we don't tax fill rate.
+      Parent::initialize(64,64);
+
       // Load some textures. This is a leak, but whatever.
       mTextureA = mTextureB = mTextureC = NULL;
       D3DXCreateTextureFromFileEx (m_Device.m_Dx9, L"Pharaoh.bmp", 0, 0, 0, D3DUSAGE_RENDERTARGET, 

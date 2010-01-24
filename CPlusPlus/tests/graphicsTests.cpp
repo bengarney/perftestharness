@@ -1,5 +1,6 @@
 #include "harness/graphicsHarness.h"
 #include "testUtilities/IUtil.h"
+#include "testUtilities/Vertices.h"
 
 /************************************************************************/
 /* Bare minimum test that shows discernable graphics.                   */
@@ -12,17 +13,17 @@ GRAPHICS_PERFORMANCE_TEST("basic/graphics/basicClear800x600", GraphicsBasicClear
    {
       frameCount = 0;
       Parent::initialize();
-	  IUtil::GetUtilFullScreenQuad()->Init( &(iDevice)Parent::m_Device,Parent::m_ScreenWidth,Parent::m_ScreenHeight );
+      IUtil::GetUtilFullScreenQuad()->Init( &(iDevice)Parent::m_Device,Parent::m_ScreenWidth,Parent::m_ScreenHeight );
    }
 
    void renderFrame(IDirect3DDevice9* pd3dDevice, double fTime, float fElapsedTime)
    {
       frameCount++;
       //pd3dDevice->Clear(0, NULL, D3DCLEAR_TARGET, 0xFF000000 | frameCount << 8, 0, 0);
-	  pd3dDevice->Clear(0, NULL, D3DCLEAR_TARGET, 0x00000000, 0, 0);
-	  
+      pd3dDevice->Clear(0, NULL, D3DCLEAR_TARGET, 0x00000000, 0, 0);
 
-	  IUtil::GetUtilFullScreenQuad()->RenderFullScreenQuad( &iDevice(pd3dDevice) );
+
+      IUtil::GetUtilFullScreenQuad()->RenderFullScreenQuad( &iDevice(pd3dDevice) );
    }
 };
 
@@ -33,27 +34,27 @@ GRAPHICS_PERFORMANCE_TEST("basic/graphics/basicClear1280x1024", GraphicsBasicCle
 {
    int frameCount;
 
-	static const unsigned int lWidth = 1280;
-	static const unsigned int lHeight = 1024;
-	static const bool lWin = true;
-	static const bool lAStencil = false;
-	static const D3DFORMAT SFormat = D3DFMT_D24S8;
+   static const unsigned int lWidth = 1280;
+   static const unsigned int lHeight = 1024;
+   static const bool lWin = true;
+   static const bool lAStencil = false;
+   static const D3DFORMAT SFormat = D3DFMT_D24S8;
 
    void initialize()
    {
       frameCount = 0;
-	  Parent::initialize(lWidth, lHeight, lWin, lAStencil, SFormat);
-	  IUtil::GetUtilFullScreenQuad()->Init( &(iDevice)Parent::m_Device,Parent::m_ScreenWidth,Parent::m_ScreenHeight );
+      Parent::initialize(lWidth, lHeight, lWin, lAStencil, SFormat);
+      IUtil::GetUtilFullScreenQuad()->Init( &(iDevice)Parent::m_Device,Parent::m_ScreenWidth,Parent::m_ScreenHeight );
    }
 
    void renderFrame(IDirect3DDevice9* pd3dDevice, double fTime, float fElapsedTime)
    {
       frameCount++;
       //pd3dDevice->Clear(0, NULL, D3DCLEAR_TARGET, 0xFF000000 | frameCount << 8, 0, 0);
-	  pd3dDevice->Clear(0, NULL, D3DCLEAR_TARGET, 0x00000000, 0, 0);
-	  
+      pd3dDevice->Clear(0, NULL, D3DCLEAR_TARGET, 0x00000000, 0, 0);
 
-	  IUtil::GetUtilFullScreenQuad()->RenderFullScreenQuad( &iDevice(pd3dDevice) );
+
+      IUtil::GetUtilFullScreenQuad()->RenderFullScreenQuad( &iDevice(pd3dDevice) );
    }
 };
 
@@ -64,27 +65,27 @@ GRAPHICS_PERFORMANCE_TEST("basic/graphics/basicClear1400x1050", GraphicsBasicCle
 {
    int frameCount;
 
-   	static const unsigned int lWidth = 1400;
-	static const unsigned int lHeight = 1050;
-	static const bool lWin = true;
-	static const bool lAStencil = false;
-	static const D3DFORMAT SFormat = D3DFMT_D24S8;
+   static const unsigned int lWidth = 1400;
+   static const unsigned int lHeight = 1050;
+   static const bool lWin = true;
+   static const bool lAStencil = false;
+   static const D3DFORMAT SFormat = D3DFMT_D24S8;
 
    void initialize()
    {
       frameCount = 0;
-	  Parent::initialize(lWidth, lHeight, lWin, lAStencil, SFormat);
-	  IUtil::GetUtilFullScreenQuad()->Init( &(iDevice)Parent::m_Device,Parent::m_ScreenWidth,Parent::m_ScreenHeight );
+      Parent::initialize(lWidth, lHeight, lWin, lAStencil, SFormat);
+      IUtil::GetUtilFullScreenQuad()->Init( &(iDevice)Parent::m_Device,Parent::m_ScreenWidth,Parent::m_ScreenHeight );
    }
 
    void renderFrame(IDirect3DDevice9* pd3dDevice, double fTime, float fElapsedTime)
    {
       frameCount++;
       //pd3dDevice->Clear(0, NULL, D3DCLEAR_TARGET, 0xFF000000 | frameCount << 8, 0, 0);
-	  pd3dDevice->Clear(0, NULL, D3DCLEAR_TARGET, 0x00000000, 0, 0);
-	  
+      pd3dDevice->Clear(0, NULL, D3DCLEAR_TARGET, 0x00000000, 0, 0);
 
-	  IUtil::GetUtilFullScreenQuad()->RenderFullScreenQuad( &iDevice(pd3dDevice) );
+
+      IUtil::GetUtilFullScreenQuad()->RenderFullScreenQuad( &iDevice(pd3dDevice) );
    }
 };
 
@@ -95,27 +96,27 @@ GRAPHICS_PERFORMANCE_TEST("basic/graphics/ZClear1400x1050", GraphicsZClear1400x1
 {
    int frameCount;
 
-   	static const unsigned int lWidth = 1400;
-	static const unsigned int lHeight = 1050;
-	static const bool lWin = true;
-	static const bool lAStencil = false;
-	static const D3DFORMAT SFormat = D3DFMT_D24S8;
+   static const unsigned int lWidth = 1400;
+   static const unsigned int lHeight = 1050;
+   static const bool lWin = true;
+   static const bool lAStencil = false;
+   static const D3DFORMAT SFormat = D3DFMT_D24S8;
 
    void initialize()
    {
       frameCount = 0;
-	  Parent::initialize(lWidth, lHeight, lWin, lAStencil, SFormat);
-	  IUtil::GetUtilFullScreenQuad()->Init( &(iDevice)Parent::m_Device,Parent::m_ScreenWidth,Parent::m_ScreenHeight );
+      Parent::initialize(lWidth, lHeight, lWin, lAStencil, SFormat);
+      IUtil::GetUtilFullScreenQuad()->Init( &(iDevice)Parent::m_Device,Parent::m_ScreenWidth,Parent::m_ScreenHeight );
    }
 
    void renderFrame(IDirect3DDevice9* pd3dDevice, double fTime, float fElapsedTime)
    {
       frameCount++;
       //pd3dDevice->Clear(0, NULL, D3DCLEAR_TARGET, 0xFF000000 | frameCount << 8, 0, 0);
-	  pd3dDevice->Clear(0, NULL, D3DCLEAR_ZBUFFER, 0x00000000, 0, 0);
-	  
+      pd3dDevice->Clear(0, NULL, D3DCLEAR_ZBUFFER, 0x00000000, 0, 0);
 
-	  IUtil::GetUtilFullScreenQuad()->RenderFullScreenQuad( &iDevice(pd3dDevice) );
+
+      IUtil::GetUtilFullScreenQuad()->RenderFullScreenQuad( &iDevice(pd3dDevice) );
    }
 };
 
@@ -126,27 +127,27 @@ GRAPHICS_PERFORMANCE_TEST("basic/graphics/StencilClear1400x1050", GraphicsStenci
 {
    int frameCount;
 
-   	static const unsigned int lWidth = 1400;
-	static const unsigned int lHeight = 1050;
-	static const bool lWin = true;
-	static const bool lAStencil = true;
-	static const D3DFORMAT SFormat = D3DFMT_D24S8;
+   static const unsigned int lWidth = 1400;
+   static const unsigned int lHeight = 1050;
+   static const bool lWin = true;
+   static const bool lAStencil = true;
+   static const D3DFORMAT SFormat = D3DFMT_D24S8;
 
    void initialize()
    {
       frameCount = 0;
-	  Parent::initialize(lWidth, lHeight, lWin, lAStencil, SFormat);
-	  IUtil::GetUtilFullScreenQuad()->Init( &(iDevice)Parent::m_Device,Parent::m_ScreenWidth,Parent::m_ScreenHeight );
+      Parent::initialize(lWidth, lHeight, lWin, lAStencil, SFormat);
+      IUtil::GetUtilFullScreenQuad()->Init( &(iDevice)Parent::m_Device,Parent::m_ScreenWidth,Parent::m_ScreenHeight );
    }
 
    void renderFrame(IDirect3DDevice9* pd3dDevice, double fTime, float fElapsedTime)
    {
       frameCount++;
       //pd3dDevice->Clear(0, NULL, D3DCLEAR_TARGET, 0xFF000000 | frameCount << 8, 0, 0);
-	  pd3dDevice->Clear(0, NULL, D3DCLEAR_STENCIL, 0x00000000, 0, 0);
-	  
+      pd3dDevice->Clear(0, NULL, D3DCLEAR_STENCIL, 0x00000000, 0, 0);
 
-	  IUtil::GetUtilFullScreenQuad()->RenderFullScreenQuad( &iDevice(pd3dDevice) );
+
+      IUtil::GetUtilFullScreenQuad()->RenderFullScreenQuad( &iDevice(pd3dDevice) );
    }
 };
 
@@ -157,27 +158,27 @@ GRAPHICS_PERFORMANCE_TEST("basic/graphics/AllClear1400x1050", GraphicsAllClear14
 {
    int frameCount;
 
-   	static const unsigned int lWidth = 1400;
-	static const unsigned int lHeight = 1050;
-	static const bool lWin = true;
-	static const bool lAStencil = true;
-	static const D3DFORMAT SFormat = D3DFMT_D24S8;
+   static const unsigned int lWidth = 1400;
+   static const unsigned int lHeight = 1050;
+   static const bool lWin = true;
+   static const bool lAStencil = true;
+   static const D3DFORMAT SFormat = D3DFMT_D24S8;
 
    void initialize()
    {
       frameCount = 0;
-	  Parent::initialize(lWidth, lHeight, lWin, lAStencil, SFormat);
-	  IUtil::GetUtilFullScreenQuad()->Init( &(iDevice)Parent::m_Device,Parent::m_ScreenWidth,Parent::m_ScreenHeight );
+      Parent::initialize(lWidth, lHeight, lWin, lAStencil, SFormat);
+      IUtil::GetUtilFullScreenQuad()->Init( &(iDevice)Parent::m_Device,Parent::m_ScreenWidth,Parent::m_ScreenHeight );
    }
 
    void renderFrame(IDirect3DDevice9* pd3dDevice, double fTime, float fElapsedTime)
    {
       frameCount++;
       //pd3dDevice->Clear(0, NULL, D3DCLEAR_TARGET, 0xFF000000 | frameCount << 8, 0, 0);
-	  pd3dDevice->Clear(0, NULL, D3DCLEAR_TARGET | D3DCLEAR_STENCIL | D3DCLEAR_ZBUFFER, 0x00000000, 0, 0);
-	  
+      pd3dDevice->Clear(0, NULL, D3DCLEAR_TARGET | D3DCLEAR_STENCIL | D3DCLEAR_ZBUFFER, 0x00000000, 0, 0);
 
-	  IUtil::GetUtilFullScreenQuad()->RenderFullScreenQuad( &iDevice(pd3dDevice) );
+
+      IUtil::GetUtilFullScreenQuad()->RenderFullScreenQuad( &iDevice(pd3dDevice) );
    }
 };
 
@@ -192,17 +193,17 @@ GRAPHICS_PERFORMANCE_TEST("basic/graphics/extraSurfaceClears800x600", GraphicsEx
    {
       frameCount = 0;
       Parent::initialize();
-	  IUtil::GetUtilFullScreenQuad()->Init( &(iDevice)Parent::m_Device,Parent::m_ScreenWidth,Parent::m_ScreenHeight );
+      IUtil::GetUtilFullScreenQuad()->Init( &(iDevice)Parent::m_Device,Parent::m_ScreenWidth,Parent::m_ScreenHeight );
    }
 
    void renderFrame(IDirect3DDevice9* pd3dDevice, double fTime, float fElapsedTime)
    {
       frameCount++;
       for(int i=0; i<50; i++)
-	  {
-		  IUtil::GetUtilFullScreenQuad()->RenderFullScreenQuad( &iDevice(pd3dDevice) );
-		  pd3dDevice->Clear(0, NULL, D3DCLEAR_TARGET, 0xFF000000 | frameCount << 8, 0, 0);
-	  }
+      {
+         IUtil::GetUtilFullScreenQuad()->RenderFullScreenQuad( &iDevice(pd3dDevice) );
+         pd3dDevice->Clear(0, NULL, D3DCLEAR_TARGET, 0xFF000000 | frameCount << 8, 0, 0);
+      }
    }
 };
 
@@ -213,27 +214,27 @@ GRAPHICS_PERFORMANCE_TEST("basic/graphics/extraSurfaceClears1280x1024", Graphics
 {
    int frameCount;
 
-    static const unsigned int lWidth = 1280;
-	static const unsigned int lHeight = 1024;
-	static const bool lWin = true;
-	static const bool lAStencil = false;
-	static const D3DFORMAT SFormat = D3DFMT_D24S8;
+   static const unsigned int lWidth = 1280;
+   static const unsigned int lHeight = 1024;
+   static const bool lWin = true;
+   static const bool lAStencil = false;
+   static const D3DFORMAT SFormat = D3DFMT_D24S8;
 
    void initialize()
    {
       frameCount = 0;
-	  Parent::initialize(lWidth, lHeight, lWin, lAStencil, SFormat);
-	  IUtil::GetUtilFullScreenQuad()->Init( &(iDevice)Parent::m_Device,Parent::m_ScreenWidth,Parent::m_ScreenHeight );
+      Parent::initialize(lWidth, lHeight, lWin, lAStencil, SFormat);
+      IUtil::GetUtilFullScreenQuad()->Init( &(iDevice)Parent::m_Device,Parent::m_ScreenWidth,Parent::m_ScreenHeight );
    }
 
    void renderFrame(IDirect3DDevice9* pd3dDevice, double fTime, float fElapsedTime)
    {
       frameCount++;
       for(int i=0; i<50; i++)
-	  {
-		  IUtil::GetUtilFullScreenQuad()->RenderFullScreenQuad( &iDevice(pd3dDevice) );
-          pd3dDevice->Clear(0, NULL, D3DCLEAR_TARGET, 0xFF000000 | frameCount << 8, 0, 0);
-	  }
+      {
+         IUtil::GetUtilFullScreenQuad()->RenderFullScreenQuad( &iDevice(pd3dDevice) );
+         pd3dDevice->Clear(0, NULL, D3DCLEAR_TARGET, 0xFF000000 | frameCount << 8, 0, 0);
+      }
    }
 };
 
@@ -244,27 +245,27 @@ GRAPHICS_PERFORMANCE_TEST("basic/graphics/extraSurfaceClears1400x1050", Graphics
 {
    int frameCount;
 
-    static const unsigned int lWidth = 1400;
-	static const unsigned int lHeight = 1050;
-	static const bool lWin = true;
-	static const bool lAStencil = false;
-	static const D3DFORMAT SFormat = D3DFMT_D24S8;
+   static const unsigned int lWidth = 1400;
+   static const unsigned int lHeight = 1050;
+   static const bool lWin = true;
+   static const bool lAStencil = false;
+   static const D3DFORMAT SFormat = D3DFMT_D24S8;
 
    void initialize()
    {
       frameCount = 0;
-	  Parent::initialize(lWidth, lHeight, lWin, lAStencil, SFormat);
-	  IUtil::GetUtilFullScreenQuad()->Init( &(iDevice)Parent::m_Device,Parent::m_ScreenWidth,Parent::m_ScreenHeight );
+      Parent::initialize(lWidth, lHeight, lWin, lAStencil, SFormat);
+      IUtil::GetUtilFullScreenQuad()->Init( &(iDevice)Parent::m_Device,Parent::m_ScreenWidth,Parent::m_ScreenHeight );
    }
 
    void renderFrame(IDirect3DDevice9* pd3dDevice, double fTime, float fElapsedTime)
    {
       frameCount++;
       for(int i=0; i<50; i++)
-	  {
-		  IUtil::GetUtilFullScreenQuad()->RenderFullScreenQuad( &iDevice(pd3dDevice) );
-          pd3dDevice->Clear(0, NULL, D3DCLEAR_TARGET, 0xFF000000 | frameCount << 8, 0, 0);
-	  }
+      {
+         IUtil::GetUtilFullScreenQuad()->RenderFullScreenQuad( &iDevice(pd3dDevice) );
+         pd3dDevice->Clear(0, NULL, D3DCLEAR_TARGET, 0xFF000000 | frameCount << 8, 0, 0);
+      }
    }
 };
 
@@ -275,27 +276,27 @@ GRAPHICS_PERFORMANCE_TEST("basic/graphics/extraStencilClears800x600", GraphicsEx
 {
    int frameCount;
 
-    static const unsigned int lWidth = 800;
-	static const unsigned int lHeight = 600;
-	static const bool lWin = true;
-	static const bool lAStencil = true;
-	static const D3DFORMAT SFormat = D3DFMT_D24S8;
+   static const unsigned int lWidth = 800;
+   static const unsigned int lHeight = 600;
+   static const bool lWin = true;
+   static const bool lAStencil = true;
+   static const D3DFORMAT SFormat = D3DFMT_D24S8;
 
    void initialize()
    {
       frameCount = 0;
       Parent::initialize(lWidth, lHeight, lWin, lAStencil, SFormat);
-	  IUtil::GetUtilFullScreenQuad()->Init( &(iDevice)Parent::m_Device,Parent::m_ScreenWidth,Parent::m_ScreenHeight );
+      IUtil::GetUtilFullScreenQuad()->Init( &(iDevice)Parent::m_Device,Parent::m_ScreenWidth,Parent::m_ScreenHeight );
    }
 
    void renderFrame(IDirect3DDevice9* pd3dDevice, double fTime, float fElapsedTime)
    {
       frameCount++;
       for(int i=0; i<50; i++)
-	  {
-		  IUtil::GetUtilFullScreenQuad()->RenderFullScreenQuad( &iDevice(pd3dDevice) );
-          pd3dDevice->Clear(0, NULL, D3DCLEAR_STENCIL, 0xFF000000 | frameCount << 8, 0, 0);
-	  }
+      {
+         IUtil::GetUtilFullScreenQuad()->RenderFullScreenQuad( &iDevice(pd3dDevice) );
+         pd3dDevice->Clear(0, NULL, D3DCLEAR_STENCIL, 0xFF000000 | frameCount << 8, 0, 0);
+      }
    }
 };
 
@@ -306,27 +307,27 @@ GRAPHICS_PERFORMANCE_TEST("basic/graphics/extraStencilClears1280x1024", Graphics
 {
    int frameCount;
 
-    static const unsigned int lWidth = 1280;
-	static const unsigned int lHeight = 1024;
-	static const bool lWin = true;
-	static const bool lAStencil = true;
-	static const D3DFORMAT SFormat = D3DFMT_D24S8;
+   static const unsigned int lWidth = 1280;
+   static const unsigned int lHeight = 1024;
+   static const bool lWin = true;
+   static const bool lAStencil = true;
+   static const D3DFORMAT SFormat = D3DFMT_D24S8;
 
    void initialize()
    {
       frameCount = 0;
       Parent::initialize(lWidth, lHeight, lWin, lAStencil, SFormat);
-	  IUtil::GetUtilFullScreenQuad()->Init( &(iDevice)Parent::m_Device,Parent::m_ScreenWidth,Parent::m_ScreenHeight );
+      IUtil::GetUtilFullScreenQuad()->Init( &(iDevice)Parent::m_Device,Parent::m_ScreenWidth,Parent::m_ScreenHeight );
    }
 
    void renderFrame(IDirect3DDevice9* pd3dDevice, double fTime, float fElapsedTime)
    {
       frameCount++;
       for(int i=0; i<50; i++)
-	  {
-		  IUtil::GetUtilFullScreenQuad()->RenderFullScreenQuad( &iDevice(pd3dDevice) );
-          pd3dDevice->Clear(0, NULL, D3DCLEAR_STENCIL, 0xFF000000 | frameCount << 8, 0, 0);
-	  }
+      {
+         IUtil::GetUtilFullScreenQuad()->RenderFullScreenQuad( &iDevice(pd3dDevice) );
+         pd3dDevice->Clear(0, NULL, D3DCLEAR_STENCIL, 0xFF000000 | frameCount << 8, 0, 0);
+      }
    }
 };
 
@@ -337,27 +338,27 @@ GRAPHICS_PERFORMANCE_TEST("basic/graphics/extraStencilClears1400x1050", Graphics
 {
    int frameCount;
 
-    static const unsigned int lWidth = 1400;
-	static const unsigned int lHeight = 1050;
-	static const bool lWin = true;
-	static const bool lAStencil = true;
-	static const D3DFORMAT SFormat = D3DFMT_D24S8;
+   static const unsigned int lWidth = 1400;
+   static const unsigned int lHeight = 1050;
+   static const bool lWin = true;
+   static const bool lAStencil = true;
+   static const D3DFORMAT SFormat = D3DFMT_D24S8;
 
    void initialize()
    {
       frameCount = 0;
       Parent::initialize(lWidth, lHeight, lWin, lAStencil, SFormat);
-	  IUtil::GetUtilFullScreenQuad()->Init( &(iDevice)Parent::m_Device,Parent::m_ScreenWidth,Parent::m_ScreenHeight );
+      IUtil::GetUtilFullScreenQuad()->Init( &(iDevice)Parent::m_Device,Parent::m_ScreenWidth,Parent::m_ScreenHeight );
    }
 
    void renderFrame(IDirect3DDevice9* pd3dDevice, double fTime, float fElapsedTime)
    {
       frameCount++;
       for(int i=0; i<50; i++)
-	  {
-		  IUtil::GetUtilFullScreenQuad()->RenderFullScreenQuad( &iDevice(pd3dDevice) );
-          pd3dDevice->Clear(0, NULL, D3DCLEAR_STENCIL, 0xFF000000 | frameCount << 8, 0, 0);
-	  }
+      {
+         IUtil::GetUtilFullScreenQuad()->RenderFullScreenQuad( &iDevice(pd3dDevice) );
+         pd3dDevice->Clear(0, NULL, D3DCLEAR_STENCIL, 0xFF000000 | frameCount << 8, 0, 0);
+      }
    }
 };
 
@@ -368,27 +369,27 @@ GRAPHICS_PERFORMANCE_TEST("basic/graphics/extraZBufferClears800x600", GraphicsEx
 {
    int frameCount;
 
-    static const unsigned int lWidth = 800;
-	static const unsigned int lHeight = 600;
-	static const bool lWin = true;
-	static const bool lAStencil = false;
-	static const D3DFORMAT SFormat = D3DFMT_D24S8;
+   static const unsigned int lWidth = 800;
+   static const unsigned int lHeight = 600;
+   static const bool lWin = true;
+   static const bool lAStencil = false;
+   static const D3DFORMAT SFormat = D3DFMT_D24S8;
 
    void initialize()
    {
       frameCount = 0;
       Parent::initialize(lWidth, lHeight, lWin, lAStencil, SFormat);
-	  IUtil::GetUtilFullScreenQuad()->Init( &(iDevice)Parent::m_Device,Parent::m_ScreenWidth,Parent::m_ScreenHeight );
+      IUtil::GetUtilFullScreenQuad()->Init( &(iDevice)Parent::m_Device,Parent::m_ScreenWidth,Parent::m_ScreenHeight );
    }
 
    void renderFrame(IDirect3DDevice9* pd3dDevice, double fTime, float fElapsedTime)
    {
       frameCount++;
       for(int i=0; i<50; i++)
-	  {
-		  IUtil::GetUtilFullScreenQuad()->RenderFullScreenQuad( &iDevice(pd3dDevice) );
-          pd3dDevice->Clear(0, NULL, D3DCLEAR_ZBUFFER, 0xFF000000 | frameCount << 8, 0, 0);
-	  }
+      {
+         IUtil::GetUtilFullScreenQuad()->RenderFullScreenQuad( &iDevice(pd3dDevice) );
+         pd3dDevice->Clear(0, NULL, D3DCLEAR_ZBUFFER, 0xFF000000 | frameCount << 8, 0, 0);
+      }
    }
 };
 
@@ -399,27 +400,27 @@ GRAPHICS_PERFORMANCE_TEST("basic/graphics/extraZBufferClears1280x1024", Graphics
 {
    int frameCount;
 
-    static const unsigned int lWidth = 1280;
-	static const unsigned int lHeight = 1024;
-	static const bool lWin = true;
-	static const bool lAStencil = false;
-	static const D3DFORMAT SFormat = D3DFMT_D24S8;
+   static const unsigned int lWidth = 1280;
+   static const unsigned int lHeight = 1024;
+   static const bool lWin = true;
+   static const bool lAStencil = false;
+   static const D3DFORMAT SFormat = D3DFMT_D24S8;
 
    void initialize()
    {
       frameCount = 0;
       Parent::initialize(lWidth, lHeight, lWin, lAStencil, SFormat);
-	  IUtil::GetUtilFullScreenQuad()->Init( &(iDevice)Parent::m_Device,Parent::m_ScreenWidth,Parent::m_ScreenHeight );
+      IUtil::GetUtilFullScreenQuad()->Init( &(iDevice)Parent::m_Device,Parent::m_ScreenWidth,Parent::m_ScreenHeight );
    }
 
    void renderFrame(IDirect3DDevice9* pd3dDevice, double fTime, float fElapsedTime)
    {
       frameCount++;
       for(int i=0; i<50; i++)
-	  {
-		  IUtil::GetUtilFullScreenQuad()->RenderFullScreenQuad( &iDevice(pd3dDevice) );
-          pd3dDevice->Clear(0, NULL, D3DCLEAR_ZBUFFER, 0xFF000000 | frameCount << 8, 0, 0);
-	  }
+      {
+         IUtil::GetUtilFullScreenQuad()->RenderFullScreenQuad( &iDevice(pd3dDevice) );
+         pd3dDevice->Clear(0, NULL, D3DCLEAR_ZBUFFER, 0xFF000000 | frameCount << 8, 0, 0);
+      }
    }
 };
 
@@ -430,27 +431,27 @@ GRAPHICS_PERFORMANCE_TEST("basic/graphics/extraZBufferClears1400x1050", Graphics
 {
    int frameCount;
 
-    static const unsigned int lWidth = 1400;
-	static const unsigned int lHeight = 1050;
-	static const bool lWin = true;
-	static const bool lAStencil = false;
-	static const D3DFORMAT SFormat = D3DFMT_D24S8;
+   static const unsigned int lWidth = 1400;
+   static const unsigned int lHeight = 1050;
+   static const bool lWin = true;
+   static const bool lAStencil = false;
+   static const D3DFORMAT SFormat = D3DFMT_D24S8;
 
    void initialize()
    {
       frameCount = 0;
       Parent::initialize(lWidth, lHeight, lWin, lAStencil, SFormat);
-	  IUtil::GetUtilFullScreenQuad()->Init( &(iDevice)Parent::m_Device,Parent::m_ScreenWidth,Parent::m_ScreenHeight );
+      IUtil::GetUtilFullScreenQuad()->Init( &(iDevice)Parent::m_Device,Parent::m_ScreenWidth,Parent::m_ScreenHeight );
    }
 
    void renderFrame(IDirect3DDevice9* pd3dDevice, double fTime, float fElapsedTime)
    {
       frameCount++;
       for(int i=0; i<50; i++)
-	  {
-		  IUtil::GetUtilFullScreenQuad()->RenderFullScreenQuad( &iDevice(pd3dDevice) );
-          pd3dDevice->Clear(0, NULL, D3DCLEAR_ZBUFFER, 0xFF000000 | frameCount << 8, 0, 0);
-	  }
+      {
+         IUtil::GetUtilFullScreenQuad()->RenderFullScreenQuad( &iDevice(pd3dDevice) );
+         pd3dDevice->Clear(0, NULL, D3DCLEAR_ZBUFFER, 0xFF000000 | frameCount << 8, 0, 0);
+      }
    }
 };
 
@@ -461,27 +462,27 @@ GRAPHICS_PERFORMANCE_TEST("basic/graphics/extraAllClears800x600", GraphicsExtraA
 {
    int frameCount;
 
-    static const unsigned int lWidth = 800;
-	static const unsigned int lHeight = 600;
-	static const bool lWin = true;
-	static const bool lAStencil = true;
-	static const D3DFORMAT SFormat = D3DFMT_D24S8;
+   static const unsigned int lWidth = 800;
+   static const unsigned int lHeight = 600;
+   static const bool lWin = true;
+   static const bool lAStencil = true;
+   static const D3DFORMAT SFormat = D3DFMT_D24S8;
 
    void initialize()
    {
       frameCount = 0;
       Parent::initialize(lWidth, lHeight, lWin, lAStencil, SFormat);
-	  IUtil::GetUtilFullScreenQuad()->Init( &(iDevice)Parent::m_Device,Parent::m_ScreenWidth,Parent::m_ScreenHeight );
+      IUtil::GetUtilFullScreenQuad()->Init( &(iDevice)Parent::m_Device,Parent::m_ScreenWidth,Parent::m_ScreenHeight );
    }
 
    void renderFrame(IDirect3DDevice9* pd3dDevice, double fTime, float fElapsedTime)
    {
       frameCount++;
       for(int i=0; i<50; i++)
-	  {
-			IUtil::GetUtilFullScreenQuad()->RenderFullScreenQuad( &iDevice(pd3dDevice) );
-			pd3dDevice->Clear(0, NULL, D3DCLEAR_TARGET | D3DCLEAR_STENCIL | D3DCLEAR_ZBUFFER, 0xFF000000 | frameCount << 8, 0, 0);
-	  }
+      {
+         IUtil::GetUtilFullScreenQuad()->RenderFullScreenQuad( &iDevice(pd3dDevice) );
+         pd3dDevice->Clear(0, NULL, D3DCLEAR_TARGET | D3DCLEAR_STENCIL | D3DCLEAR_ZBUFFER, 0xFF000000 | frameCount << 8, 0, 0);
+      }
    }
 };
 
@@ -492,27 +493,27 @@ GRAPHICS_PERFORMANCE_TEST("basic/graphics/extraAllClears1280X1024", GraphicsExtr
 {
    int frameCount;
 
-    static const unsigned int lWidth = 1280;
-	static const unsigned int lHeight = 1024;
-	static const bool lWin = true;
-	static const bool lAStencil = true;
-	static const D3DFORMAT SFormat = D3DFMT_D24S8;
+   static const unsigned int lWidth = 1280;
+   static const unsigned int lHeight = 1024;
+   static const bool lWin = true;
+   static const bool lAStencil = true;
+   static const D3DFORMAT SFormat = D3DFMT_D24S8;
 
    void initialize()
    {
       frameCount = 0;
       Parent::initialize(lWidth, lHeight, lWin, lAStencil, SFormat);
-	  IUtil::GetUtilFullScreenQuad()->Init( &(iDevice)Parent::m_Device,Parent::m_ScreenWidth,Parent::m_ScreenHeight );
+      IUtil::GetUtilFullScreenQuad()->Init( &(iDevice)Parent::m_Device,Parent::m_ScreenWidth,Parent::m_ScreenHeight );
    }
 
    void renderFrame(IDirect3DDevice9* pd3dDevice, double fTime, float fElapsedTime)
    {
       frameCount++;
       for(int i=0; i<50; i++)
-	  {
-			IUtil::GetUtilFullScreenQuad()->RenderFullScreenQuad( &iDevice(pd3dDevice) );
-			pd3dDevice->Clear(0, NULL, D3DCLEAR_TARGET | D3DCLEAR_STENCIL | D3DCLEAR_ZBUFFER, 0xFF000000 | frameCount << 8, 0, 0);
-	  }
+      {
+         IUtil::GetUtilFullScreenQuad()->RenderFullScreenQuad( &iDevice(pd3dDevice) );
+         pd3dDevice->Clear(0, NULL, D3DCLEAR_TARGET | D3DCLEAR_STENCIL | D3DCLEAR_ZBUFFER, 0xFF000000 | frameCount << 8, 0, 0);
+      }
    }
 };
 
@@ -523,27 +524,27 @@ GRAPHICS_PERFORMANCE_TEST("basic/graphics/extraAllClears1400X1050", GraphicsExtr
 {
    int frameCount;
 
-    static const unsigned int lWidth = 1400;
-	static const unsigned int lHeight = 1050;
-	static const bool lWin = true;
-	static const bool lAStencil = true;
-	static const D3DFORMAT SFormat = D3DFMT_D24S8;
+   static const unsigned int lWidth = 1400;
+   static const unsigned int lHeight = 1050;
+   static const bool lWin = true;
+   static const bool lAStencil = true;
+   static const D3DFORMAT SFormat = D3DFMT_D24S8;
 
    void initialize()
    {
       frameCount = 0;
       Parent::initialize(lWidth, lHeight, lWin, lAStencil, SFormat);
-	  IUtil::GetUtilFullScreenQuad()->Init( &(iDevice)Parent::m_Device,Parent::m_ScreenWidth,Parent::m_ScreenHeight );
+      IUtil::GetUtilFullScreenQuad()->Init( &(iDevice)Parent::m_Device,Parent::m_ScreenWidth,Parent::m_ScreenHeight );
    }
 
    void renderFrame(IDirect3DDevice9* pd3dDevice, double fTime, float fElapsedTime)
    {
       frameCount++;
       for(int i=0; i<50; i++)
-	  {
-			IUtil::GetUtilFullScreenQuad()->RenderFullScreenQuad( &iDevice(pd3dDevice) );
-			pd3dDevice->Clear(0, NULL, D3DCLEAR_TARGET | D3DCLEAR_STENCIL | D3DCLEAR_ZBUFFER, 0xFF000000 | frameCount << 8, 0, 0);
-	  }
+      {
+         IUtil::GetUtilFullScreenQuad()->RenderFullScreenQuad( &iDevice(pd3dDevice) );
+         pd3dDevice->Clear(0, NULL, D3DCLEAR_TARGET | D3DCLEAR_STENCIL | D3DCLEAR_ZBUFFER, 0xFF000000 | frameCount << 8, 0, 0);
+      }
    }
 };
 
@@ -554,29 +555,29 @@ GRAPHICS_PERFORMANCE_TEST("basic/graphics/extraIndClears1400X1050", GraphicsExtr
 {
    int frameCount;
 
-    static const unsigned int lWidth = 1400;
-	static const unsigned int lHeight = 1050;
-	static const bool lWin = true;
-	static const bool lAStencil = true;
-	static const D3DFORMAT SFormat = D3DFMT_D24S8;
+   static const unsigned int lWidth = 1400;
+   static const unsigned int lHeight = 1050;
+   static const bool lWin = true;
+   static const bool lAStencil = true;
+   static const D3DFORMAT SFormat = D3DFMT_D24S8;
 
    void initialize()
    {
       frameCount = 0;
       Parent::initialize(lWidth, lHeight, lWin, lAStencil, SFormat);
-	  IUtil::GetUtilFullScreenQuad()->Init( &(iDevice)Parent::m_Device,Parent::m_ScreenWidth,Parent::m_ScreenHeight );
+      IUtil::GetUtilFullScreenQuad()->Init( &(iDevice)Parent::m_Device,Parent::m_ScreenWidth,Parent::m_ScreenHeight );
    }
 
    void renderFrame(IDirect3DDevice9* pd3dDevice, double fTime, float fElapsedTime)
    {
       frameCount++;
       for(int i=0; i<50; i++)
-	  {
-			IUtil::GetUtilFullScreenQuad()->RenderFullScreenQuad( &iDevice(pd3dDevice) );
-			pd3dDevice->Clear(0, NULL, D3DCLEAR_TARGET, 0xFF000000 | frameCount << 8, 0, 0);
-			pd3dDevice->Clear(0, NULL, D3DCLEAR_STENCIL, 0xFF000000 | frameCount << 8, 0, 0);
-			pd3dDevice->Clear(0, NULL, D3DCLEAR_ZBUFFER, 0xFF000000 | frameCount << 8, 0, 0);
-	  }
+      {
+         IUtil::GetUtilFullScreenQuad()->RenderFullScreenQuad( &iDevice(pd3dDevice) );
+         pd3dDevice->Clear(0, NULL, D3DCLEAR_TARGET, 0xFF000000 | frameCount << 8, 0, 0);
+         pd3dDevice->Clear(0, NULL, D3DCLEAR_STENCIL, 0xFF000000 | frameCount << 8, 0, 0);
+         pd3dDevice->Clear(0, NULL, D3DCLEAR_ZBUFFER, 0xFF000000 | frameCount << 8, 0, 0);
+      }
    }
 };
 
@@ -587,27 +588,27 @@ GRAPHICS_PERFORMANCE_TEST("basic/graphics/vertexBatchingControl", GraphicsVertex
 {
    int frameCount;
 
-    static const unsigned int lWidth = 1280;
-	static const unsigned int lHeight = 1024;
-	static const bool lWin = true;
-	static const bool lAStencil = false;
-	static const D3DFORMAT SFormat = D3DFMT_D24S8;
+   static const unsigned int lWidth = 1280;
+   static const unsigned int lHeight = 1024;
+   static const bool lWin = true;
+   static const bool lAStencil = false;
+   static const D3DFORMAT SFormat = D3DFMT_D24S8;
 
-	static const int Loop = 1;
-	static const int Primitives = 1;
+   static const int Loop = 1;
+   static const int Primitives = 1;
 
    void initialize()
    {
       frameCount = 0;
       Parent::initialize(lWidth, lHeight, lWin, lAStencil, SFormat);
-	  IUtil::GetUtilFullScreenQuad()->InitVert( &(iDevice)Parent::m_Device,Parent::m_ScreenWidth,Parent::m_ScreenHeight );
+      IUtil::GetUtilFullScreenQuad()->InitVert( &(iDevice)Parent::m_Device,Parent::m_ScreenWidth,Parent::m_ScreenHeight );
    }
 
 
    void renderFrame(IDirect3DDevice9* pd3dDevice, double fTime, float fElapsedTime)
    {
       frameCount++;
-	  IUtil::GetUtilFullScreenQuad()->RenderFullScreenQuadVert( &iDevice(pd3dDevice), Loop, Primitives);
+      IUtil::GetUtilFullScreenQuad()->RenderFullScreenQuadVert( &iDevice(pd3dDevice), Loop, Primitives);
    }
 };
 
@@ -618,27 +619,27 @@ GRAPHICS_PERFORMANCE_TEST("basic/graphics/vertexBatchingSmall", GraphicsVertexBa
 {
    int frameCount;
 
-    static const unsigned int lWidth = 1280;
-	static const unsigned int lHeight = 1024;
-	static const bool lWin = true;
-	static const bool lAStencil = false;
-	static const D3DFORMAT SFormat = D3DFMT_D24S8;
-	
-	static const int Loop = 1000;
-	static const int Primitives = 1;
+   static const unsigned int lWidth = 1280;
+   static const unsigned int lHeight = 1024;
+   static const bool lWin = true;
+   static const bool lAStencil = false;
+   static const D3DFORMAT SFormat = D3DFMT_D24S8;
+
+   static const int Loop = 1000;
+   static const int Primitives = 1;
 
    void initialize()
    {
       frameCount = 0;
       Parent::initialize(lWidth, lHeight, lWin, lAStencil, SFormat);
-	  IUtil::GetUtilFullScreenQuad()->InitVert( &(iDevice)Parent::m_Device,Parent::m_ScreenWidth,Parent::m_ScreenHeight );
+      IUtil::GetUtilFullScreenQuad()->InitVert( &(iDevice)Parent::m_Device,Parent::m_ScreenWidth,Parent::m_ScreenHeight );
    }
 
 
    void renderFrame(IDirect3DDevice9* pd3dDevice, double fTime, float fElapsedTime)
    {
       frameCount++;
-	  IUtil::GetUtilFullScreenQuad()->RenderFullScreenQuadVert( &iDevice(pd3dDevice), Loop, Primitives);
+      IUtil::GetUtilFullScreenQuad()->RenderFullScreenQuadVert( &iDevice(pd3dDevice), Loop, Primitives);
    }
 };
 
@@ -649,27 +650,27 @@ GRAPHICS_PERFORMANCE_TEST("basic/graphics/vertexBatchingLarge", GraphicsVertexBa
 {
    int frameCount;
 
-    static const unsigned int lWidth = 1280;
-	static const unsigned int lHeight = 1024;
-	static const bool lWin = true;
-	static const bool lAStencil = false;
-	static const D3DFORMAT SFormat = D3DFMT_D24S8;
-	
-	static const int Loop = 1;
-	static const int Primitives = 1000;
+   static const unsigned int lWidth = 1280;
+   static const unsigned int lHeight = 1024;
+   static const bool lWin = true;
+   static const bool lAStencil = false;
+   static const D3DFORMAT SFormat = D3DFMT_D24S8;
+
+   static const int Loop = 1;
+   static const int Primitives = 1000;
 
    void initialize()
    {
       frameCount = 0;
       Parent::initialize(lWidth, lHeight, lWin, lAStencil, SFormat);
-	  IUtil::GetUtilFullScreenQuad()->InitVert( &(iDevice)Parent::m_Device,Parent::m_ScreenWidth,Parent::m_ScreenHeight );
+      IUtil::GetUtilFullScreenQuad()->InitVert( &(iDevice)Parent::m_Device,Parent::m_ScreenWidth,Parent::m_ScreenHeight );
    }
 
 
    void renderFrame(IDirect3DDevice9* pd3dDevice, double fTime, float fElapsedTime)
    {
       frameCount++;
-	  IUtil::GetUtilFullScreenQuad()->RenderFullScreenQuadVert( &iDevice(pd3dDevice), Loop, Primitives);
+      IUtil::GetUtilFullScreenQuad()->RenderFullScreenQuadVert( &iDevice(pd3dDevice), Loop, Primitives);
    }
 };
 
@@ -680,26 +681,26 @@ GRAPHICS_PERFORMANCE_TEST("basic/graphics/stateBase", GraphicsStateBase, 8000)
 {
    int frameCount;
 
-    static const unsigned int lWidth = 1280;
-	static const unsigned int lHeight = 1024;
-	static const bool lWin = true;
-	static const bool lAStencil = false;
-	static const D3DFORMAT SFormat = D3DFMT_D24S8;
-	
-	static const int stateLoop = 1;
+   static const unsigned int lWidth = 1280;
+   static const unsigned int lHeight = 1024;
+   static const bool lWin = true;
+   static const bool lAStencil = false;
+   static const D3DFORMAT SFormat = D3DFMT_D24S8;
+
+   static const int stateLoop = 1;
 
    void initialize()
    {
       frameCount = 0;
       Parent::initialize(lWidth, lHeight, lWin, lAStencil, SFormat);
-	  IUtil::GetUtilFullScreenQuad()->InitState( &(iDevice)Parent::m_Device,Parent::m_ScreenWidth,Parent::m_ScreenHeight );
+      IUtil::GetUtilFullScreenQuad()->InitState( &(iDevice)Parent::m_Device,Parent::m_ScreenWidth,Parent::m_ScreenHeight );
    }
 
 
    void renderFrame(IDirect3DDevice9* pd3dDevice, double fTime, float fElapsedTime)
    {
       frameCount++;
-	  IUtil::GetUtilFullScreenQuad()->RenderFullScreenQuadState( &iDevice(pd3dDevice), stateLoop );
+      IUtil::GetUtilFullScreenQuad()->RenderFullScreenQuadState( &iDevice(pd3dDevice), stateLoop );
    }
 };
 
@@ -710,26 +711,26 @@ GRAPHICS_PERFORMANCE_TEST("basic/graphics/stateThrash", GraphicsStateThrash, 800
 {
    int frameCount;
 
-    static const unsigned int lWidth = 1280;
-	static const unsigned int lHeight = 1024;
-	static const bool lWin = true;
-	static const bool lAStencil = false;
-	static const D3DFORMAT SFormat = D3DFMT_D24S8;
-	
-	static const int stateLoop = 3000;
+   static const unsigned int lWidth = 1280;
+   static const unsigned int lHeight = 1024;
+   static const bool lWin = true;
+   static const bool lAStencil = false;
+   static const D3DFORMAT SFormat = D3DFMT_D24S8;
+
+   static const int stateLoop = 3000;
 
    void initialize()
    {
       frameCount = 0;
       Parent::initialize(lWidth, lHeight, lWin, lAStencil, SFormat);
-	  IUtil::GetUtilFullScreenQuad()->InitState( &(iDevice)Parent::m_Device,Parent::m_ScreenWidth,Parent::m_ScreenHeight );
+      IUtil::GetUtilFullScreenQuad()->InitState( &(iDevice)Parent::m_Device,Parent::m_ScreenWidth,Parent::m_ScreenHeight );
    }
 
 
    void renderFrame(IDirect3DDevice9* pd3dDevice, double fTime, float fElapsedTime)
    {
       frameCount++;
-	  IUtil::GetUtilFullScreenQuad()->RenderFullScreenQuadState( &iDevice(pd3dDevice), stateLoop );
+      IUtil::GetUtilFullScreenQuad()->RenderFullScreenQuadState( &iDevice(pd3dDevice), stateLoop );
    }
 };
 
@@ -740,26 +741,26 @@ GRAPHICS_PERFORMANCE_TEST("basic/graphics/scissorDisable", GraphicsScissorDisabl
 {
    int frameCount;
 
-    static const unsigned int lWidth = 1280;
-	static const unsigned int lHeight = 1024;
-	static const bool lWin = true;
-	static const bool lAStencil = false;
-	static const D3DFORMAT SFormat = D3DFMT_D24S8;
-	
-	static const int EnableScissor = 0;
+   static const unsigned int lWidth = 1280;
+   static const unsigned int lHeight = 1024;
+   static const bool lWin = true;
+   static const bool lAStencil = false;
+   static const D3DFORMAT SFormat = D3DFMT_D24S8;
+
+   static const int EnableScissor = 0;
 
    void initialize()
    {
       frameCount = 0;
       Parent::initialize(lWidth, lHeight, lWin, lAStencil, SFormat);
-	  IUtil::GetUtilFullScreenQuad()->InitScissor( &(iDevice)Parent::m_Device,Parent::m_ScreenWidth,Parent::m_ScreenHeight );
+      IUtil::GetUtilFullScreenQuad()->InitScissor( &(iDevice)Parent::m_Device,Parent::m_ScreenWidth,Parent::m_ScreenHeight );
    }
 
 
    void renderFrame(IDirect3DDevice9* pd3dDevice, double fTime, float fElapsedTime)
    {
       frameCount++;
-	  IUtil::GetUtilFullScreenQuad()->RenderFullScreenQuadScissor( &iDevice(pd3dDevice), EnableScissor);
+      IUtil::GetUtilFullScreenQuad()->RenderFullScreenQuadScissor( &iDevice(pd3dDevice), EnableScissor);
    }
 };
 
@@ -770,26 +771,26 @@ GRAPHICS_PERFORMANCE_TEST("basic/graphics/scissorEnable", GraphicsScissorEnable,
 {
    int frameCount;
 
-    static const unsigned int lWidth = 1280;
-	static const unsigned int lHeight = 1024;
-	static const bool lWin = true;
-	static const bool lAStencil = false;
-	static const D3DFORMAT SFormat = D3DFMT_D24S8;
-	
-	static const int EnableScissor = 1;
+   static const unsigned int lWidth = 1280;
+   static const unsigned int lHeight = 1024;
+   static const bool lWin = true;
+   static const bool lAStencil = false;
+   static const D3DFORMAT SFormat = D3DFMT_D24S8;
+
+   static const int EnableScissor = 1;
 
    void initialize()
    {
       frameCount = 0;
       Parent::initialize(lWidth, lHeight, lWin, lAStencil, SFormat);
-	  IUtil::GetUtilFullScreenQuad()->InitScissor( &(iDevice)Parent::m_Device,Parent::m_ScreenWidth,Parent::m_ScreenHeight );
+      IUtil::GetUtilFullScreenQuad()->InitScissor( &(iDevice)Parent::m_Device,Parent::m_ScreenWidth,Parent::m_ScreenHeight );
    }
 
 
    void renderFrame(IDirect3DDevice9* pd3dDevice, double fTime, float fElapsedTime)
    {
       frameCount++;
-	  IUtil::GetUtilFullScreenQuad()->RenderFullScreenQuadScissor( &iDevice(pd3dDevice), EnableScissor);
+      IUtil::GetUtilFullScreenQuad()->RenderFullScreenQuadScissor( &iDevice(pd3dDevice), EnableScissor);
    }
 };
 
@@ -800,26 +801,26 @@ GRAPHICS_PERFORMANCE_TEST("basic/graphics/scissorTest", GraphicsScissorTest, 800
 {
    int frameCount;
 
-    static const unsigned int lWidth = 1280;
-	static const unsigned int lHeight = 1024;
-	static const bool lWin = true;
-	static const bool lAStencil = false;
-	static const D3DFORMAT SFormat = D3DFMT_D24S8;
-	
-	static const int EnableScissor = 2;
+   static const unsigned int lWidth = 1280;
+   static const unsigned int lHeight = 1024;
+   static const bool lWin = true;
+   static const bool lAStencil = false;
+   static const D3DFORMAT SFormat = D3DFMT_D24S8;
+
+   static const int EnableScissor = 2;
 
    void initialize()
    {
       frameCount = 0;
       Parent::initialize(lWidth, lHeight, lWin, lAStencil, SFormat);
-	  IUtil::GetUtilFullScreenQuad()->InitScissor( &(iDevice)Parent::m_Device,Parent::m_ScreenWidth,Parent::m_ScreenHeight );
+      IUtil::GetUtilFullScreenQuad()->InitScissor( &(iDevice)Parent::m_Device,Parent::m_ScreenWidth,Parent::m_ScreenHeight );
    }
 
 
    void renderFrame(IDirect3DDevice9* pd3dDevice, double fTime, float fElapsedTime)
    {
       frameCount++;
-	  IUtil::GetUtilFullScreenQuad()->RenderFullScreenQuadScissor( &iDevice(pd3dDevice), EnableScissor );
+      IUtil::GetUtilFullScreenQuad()->RenderFullScreenQuadScissor( &iDevice(pd3dDevice), EnableScissor );
    }
 };
 
@@ -830,26 +831,26 @@ GRAPHICS_PERFORMANCE_TEST("basic/graphics/triStripTest", GraphicsTriStripTest, 8
 {
    int frameCount;
 
-    static const unsigned int lWidth = 1280;
-	static const unsigned int lHeight = 1024;
-	static const bool lWin = true;
-	static const bool lAStencil = false;
-	static const D3DFORMAT SFormat = D3DFMT_D24S8;
-	
-	static const int DrawType = 1;
+   static const unsigned int lWidth = 1280;
+   static const unsigned int lHeight = 1024;
+   static const bool lWin = true;
+   static const bool lAStencil = false;
+   static const D3DFORMAT SFormat = D3DFMT_D24S8;
+
+   static const int DrawType = 1;
 
    void initialize()
    {
       frameCount = 0;
       Parent::initialize(lWidth, lHeight, lWin, lAStencil, SFormat);
-	  IUtil::GetUtilFullScreenQuad()->InitTri( &(iDevice)Parent::m_Device,Parent::m_ScreenWidth,Parent::m_ScreenHeight, DrawType );
+      IUtil::GetUtilFullScreenQuad()->InitTri( &(iDevice)Parent::m_Device,Parent::m_ScreenWidth,Parent::m_ScreenHeight, DrawType );
    }
 
 
    void renderFrame(IDirect3DDevice9* pd3dDevice, double fTime, float fElapsedTime)
    {
       frameCount++;
-	  IUtil::GetUtilFullScreenQuad()->RenderFullScreenQuadTri( &iDevice(pd3dDevice), DrawType);
+      IUtil::GetUtilFullScreenQuad()->RenderFullScreenQuadTri( &iDevice(pd3dDevice), DrawType);
    }
 
 };
@@ -861,26 +862,26 @@ GRAPHICS_PERFORMANCE_TEST("basic/graphics/triListTest", GraphicsTriListTest, 800
 {
    int frameCount;
 
-    static const unsigned int lWidth = 1280;
-	static const unsigned int lHeight = 1024;
-	static const bool lWin = true;
-	static const bool lAStencil = false;
-	static const D3DFORMAT SFormat = D3DFMT_D24S8;
-	
-	static const int DrawType = 0;
+   static const unsigned int lWidth = 1280;
+   static const unsigned int lHeight = 1024;
+   static const bool lWin = true;
+   static const bool lAStencil = false;
+   static const D3DFORMAT SFormat = D3DFMT_D24S8;
+
+   static const int DrawType = 0;
 
    void initialize()
    {
       frameCount = 0;
       Parent::initialize(lWidth, lHeight, lWin, lAStencil, SFormat);
-	  IUtil::GetUtilFullScreenQuad()->InitTri( &(iDevice)Parent::m_Device,Parent::m_ScreenWidth,Parent::m_ScreenHeight, DrawType );
+      IUtil::GetUtilFullScreenQuad()->InitTri( &(iDevice)Parent::m_Device,Parent::m_ScreenWidth,Parent::m_ScreenHeight, DrawType );
    }
 
 
    void renderFrame(IDirect3DDevice9* pd3dDevice, double fTime, float fElapsedTime)
    {
       frameCount++;
-	  IUtil::GetUtilFullScreenQuad()->RenderFullScreenQuadTri( &iDevice(pd3dDevice), DrawType);
+      IUtil::GetUtilFullScreenQuad()->RenderFullScreenQuadTri( &iDevice(pd3dDevice), DrawType);
    }
 
 };
@@ -892,26 +893,26 @@ GRAPHICS_PERFORMANCE_TEST("basic/graphics/triListIndexTest", GraphicsTriListInde
 {
    int frameCount;
 
-    static const unsigned int lWidth = 1280;
-	static const unsigned int lHeight = 1024;
-	static const bool lWin = true;
-	static const bool lAStencil = false;
-	static const D3DFORMAT SFormat = D3DFMT_D24S8;
-	
-	static const int DrawType = 0;
+   static const unsigned int lWidth = 1280;
+   static const unsigned int lHeight = 1024;
+   static const bool lWin = true;
+   static const bool lAStencil = false;
+   static const D3DFORMAT SFormat = D3DFMT_D24S8;
+
+   static const int DrawType = 0;
 
    void initialize()
    {
       frameCount = 0;
       Parent::initialize(lWidth, lHeight, lWin, lAStencil, SFormat);
-	  IUtil::GetUtilFullScreenQuad()->InitIndex( &(iDevice)Parent::m_Device,Parent::m_ScreenWidth,Parent::m_ScreenHeight, DrawType );
+      IUtil::GetUtilFullScreenQuad()->InitIndex( &(iDevice)Parent::m_Device,Parent::m_ScreenWidth,Parent::m_ScreenHeight, DrawType );
    }
 
 
    void renderFrame(IDirect3DDevice9* pd3dDevice, double fTime, float fElapsedTime)
    {
       frameCount++;
-	  IUtil::GetUtilFullScreenQuad()->RenderFullScreenQuadIndex( &iDevice(pd3dDevice), DrawType);
+      IUtil::GetUtilFullScreenQuad()->RenderFullScreenQuadIndex( &iDevice(pd3dDevice), DrawType);
    }
 
 };
@@ -923,26 +924,26 @@ GRAPHICS_PERFORMANCE_TEST("basic/graphics/triListNonIndexTest", GraphicsTriListN
 {
    int frameCount;
 
-    static const unsigned int lWidth = 1280;
-	static const unsigned int lHeight = 1024;
-	static const bool lWin = true;
-	static const bool lAStencil = false;
-	static const D3DFORMAT SFormat = D3DFMT_D24S8;
-	
-	static const int DrawType = 1;
+   static const unsigned int lWidth = 1280;
+   static const unsigned int lHeight = 1024;
+   static const bool lWin = true;
+   static const bool lAStencil = false;
+   static const D3DFORMAT SFormat = D3DFMT_D24S8;
+
+   static const int DrawType = 1;
 
    void initialize()
    {
       frameCount = 0;
       Parent::initialize(lWidth, lHeight, lWin, lAStencil, SFormat);
-	  IUtil::GetUtilFullScreenQuad()->InitIndex( &(iDevice)Parent::m_Device,Parent::m_ScreenWidth,Parent::m_ScreenHeight, DrawType );
+      IUtil::GetUtilFullScreenQuad()->InitIndex( &(iDevice)Parent::m_Device,Parent::m_ScreenWidth,Parent::m_ScreenHeight, DrawType );
    }
 
 
    void renderFrame(IDirect3DDevice9* pd3dDevice, double fTime, float fElapsedTime)
    {
       frameCount++;
-	  IUtil::GetUtilFullScreenQuad()->RenderFullScreenQuadIndex( &iDevice(pd3dDevice), DrawType);
+      IUtil::GetUtilFullScreenQuad()->RenderFullScreenQuadIndex( &iDevice(pd3dDevice), DrawType);
    }
 
 };
@@ -954,26 +955,26 @@ GRAPHICS_PERFORMANCE_TEST("basic/graphics/textureABGR32FTest12x10", GraphicsText
 {
    int frameCount;
 
-    static const unsigned int lWidth = 1280;
-	static const unsigned int lHeight = 1024;
-	static const bool lWin = true;
-	static const bool lAStencil = false;
-	static const D3DFORMAT SFormat = D3DFMT_D24S8;
-	
-	static const int DrawType = 0;
+   static const unsigned int lWidth = 1280;
+   static const unsigned int lHeight = 1024;
+   static const bool lWin = true;
+   static const bool lAStencil = false;
+   static const D3DFORMAT SFormat = D3DFMT_D24S8;
+
+   static const int DrawType = 0;
 
    void initialize()
    {
       frameCount = 0;
       Parent::initialize(lWidth, lHeight, lWin, lAStencil, SFormat);
-	  IUtil::GetUtilFullScreenQuad()->InitTex( &(iDevice)Parent::m_Device,Parent::m_ScreenWidth,Parent::m_ScreenHeight, DrawType );
+      IUtil::GetUtilFullScreenQuad()->InitTex( &(iDevice)Parent::m_Device,Parent::m_ScreenWidth,Parent::m_ScreenHeight, DrawType );
    }
 
 
    void renderFrame(IDirect3DDevice9* pd3dDevice, double fTime, float fElapsedTime)
    {
       frameCount++;
-	  IUtil::GetUtilFullScreenQuad()->RenderFullScreenQuadTex( &iDevice(pd3dDevice), DrawType);
+      IUtil::GetUtilFullScreenQuad()->RenderFullScreenQuadTex( &iDevice(pd3dDevice), DrawType);
    }
 
 };
@@ -985,26 +986,26 @@ GRAPHICS_PERFORMANCE_TEST("basic/graphics/textureABGR32FTest6x4", GraphicsTextur
 {
    int frameCount;
 
-    static const unsigned int lWidth = 640;
-	static const unsigned int lHeight = 480;
-	static const bool lWin = true;
-	static const bool lAStencil = false;
-	static const D3DFORMAT SFormat = D3DFMT_D24S8;
-	
-	static const int DrawType = 0;
+   static const unsigned int lWidth = 640;
+   static const unsigned int lHeight = 480;
+   static const bool lWin = true;
+   static const bool lAStencil = false;
+   static const D3DFORMAT SFormat = D3DFMT_D24S8;
+
+   static const int DrawType = 0;
 
    void initialize()
    {
       frameCount = 0;
       Parent::initialize(lWidth, lHeight, lWin, lAStencil, SFormat);
-	  IUtil::GetUtilFullScreenQuad()->InitTex( &(iDevice)Parent::m_Device,Parent::m_ScreenWidth,Parent::m_ScreenHeight, DrawType );
+      IUtil::GetUtilFullScreenQuad()->InitTex( &(iDevice)Parent::m_Device,Parent::m_ScreenWidth,Parent::m_ScreenHeight, DrawType );
    }
 
 
    void renderFrame(IDirect3DDevice9* pd3dDevice, double fTime, float fElapsedTime)
    {
       frameCount++;
-	  IUtil::GetUtilFullScreenQuad()->RenderFullScreenQuadTex( &iDevice(pd3dDevice), DrawType);
+      IUtil::GetUtilFullScreenQuad()->RenderFullScreenQuadTex( &iDevice(pd3dDevice), DrawType);
    }
 
 };
@@ -1016,26 +1017,26 @@ GRAPHICS_PERFORMANCE_TEST("basic/graphics/textureR3G3B2Test12x10", GraphicsTextu
 {
    int frameCount;
 
-    static const unsigned int lWidth = 1280;
-	static const unsigned int lHeight = 1024;
-	static const bool lWin = true;
-	static const bool lAStencil = false;
-	static const D3DFORMAT SFormat = D3DFMT_D24S8;
-	
-	static const int DrawType = 1;
+   static const unsigned int lWidth = 1280;
+   static const unsigned int lHeight = 1024;
+   static const bool lWin = true;
+   static const bool lAStencil = false;
+   static const D3DFORMAT SFormat = D3DFMT_D24S8;
+
+   static const int DrawType = 1;
 
    void initialize()
    {
       frameCount = 0;
       Parent::initialize(lWidth, lHeight, lWin, lAStencil, SFormat);
-	  IUtil::GetUtilFullScreenQuad()->InitTex( &(iDevice)Parent::m_Device,Parent::m_ScreenWidth,Parent::m_ScreenHeight, DrawType );
+      IUtil::GetUtilFullScreenQuad()->InitTex( &(iDevice)Parent::m_Device,Parent::m_ScreenWidth,Parent::m_ScreenHeight, DrawType );
    }
 
 
    void renderFrame(IDirect3DDevice9* pd3dDevice, double fTime, float fElapsedTime)
    {
       frameCount++;
-	  IUtil::GetUtilFullScreenQuad()->RenderFullScreenQuadTex( &iDevice(pd3dDevice), DrawType);
+      IUtil::GetUtilFullScreenQuad()->RenderFullScreenQuadTex( &iDevice(pd3dDevice), DrawType);
    }
 
 };
@@ -1047,26 +1048,26 @@ GRAPHICS_PERFORMANCE_TEST("basic/graphics/textureR3G3B2Test6x4", GraphicsTexture
 {
    int frameCount;
 
-    static const unsigned int lWidth = 640;
-	static const unsigned int lHeight = 480;
-	static const bool lWin = true;
-	static const bool lAStencil = false;
-	static const D3DFORMAT SFormat = D3DFMT_D24S8;
-	
-	static const int DrawType = 1;
+   static const unsigned int lWidth = 640;
+   static const unsigned int lHeight = 480;
+   static const bool lWin = true;
+   static const bool lAStencil = false;
+   static const D3DFORMAT SFormat = D3DFMT_D24S8;
+
+   static const int DrawType = 1;
 
    void initialize()
    {
       frameCount = 0;
       Parent::initialize(lWidth, lHeight, lWin, lAStencil, SFormat);
-	  IUtil::GetUtilFullScreenQuad()->InitTex( &(iDevice)Parent::m_Device,Parent::m_ScreenWidth,Parent::m_ScreenHeight, DrawType );
+      IUtil::GetUtilFullScreenQuad()->InitTex( &(iDevice)Parent::m_Device,Parent::m_ScreenWidth,Parent::m_ScreenHeight, DrawType );
    }
 
 
    void renderFrame(IDirect3DDevice9* pd3dDevice, double fTime, float fElapsedTime)
    {
       frameCount++;
-	  IUtil::GetUtilFullScreenQuad()->RenderFullScreenQuadTex( &iDevice(pd3dDevice), DrawType);
+      IUtil::GetUtilFullScreenQuad()->RenderFullScreenQuadTex( &iDevice(pd3dDevice), DrawType);
    }
 
 };
@@ -1078,26 +1079,26 @@ GRAPHICS_PERFORMANCE_TEST("basic/graphics/textureR3G3B2_2x2Test", GraphicsTextur
 {
    int frameCount;
 
-    static const unsigned int lWidth = 1280;
-	static const unsigned int lHeight = 1024;
-	static const bool lWin = true;
-	static const bool lAStencil = false;
-	static const D3DFORMAT SFormat = D3DFMT_D24S8;
-	
-	static const int DrawType = 2;
+   static const unsigned int lWidth = 1280;
+   static const unsigned int lHeight = 1024;
+   static const bool lWin = true;
+   static const bool lAStencil = false;
+   static const D3DFORMAT SFormat = D3DFMT_D24S8;
+
+   static const int DrawType = 2;
 
    void initialize()
    {
       frameCount = 0;
       Parent::initialize(lWidth, lHeight, lWin, lAStencil, SFormat);
-	  IUtil::GetUtilFullScreenQuad()->InitTex( &(iDevice)Parent::m_Device,Parent::m_ScreenWidth,Parent::m_ScreenHeight, DrawType );
+      IUtil::GetUtilFullScreenQuad()->InitTex( &(iDevice)Parent::m_Device,Parent::m_ScreenWidth,Parent::m_ScreenHeight, DrawType );
    }
 
 
    void renderFrame(IDirect3DDevice9* pd3dDevice, double fTime, float fElapsedTime)
    {
       frameCount++;
-	  IUtil::GetUtilFullScreenQuad()->RenderFullScreenQuadTex( &iDevice(pd3dDevice), DrawType);
+      IUtil::GetUtilFullScreenQuad()->RenderFullScreenQuadTex( &iDevice(pd3dDevice), DrawType);
    }
 
 };
@@ -1109,26 +1110,26 @@ GRAPHICS_PERFORMANCE_TEST("basic/graphics/textureDXT5Test", GraphicsTextureDXT5T
 {
    int frameCount;
 
-    static const unsigned int lWidth = 1280;
-	static const unsigned int lHeight = 1024;
-	static const bool lWin = true;
-	static const bool lAStencil = false;
-	static const D3DFORMAT SFormat = D3DFMT_D24S8;
-	
-	static const int DrawType = 3;
+   static const unsigned int lWidth = 1280;
+   static const unsigned int lHeight = 1024;
+   static const bool lWin = true;
+   static const bool lAStencil = false;
+   static const D3DFORMAT SFormat = D3DFMT_D24S8;
+
+   static const int DrawType = 3;
 
    void initialize()
    {
       frameCount = 0;
       Parent::initialize(lWidth, lHeight, lWin, lAStencil, SFormat);
-	  IUtil::GetUtilFullScreenQuad()->InitTex( &(iDevice)Parent::m_Device,Parent::m_ScreenWidth,Parent::m_ScreenHeight, DrawType );
+      IUtil::GetUtilFullScreenQuad()->InitTex( &(iDevice)Parent::m_Device,Parent::m_ScreenWidth,Parent::m_ScreenHeight, DrawType );
    }
 
 
    void renderFrame(IDirect3DDevice9* pd3dDevice, double fTime, float fElapsedTime)
    {
       frameCount++;
-	  IUtil::GetUtilFullScreenQuad()->RenderFullScreenQuadTex( &iDevice(pd3dDevice), DrawType);
+      IUtil::GetUtilFullScreenQuad()->RenderFullScreenQuadTex( &iDevice(pd3dDevice), DrawType);
    }
 
 };
@@ -1140,26 +1141,26 @@ GRAPHICS_PERFORMANCE_TEST("basic/graphics/texture16BitTest", GraphicsTexture16Bi
 {
    int frameCount;
 
-    static const unsigned int lWidth = 1280;
-	static const unsigned int lHeight = 1024;
-	static const bool lWin = true;
-	static const bool lAStencil = false;
-	static const D3DFORMAT SFormat = D3DFMT_D24S8;
-	
-	static const int DrawType = 4;
+   static const unsigned int lWidth = 1280;
+   static const unsigned int lHeight = 1024;
+   static const bool lWin = true;
+   static const bool lAStencil = false;
+   static const D3DFORMAT SFormat = D3DFMT_D24S8;
+
+   static const int DrawType = 4;
 
    void initialize()
    {
       frameCount = 0;
       Parent::initialize(lWidth, lHeight, lWin, lAStencil, SFormat);
-	  IUtil::GetUtilFullScreenQuad()->InitTex( &(iDevice)Parent::m_Device,Parent::m_ScreenWidth,Parent::m_ScreenHeight, DrawType );
+      IUtil::GetUtilFullScreenQuad()->InitTex( &(iDevice)Parent::m_Device,Parent::m_ScreenWidth,Parent::m_ScreenHeight, DrawType );
    }
 
 
    void renderFrame(IDirect3DDevice9* pd3dDevice, double fTime, float fElapsedTime)
    {
       frameCount++;
-	  IUtil::GetUtilFullScreenQuad()->RenderFullScreenQuadTex( &iDevice(pd3dDevice), DrawType);
+      IUtil::GetUtilFullScreenQuad()->RenderFullScreenQuadTex( &iDevice(pd3dDevice), DrawType);
    }
 
 };
@@ -1171,26 +1172,26 @@ GRAPHICS_PERFORMANCE_TEST("basic/graphics/texture32BitTest", GraphicsTexture32Bi
 {
    int frameCount;
 
-    static const unsigned int lWidth = 1280;
-	static const unsigned int lHeight = 1024;
-	static const bool lWin = true;
-	static const bool lAStencil = false;
-	static const D3DFORMAT SFormat = D3DFMT_D24S8;
-	
-	static const int DrawType = 5;
+   static const unsigned int lWidth = 1280;
+   static const unsigned int lHeight = 1024;
+   static const bool lWin = true;
+   static const bool lAStencil = false;
+   static const D3DFORMAT SFormat = D3DFMT_D24S8;
+
+   static const int DrawType = 5;
 
    void initialize()
    {
       frameCount = 0;
       Parent::initialize(lWidth, lHeight, lWin, lAStencil, SFormat);
-	  IUtil::GetUtilFullScreenQuad()->InitTex( &(iDevice)Parent::m_Device,Parent::m_ScreenWidth,Parent::m_ScreenHeight, DrawType );
+      IUtil::GetUtilFullScreenQuad()->InitTex( &(iDevice)Parent::m_Device,Parent::m_ScreenWidth,Parent::m_ScreenHeight, DrawType );
    }
 
 
    void renderFrame(IDirect3DDevice9* pd3dDevice, double fTime, float fElapsedTime)
    {
       frameCount++;
-	  IUtil::GetUtilFullScreenQuad()->RenderFullScreenQuadTex( &iDevice(pd3dDevice), DrawType);
+      IUtil::GetUtilFullScreenQuad()->RenderFullScreenQuadTex( &iDevice(pd3dDevice), DrawType);
    }
 
 };
@@ -1331,7 +1332,7 @@ GRAPHICS_PERFORMANCE_TEST("basic/graphics/drawCalls", GraphicsDrawCallsTests, 80
    {
       // Very small so we don't tax fill rate.
       Parent::initialize(64,64);
-      
+
       // Load some textures. This is a leak, but whatever.
       mTextureA = mTextureB = mTextureC = NULL;
 
@@ -1403,7 +1404,7 @@ GRAPHICS_PERFORMANCE_TEST("basic/graphics/drawCallsTextureChanges", GraphicsDraw
 
       // Load some textures. This is a leak, but whatever.
       mTextureA = mTextureB = mTextureC = NULL;
-      D3DXCreateTextureFromFileEx (m_Device.m_Dx9, L"Pharaoh.bmp", 0, 0, 0, D3DUSAGE_RENDERTARGET, 
+      D3DXCreateTextureFromFileEx (m_Device.m_Dx9, L"lena.jpg", 0, 0, 0, D3DUSAGE_RENDERTARGET, 
          D3DFMT_A8B8G8R8, D3DPOOL_DEFAULT, D3DX_DEFAULT, D3DX_DEFAULT, 0, NULL, NULL, &mTextureA);
       D3DXCreateTextureFromFileEx (m_Device.m_Dx9, L"lena.jpg", 0, 0, 0, D3DUSAGE_RENDERTARGET, 
          D3DFMT_A8B8G8R8, D3DPOOL_DEFAULT, D3DX_DEFAULT, D3DX_DEFAULT, 0, NULL, NULL, &mTextureB);
@@ -1447,3 +1448,711 @@ GRAPHICS_PERFORMANCE_TEST("basic/graphics/drawCallsTextureChanges", GraphicsDraw
       pd3dDevice->EndScene();
    }
 };
+
+#define FILL_COUNT 2000
+IDirect3DVertexBuffer9 *fill;
+IDirect3DIndexBuffer9 *fillIdx;
+
+void initFillrateRenderer(IDirect3DDevice9 *device)
+{
+   fill = NULL;
+   device->CreateVertexBuffer(sizeof(CUSTOMVERTEX) * 4, D3DUSAGE_WRITEONLY, D3DFVF_CUSTOMVERTEX, D3DPOOL_DEFAULT, &fill, NULL );
+   CUSTOMVERTEX *tri = NULL;
+   fill->Lock(0, 4, (void**)&tri, 0);
+
+   tri[0].x = 0;
+   tri[0].y = 0;
+   tri[0].z = 0.5;
+   tri[0].rhw = 1.0;
+   tri[0].color = rand();
+
+   tri[1].x = 512;
+   tri[1].y = 0;
+   tri[1].z = 0.5;
+   tri[1].rhw = 1.0;
+   tri[1].color = rand();
+
+   tri[2].x = 512;
+   tri[2].y = 512;
+   tri[2].z = 0.5;
+   tri[2].rhw = 1.0;
+   tri[2].color = rand();
+
+   tri[3].x = 0;
+   tri[3].y = 512;
+   tri[3].z = 0.5;
+   tri[3].rhw = 1.0;
+   tri[3].color = rand();
+
+   fill->Unlock();
+
+   fillIdx = NULL;
+   device->CreateIndexBuffer(6*FILL_COUNT*2, D3DUSAGE_WRITEONLY, D3DFMT_INDEX16, D3DPOOL_DEFAULT, &fillIdx, NULL);
+
+   unsigned short *index = NULL;
+   fillIdx->Lock(0, 6*FILL_COUNT*2, (void**)&index, 0);
+   for(int i=0; i<FILL_COUNT; i++)
+   {
+      *(index++) = 0;
+      *(index++) = 1;
+      *(index++) = 2;
+
+      *(index++) = 0;
+      *(index++) = 2;
+      *(index++) = 3;
+   }
+   fillIdx->Unlock();
+}
+
+void initFillrateRendererTexture(IDirect3DDevice9 *device)
+{
+   fill = NULL;
+   device->CreateVertexBuffer(sizeof(CUSTOMVERT2) * 4, D3DUSAGE_WRITEONLY, D3DFVF_VERT2, D3DPOOL_DEFAULT, &fill, NULL );
+   CUSTOMVERT2 *tri = NULL;
+   fill->Lock(0, 4, (void**)&tri, 0);
+
+   tri[0].x = 0;
+   tri[0].y = 0;
+   tri[0].z = 0.5;
+   tri[0].rhw = 1.0;
+   tri[0].tu = 0;
+   tri[0].tv = 0;
+
+   tri[1].x = 512;
+   tri[1].y = 0;
+   tri[1].z = 0.5;
+   tri[1].rhw = 1.0;
+   tri[1].tu = 0.5;
+   tri[1].tv = 0;
+
+   tri[2].x = 512;
+   tri[2].y = 512;
+   tri[2].z = 0.5;
+   tri[2].rhw = 1.0;
+   tri[2].tu = 1;
+   tri[2].tv = 1.5;
+
+   tri[3].x = 0;
+   tri[3].y = 512;
+   tri[3].z = 0.5;
+   tri[3].rhw = 1.0;
+   tri[3].tu = 0;
+   tri[3].tv = 200;
+
+   fill->Unlock();
+
+   fillIdx = NULL;
+   device->CreateIndexBuffer(6*FILL_COUNT*2, D3DUSAGE_WRITEONLY, D3DFMT_INDEX16, D3DPOOL_DEFAULT, &fillIdx, NULL);
+
+   unsigned short *index = NULL;
+   fillIdx->Lock(0, 6*FILL_COUNT*2, (void**)&index, 0);
+   for(int i=0; i<FILL_COUNT; i++)
+   {
+      *(index++) = 0;
+      *(index++) = 1;
+      *(index++) = 2;
+
+      *(index++) = 0;
+      *(index++) = 2;
+      *(index++) = 3;
+   }
+   fillIdx->Unlock();
+}
+
+void drawFillrateRenderer(IDirect3DDevice9 *pd3dDevice)
+{
+   pd3dDevice->SetRenderState(D3DRS_CULLMODE, D3DCULL_NONE);
+   pd3dDevice->SetRenderState(D3DRS_ZENABLE, false);
+   pd3dDevice->SetStreamSource( 0, fill, 0, sizeof( CUSTOMVERTEX ) );
+   pd3dDevice->SetFVF( D3DFVF_CUSTOMVERTEX );
+   pd3dDevice->SetIndices(fillIdx);
+
+   IDirect3DQuery9 *query = NULL;
+   pd3dDevice->CreateQuery(D3DQUERYTYPE_EVENT, &query);
+   pd3dDevice->DrawIndexedPrimitive( D3DPT_TRIANGLELIST, 0, 0, 4, 0, 2*FILL_COUNT );
+   query->Issue(D3DISSUE_END);
+   while(S_FALSE == query->GetData( NULL, 0, D3DGETDATA_FLUSH ));
+   query->Release();
+}
+
+void drawFillrateRendererTexture(IDirect3DDevice9 *pd3dDevice)
+{
+   pd3dDevice->SetRenderState(D3DRS_CULLMODE, D3DCULL_NONE);
+   pd3dDevice->SetRenderState(D3DRS_ZENABLE, false);
+   pd3dDevice->SetStreamSource( 0, fill, 0, sizeof( CUSTOMVERT2 ) );
+   pd3dDevice->SetFVF( D3DFVF_VERT2 );
+   pd3dDevice->SetIndices(fillIdx);
+
+   IDirect3DQuery9 *query = NULL;
+   pd3dDevice->CreateQuery(D3DQUERYTYPE_EVENT, &query);
+   pd3dDevice->DrawIndexedPrimitive( D3DPT_TRIANGLELIST, 0, 0, 4, 0, 2*FILL_COUNT );
+   query->Issue(D3DISSUE_END);
+   while(S_FALSE == query->GetData( NULL, 0, D3DGETDATA_FLUSH ));
+   query->Release();
+}
+
+void teardownFillrateRenderer()
+{
+   // Free the VB.
+   fill->Release();
+   fillIdx->Release();
+}
+
+GRAPHICS_PERFORMANCE_TEST("chapter9-gpu/opaqueFillrate", GraphicsFillRateOpaque, 9003)
+{
+   void initialize()
+   {
+      Parent::initialize(512, 512);
+
+      initFillrateRenderer(m_Device.m_Dx9);
+   }
+
+   void renderFrame(IDirect3DDevice9* pd3dDevice, double fTime, float fElapsedTime)
+   {
+      pd3dDevice->BeginScene();
+
+      drawFillrateRenderer(pd3dDevice);
+
+      pd3dDevice->EndScene();
+   }
+
+   void teardown()
+   {
+      teardownFillrateRenderer();
+   }
+};
+
+GRAPHICS_PERFORMANCE_TEST("chapter9-gpu/alphaFillrate", GraphicsFillRateAlpha, 9003)
+{
+   void initialize()
+   {
+      Parent::initialize(512, 512);
+
+      initFillrateRenderer(m_Device.m_Dx9);
+   }
+
+   void renderFrame(IDirect3DDevice9* pd3dDevice, double fTime, float fElapsedTime)
+   {
+      pd3dDevice->BeginScene();
+
+      pd3dDevice->SetRenderState(D3DRS_ALPHABLENDENABLE, true);
+      pd3dDevice->SetRenderState(D3DRS_SRCBLEND, D3DBLEND_ZERO);
+      pd3dDevice->SetRenderState(D3DRS_DESTBLEND, D3DBLEND_SRCCOLOR);
+
+      drawFillrateRenderer(pd3dDevice);
+
+      pd3dDevice->EndScene();
+   }
+
+   void teardown()
+   {
+      teardownFillrateRenderer();
+   }
+};
+
+
+GRAPHICS_PERFORMANCE_TEST("chapter9-gpu/alphaWithTestFillrate", GraphicsFillRateAlphaWithTest, 9003)
+{
+   void initialize()
+   {
+      Parent::initialize(512, 512);
+
+      initFillrateRenderer(m_Device.m_Dx9);
+   }
+
+   void renderFrame(IDirect3DDevice9* pd3dDevice, double fTime, float fElapsedTime)
+   {
+      pd3dDevice->BeginScene();
+
+      pd3dDevice->SetRenderState(D3DRS_ALPHABLENDENABLE, true);
+      pd3dDevice->SetRenderState(D3DRS_SRCBLEND, D3DBLEND_ZERO);
+      pd3dDevice->SetRenderState(D3DRS_DESTBLEND, D3DBLEND_SRCCOLOR);
+
+      pd3dDevice->SetRenderState(D3DRS_ALPHAFUNC, D3DCMP_GREATEREQUAL); 
+      pd3dDevice->SetRenderState(D3DRS_ALPHAREF, (DWORD)8); 
+      pd3dDevice->SetRenderState(D3DRS_ALPHATESTENABLE, TRUE); 
+
+      drawFillrateRenderer(pd3dDevice);
+
+      pd3dDevice->EndScene();
+   }
+
+   void teardown()
+   {
+      teardownFillrateRenderer();
+   }
+};
+
+GRAPHICS_PERFORMANCE_TEST("chapter9-gpu/textureFormatRateVariation/ABGR8", GraphicsFillRateForTextureFormatsAGBR8, 9004)
+{
+   IDirect3DTexture9 *mTextureA;
+
+   void initialize()
+   {
+      Parent::initialize(512, 512);
+
+      initFillrateRendererTexture(m_Device.m_Dx9);
+
+      mTextureA = NULL;
+      D3DXCreateTextureFromFileEx (m_Device.m_Dx9, L"lena.jpg", 0, 0, 0, 0, 
+         D3DFMT_A8B8G8R8, D3DPOOL_DEFAULT, D3DX_DEFAULT, D3DX_DEFAULT, 0, NULL, NULL, &mTextureA);
+   }
+
+   void renderFrame(IDirect3DDevice9* pd3dDevice, double fTime, float fElapsedTime)
+   {
+      pd3dDevice->BeginScene();
+
+      pd3dDevice->SetTexture(0, mTextureA);
+      pd3dDevice->SetSamplerState(0, D3DSAMP_MINFILTER, D3DTEXF_LINEAR);
+      pd3dDevice->SetSamplerState(0, D3DSAMP_MAGFILTER, D3DTEXF_LINEAR);
+      pd3dDevice->SetSamplerState(0, D3DSAMP_MIPFILTER, D3DTEXF_LINEAR);
+
+      drawFillrateRendererTexture(pd3dDevice);
+
+      pd3dDevice->EndScene();
+   }
+
+   void teardown()
+   {
+      mTextureA->Release();
+      teardownFillrateRenderer();
+   }
+
+};
+
+GRAPHICS_PERFORMANCE_TEST("chapter9-gpu/textureFormatRateVariation/16bit", GraphicsFillRateForTextureFormats16Bit, 9004)
+{
+   IDirect3DTexture9 *mTextureA;
+
+   void initialize()
+   {
+      Parent::initialize(512, 512);
+
+      initFillrateRendererTexture(m_Device.m_Dx9);
+
+      mTextureA = NULL;
+      D3DXCreateTextureFromFileEx (m_Device.m_Dx9, L"lena.jpg", 0, 0, 0, 0, 
+         D3DFMT_R5G6B5, D3DPOOL_DEFAULT, D3DX_DEFAULT, D3DX_DEFAULT, 0, NULL, NULL, &mTextureA);
+   }
+
+   void renderFrame(IDirect3DDevice9* pd3dDevice, double fTime, float fElapsedTime)
+   {
+      pd3dDevice->BeginScene();
+
+      pd3dDevice->SetTexture(0, mTextureA);
+      pd3dDevice->SetSamplerState(0, D3DSAMP_MINFILTER, D3DTEXF_LINEAR);
+      pd3dDevice->SetSamplerState(0, D3DSAMP_MAGFILTER, D3DTEXF_LINEAR);
+      pd3dDevice->SetSamplerState(0, D3DSAMP_MIPFILTER, D3DTEXF_LINEAR);
+
+      drawFillrateRendererTexture(pd3dDevice);
+
+      pd3dDevice->EndScene();
+   }
+
+   void teardown()
+   {
+      mTextureA->Release();
+      teardownFillrateRenderer();
+   }
+
+};
+
+GRAPHICS_PERFORMANCE_TEST("chapter9-gpu/textureFormatRateVariation/64bit", GraphicsFillRateForTextureFormats64Bit, 9004)
+{
+   IDirect3DTexture9 *mTextureA;
+
+   void initialize()
+   {
+      Parent::initialize(512, 512);
+
+      initFillrateRendererTexture(m_Device.m_Dx9);
+
+      mTextureA = NULL;
+      D3DXCreateTextureFromFileEx (m_Device.m_Dx9, L"lena.jpg", 0, 0, 0, 0, 
+         D3DFMT_A16B16G16R16, D3DPOOL_DEFAULT, D3DX_DEFAULT, D3DX_DEFAULT, 0, NULL, NULL, &mTextureA);
+   }
+
+   void renderFrame(IDirect3DDevice9* pd3dDevice, double fTime, float fElapsedTime)
+   {
+      pd3dDevice->BeginScene();
+
+      pd3dDevice->SetTexture(0, mTextureA);
+      pd3dDevice->SetSamplerState(0, D3DSAMP_MINFILTER, D3DTEXF_LINEAR);
+      pd3dDevice->SetSamplerState(0, D3DSAMP_MAGFILTER, D3DTEXF_LINEAR);
+      pd3dDevice->SetSamplerState(0, D3DSAMP_MIPFILTER, D3DTEXF_LINEAR);
+
+      drawFillrateRendererTexture(pd3dDevice);
+
+      pd3dDevice->EndScene();
+   }
+
+   void teardown()
+   {
+      mTextureA->Release();
+      teardownFillrateRenderer();
+   }
+
+};
+
+GRAPHICS_PERFORMANCE_TEST("chapter9-gpu/textureFormatRateVariation/128bit", GraphicsFillRateForTextureFormats128Bit, 9004)
+{
+   IDirect3DTexture9 *mTextureA;
+
+   void initialize()
+   {
+      Parent::initialize(512, 512);
+
+      initFillrateRendererTexture(m_Device.m_Dx9);
+
+      mTextureA = NULL;
+      D3DXCreateTextureFromFileEx (m_Device.m_Dx9, L"lena.jpg", 0, 0, 0, 0, 
+         D3DFMT_A32B32G32R32F, D3DPOOL_DEFAULT, D3DX_DEFAULT, D3DX_DEFAULT, 0, NULL, NULL, &mTextureA);
+   }
+
+   void renderFrame(IDirect3DDevice9* pd3dDevice, double fTime, float fElapsedTime)
+   {
+      pd3dDevice->BeginScene();
+
+      pd3dDevice->SetTexture(0, mTextureA);
+      pd3dDevice->SetSamplerState(0, D3DSAMP_MINFILTER, D3DTEXF_LINEAR);
+      pd3dDevice->SetSamplerState(0, D3DSAMP_MAGFILTER, D3DTEXF_LINEAR);
+      pd3dDevice->SetSamplerState(0, D3DSAMP_MIPFILTER, D3DTEXF_LINEAR);
+
+      drawFillrateRendererTexture(pd3dDevice);
+
+      pd3dDevice->EndScene();
+   }
+
+   void teardown()
+   {
+      mTextureA->Release();
+      teardownFillrateRenderer();
+   }
+
+};
+
+GRAPHICS_PERFORMANCE_TEST("chapter9-gpu/textureFormatRateVariation/DXT1", GraphicsFillRateForTextureFormatsDXT1, 9004)
+{
+   IDirect3DTexture9 *mTextureA;
+
+   void initialize()
+   {
+      Parent::initialize(512, 512);
+
+      initFillrateRendererTexture(m_Device.m_Dx9);
+
+      mTextureA = NULL;
+      D3DXCreateTextureFromFileEx (m_Device.m_Dx9, L"lena.jpg", 0, 0, 0, 0, 
+         D3DFMT_DXT1, D3DPOOL_DEFAULT, D3DX_DEFAULT, D3DX_DEFAULT, 0, NULL, NULL, &mTextureA);
+   }
+
+   void renderFrame(IDirect3DDevice9* pd3dDevice, double fTime, float fElapsedTime)
+   {
+      pd3dDevice->BeginScene();
+
+      pd3dDevice->SetTexture(0, mTextureA);
+      pd3dDevice->SetSamplerState(0, D3DSAMP_MINFILTER, D3DTEXF_LINEAR);
+      pd3dDevice->SetSamplerState(0, D3DSAMP_MAGFILTER, D3DTEXF_LINEAR);
+
+      drawFillrateRendererTexture(pd3dDevice);
+
+      pd3dDevice->EndScene();
+   }
+
+   void teardown()
+   {
+      mTextureA->Release();
+      teardownFillrateRenderer();
+   }
+
+};
+
+GRAPHICS_PERFORMANCE_TEST("chapter9-gpu/SampleModeVsMipMap/PointNoMips", GraphicsSampleModeAndMipMapPointNoMips, 9005)
+{
+   IDirect3DTexture9 *mTextureA;
+
+   void initialize()
+   {
+      Parent::initialize(512, 512);
+
+      initFillrateRendererTexture(m_Device.m_Dx9);
+
+      mTextureA = NULL;
+      D3DXCreateTextureFromFileEx (m_Device.m_Dx9, L"lena.jpg", 0, 0, 1, 0, 
+         D3DFMT_A8B8G8R8, D3DPOOL_DEFAULT, D3DX_DEFAULT, D3DX_DEFAULT, 0, NULL, NULL, &mTextureA);
+   }
+
+   void renderFrame(IDirect3DDevice9* pd3dDevice, double fTime, float fElapsedTime)
+   {
+      pd3dDevice->BeginScene();
+
+      pd3dDevice->SetTexture(0, mTextureA);
+      pd3dDevice->SetSamplerState(0, D3DSAMP_MINFILTER, D3DTEXF_POINT);
+      pd3dDevice->SetSamplerState(0, D3DSAMP_MAGFILTER, D3DTEXF_POINT);
+
+      drawFillrateRendererTexture(pd3dDevice);
+
+      pd3dDevice->EndScene();
+   }
+
+   void teardown()
+   {
+      mTextureA->Release();
+      teardownFillrateRenderer();
+   }
+};
+
+
+GRAPHICS_PERFORMANCE_TEST("chapter9-gpu/SampleModeVsMipMap/PointMips", GraphicsSampleModeAndMipMapPointMips, 9005)
+{
+   IDirect3DTexture9 *mTextureA;
+
+   void initialize()
+   {
+      Parent::initialize(512, 512);
+
+      initFillrateRendererTexture(m_Device.m_Dx9);
+
+      mTextureA = NULL;
+      D3DXCreateTextureFromFileEx (m_Device.m_Dx9, L"lena.jpg", 0, 0, D3DX_DEFAULT, 0, 
+         D3DFMT_A8B8G8R8, D3DPOOL_DEFAULT, D3DX_DEFAULT, D3DX_DEFAULT, 0, NULL, NULL, &mTextureA);
+   }
+
+   void renderFrame(IDirect3DDevice9* pd3dDevice, double fTime, float fElapsedTime)
+   {
+      pd3dDevice->BeginScene();
+
+      pd3dDevice->SetTexture(0, mTextureA);
+      pd3dDevice->SetSamplerState(0, D3DSAMP_MINFILTER, D3DTEXF_POINT);
+      pd3dDevice->SetSamplerState(0, D3DSAMP_MAGFILTER, D3DTEXF_POINT);
+
+      drawFillrateRendererTexture(pd3dDevice);
+
+      pd3dDevice->EndScene();
+   }
+
+   void teardown()
+   {
+      mTextureA->Release();
+      teardownFillrateRenderer();
+   }
+};
+
+GRAPHICS_PERFORMANCE_TEST("chapter9-gpu/SampleModeVsMipMap/LinearNoMips", GraphicsSampleModeAndMipMapLinearNoMips, 9005)
+{
+   IDirect3DTexture9 *mTextureA;
+
+   void initialize()
+   {
+      Parent::initialize(512, 512);
+
+      initFillrateRendererTexture(m_Device.m_Dx9);
+
+      mTextureA = NULL;
+      D3DXCreateTextureFromFileEx (m_Device.m_Dx9, L"lena.jpg", 0, 0, 1, 0, 
+         D3DFMT_A8B8G8R8, D3DPOOL_DEFAULT, D3DX_DEFAULT, D3DX_DEFAULT, 0, NULL, NULL, &mTextureA);
+   }
+
+   void renderFrame(IDirect3DDevice9* pd3dDevice, double fTime, float fElapsedTime)
+   {
+      pd3dDevice->BeginScene();
+
+      pd3dDevice->SetTexture(0, mTextureA);
+      pd3dDevice->SetSamplerState(0, D3DSAMP_MINFILTER, D3DTEXF_LINEAR);
+      pd3dDevice->SetSamplerState(0, D3DSAMP_MAGFILTER, D3DTEXF_LINEAR);
+
+      drawFillrateRendererTexture(pd3dDevice);
+
+      pd3dDevice->EndScene();
+   }
+
+   void teardown()
+   {
+      mTextureA->Release();
+      teardownFillrateRenderer();
+   }
+};
+
+
+GRAPHICS_PERFORMANCE_TEST("chapter9-gpu/SampleModeVsMipMap/LinearMips", GraphicsSampleModeAndMipMapLinearMips, 9005)
+{
+   IDirect3DTexture9 *mTextureA;
+
+   void initialize()
+   {
+      Parent::initialize(512, 512);
+
+      initFillrateRendererTexture(m_Device.m_Dx9);
+
+      mTextureA = NULL;
+      D3DXCreateTextureFromFileEx (m_Device.m_Dx9, L"lena.jpg", 0, 0, D3DX_DEFAULT, 0, 
+         D3DFMT_A8B8G8R8, D3DPOOL_DEFAULT, D3DX_DEFAULT, D3DX_DEFAULT, 0, NULL, NULL, &mTextureA);
+   }
+
+   void renderFrame(IDirect3DDevice9* pd3dDevice, double fTime, float fElapsedTime)
+   {
+      pd3dDevice->BeginScene();
+
+      pd3dDevice->SetTexture(0, mTextureA);
+      pd3dDevice->SetSamplerState(0, D3DSAMP_MINFILTER, D3DTEXF_LINEAR);
+      pd3dDevice->SetSamplerState(0, D3DSAMP_MAGFILTER, D3DTEXF_LINEAR);
+
+      drawFillrateRendererTexture(pd3dDevice);
+
+      pd3dDevice->EndScene();
+   }
+
+   void teardown()
+   {
+      mTextureA->Release();
+      teardownFillrateRenderer();
+   }
+};
+
+GRAPHICS_PERFORMANCE_TEST("chapter9-gpu/textureCount", GraphicsFillRateActiveTextures, 9006)
+{
+   static const char *getIndependentVariableName()
+   {
+      return "# of Samplers";
+   }
+
+   static int getIndependentVariableMin()
+   {
+      return 1;
+   }
+
+   static int getIndependentVariableMax()
+   {
+      return 16;
+   }
+   
+   void setIndependentVariable(int v)
+   {
+      samplerCount = v;
+   }
+
+   int samplerCount;
+   IDirect3DTexture9 *mTextureA;
+
+   void initialize()
+   {
+      Parent::initialize(512, 512);
+
+      initFillrateRendererTexture(m_Device.m_Dx9);
+
+      mTextureA = NULL;
+      D3DXCreateTextureFromFileEx (m_Device.m_Dx9, L"lena.jpg", 0, 0, D3DX_DEFAULT, 0, 
+         D3DFMT_A8B8G8R8, D3DPOOL_DEFAULT, D3DX_DEFAULT, D3DX_DEFAULT, 0, NULL, NULL, &mTextureA);
+   }
+
+   void renderFrame(IDirect3DDevice9* pd3dDevice, double fTime, float fElapsedTime)
+   {
+      pd3dDevice->BeginScene();
+
+
+      for(int i=0; i<samplerCount; i++)
+      {
+         pd3dDevice->SetTexture(i, mTextureA);
+         pd3dDevice->SetTextureStageState( i, D3DTSS_COLORARG1, D3DTA_CURRENT ); 
+         pd3dDevice->SetTextureStageState( i, D3DTSS_COLORARG2, D3DTA_TEXTURE ); 
+         pd3dDevice->SetTextureStageState( i, D3DTSS_COLOROP, D3DTOP_ADDSIGNED );
+      }
+
+      drawFillrateRendererTexture(pd3dDevice);
+
+      pd3dDevice->EndScene();
+   }
+
+   void teardown()
+   {
+      mTextureA->Release();
+      teardownFillrateRenderer();
+   }
+};
+
+/*GRAPHICS_PERFORMANCE_TEST("chapter9-gpu/fastZFill", GraphicsFastZFill, 9007)
+{
+   void renderFrame(IDirect3DDevice9* pd3dDevice, double fTime, float fElapsedTime)
+   {
+
+   }
+
+};
+
+GRAPHICS_PERFORMANCE_TEST("chapter9-gpu/zReject", GraphicsZReject, 9007)
+{
+   void renderFrame(IDirect3DDevice9* pd3dDevice, double fTime, float fElapsedTime)
+   {
+
+   }
+
+};
+
+GRAPHICS_PERFORMANCE_TEST("chapter9-gpu/stencilReject", GraphicsStencilReject, 9007)
+{
+   void renderFrame(IDirect3DDevice9* pd3dDevice, double fTime, float fElapsedTime)
+   {
+
+   }
+
+};
+
+GRAPHICS_PERFORMANCE_TEST("chapter9-gpu/targetClearPerformance", GraphicsClearPerformance, 9008)
+{
+   void renderFrame(IDirect3DDevice9* pd3dDevice, double fTime, float fElapsedTime)
+   {
+
+   }
+
+};
+
+GRAPHICS_PERFORMANCE_TEST("chapter9-gpu/cacheFriendlyandNot", GraphicsStanfordCacheFriendlyAndNot, 9009)
+{
+   void renderFrame(IDirect3DDevice9* pd3dDevice, double fTime, float fElapsedTime)
+   {
+
+   }
+};
+
+GRAPHICS_PERFORMANCE_TEST("chapter9-gpu/index16vs32", GraphicsStanfordIB16And32Bit, 9010)
+{
+   void renderFrame(IDirect3DDevice9* pd3dDevice, double fTime, float fElapsedTime)
+   {
+
+   }
+
+};
+
+GRAPHICS_PERFORMANCE_TEST("chapter9-gpu/vertexSize", GraphicsStanfordVaryingVertexSize, 9011)
+{
+   void renderFrame(IDirect3DDevice9* pd3dDevice, double fTime, float fElapsedTime)
+   {
+
+   }
+
+};
+
+GRAPHICS_PERFORMANCE_TEST("chapter9-gpu/msaaFillRate", GraphicsMSAAFillRate, 9012)
+{
+   void renderFrame(IDirect3DDevice9* pd3dDevice, double fTime, float fElapsedTime)
+   {
+
+   }
+
+};
+
+GRAPHICS_PERFORMANCE_TEST("chapter9-gpu/mrtFillRate", GraphicsMRTFillRate, 9013)
+{
+   void renderFrame(IDirect3DDevice9* pd3dDevice, double fTime, float fElapsedTime)
+   {
+
+   }
+};
+
+GRAPHICS_PERFORMANCE_TEST("chapter9-gpu/pixelFormatRateVariation", GraphicsFillRateForPixelFormats, 9002)
+{
+   void renderFrame(IDirect3DDevice9* pd3dDevice, double fTime, float fElapsedTime)
+   {
+
+   }
+}; */

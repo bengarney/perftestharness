@@ -257,7 +257,7 @@ static void
     // Sin/Cos caches
     float sinI[CACHE_SIZE], cosI[CACHE_SIZE];
 
-    for(i = 0; i < uSlices; i++) 
+    for(int i = 0; i < uSlices; i++) 
         sincosf(2.0f * D3DX_PI * i / uSlices, sinI + i, cosI + i);
 
 
@@ -287,7 +287,7 @@ static void
         pPointReps[iVertex] = iVertex;
     iVertex++;
 
-    for(i = 0; i < uSlices; i++)
+    for(int i = 0; i < uSlices; i++)
     {
         pVertex->pos  = D3DXVECTOR3(fRadius * sinI[i], fRadius * cosI[i], fZ);
         pVertex->norm = D3DXVECTOR3(0.0f, 0.0f, -1.0f);
@@ -307,7 +307,7 @@ static void
         fZ = fLength * (f - 0.5f);
         fRadius = fRadius1 + f * fDeltaRadius;
 
-        for(i = 0; i < uSlices; i++)
+        for(int i = 0; i < uSlices; i++)
         {
             pVertex->pos  = D3DXVECTOR3(fRadius * sinI[i], fRadius * cosI[i], fZ);
             pVertex->norm = D3DXVECTOR3(fNormalXY * sinI[i], fNormalXY * cosI[i], fNormalZ);
@@ -322,7 +322,7 @@ static void
     fZ = fLength * 0.5f;
     fRadius = fRadius2;
 
-    for(i = 0; i < uSlices; i++)
+    for(int i = 0; i < uSlices; i++)
     {
         pVertex->pos  = D3DXVECTOR3(fRadius * sinI[i], fRadius * cosI[i], fZ);
         pVertex->norm = D3DXVECTOR3(0.0f, 0.0f, 1.0f);
@@ -351,7 +351,7 @@ static void
     uRowA = 0;
     uRowB = 1;
 
-    for(i = 0; i < uSlices - 1; i++)
+    for(int i = 0; i < uSlices - 1; i++)
     {
         pwFace[0] = (WORD) (uRowA);
         pwFace[1] = (WORD) (uRowB + i);
@@ -370,7 +370,7 @@ static void
         uRowA = 1 + (j + 1) * uSlices;
         uRowB = uRowA + uSlices;
 
-        for(i = 0; i < uSlices - 1; i++)
+        for(int i = 0; i < uSlices - 1; i++)
         {
             pwFace[0] = (WORD) (uRowA + i);
             pwFace[1] = (WORD) (uRowB + i);
@@ -398,7 +398,7 @@ static void
     uRowA = 1 + (uStacks + 2) * uSlices;
     uRowB = uRowA + uSlices;
 
-    for(i = 0; i < uSlices - 1; i++)
+    for(int i = 0; i < uSlices - 1; i++)
     {
         pwFace[0] = (WORD) (uRowA + i);
         pwFace[1] = (WORD) (uRowB);
@@ -515,7 +515,7 @@ static void
     WORD *pwFace = pwIndices;
 
     UINT iFace;
-    for(iFace = 0; iFace < uSides - 1; iFace++)
+    for(int iFace = 0; iFace < uSides - 1; iFace++)
     {
         pwFace[0] = 0;
         pwFace[1] = (WORD)iFace + 1;
@@ -601,7 +601,7 @@ static void
     float sinI[CACHE_SIZE], cosI[CACHE_SIZE];
     float sinJ[CACHE_SIZE], cosJ[CACHE_SIZE];
 
-    for(i = 0; i < uSlices; i++) 
+    for(int i = 0; i < uSlices; i++) 
         sincosf(2.0f * D3DX_PI * i / uSlices, sinI + i, cosI + i);
 
     for(j = 0; j < uStacks; j++) 
@@ -620,7 +620,7 @@ static void
     // Stacks
     for(j = 1; j < uStacks; j++) 
     {
-        for(i = 0; i < uSlices; i++)
+        for(int i = 0; i < uSlices; i++)
         {
             D3DXVECTOR3 norm(sinI[i] * sinJ[j], cosI[i] * sinJ[j], cosJ[j]);
 
@@ -646,7 +646,7 @@ static void
     uRowA = 0;
     uRowB = 1;
 
-    for(i = 0; i < uSlices - 1; i++)
+    for(int i = 0; i < uSlices - 1; i++)
     {
         pwFace[0] = (WORD) (uRowA);
         pwFace[1] = (WORD) (uRowB + i + 1);
@@ -665,7 +665,7 @@ static void
         uRowA = 1 + (j - 1) * uSlices;
         uRowB = uRowA + uSlices;
 
-        for(i = 0; i < uSlices - 1; i++)
+        for(int i = 0; i < uSlices - 1; i++)
         {
             pwFace[0] = (WORD) (uRowA + i);
             pwFace[1] = (WORD) (uRowA + i + 1);
@@ -693,7 +693,7 @@ static void
     uRowA = 1 + (uStacks - 2) * uSlices;
     uRowB = uRowA + uSlices;
 
-    for(i = 0; i < uSlices - 1; i++)
+    for(int i = 0; i < uSlices - 1; i++)
     {
         pwFace[0] = (WORD) (uRowA + i);
         pwFace[1] = (WORD) (uRowA + i + 1);

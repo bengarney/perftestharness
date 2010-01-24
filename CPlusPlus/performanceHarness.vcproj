@@ -472,6 +472,14 @@
 			Name="testUtilities"
 			>
 			<File
+				RelativePath=".\testUtilities\bunny.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\testUtilities\bunny.h"
+				>
+			</File>
+			<File
 				RelativePath=".\testUtilities\FullScreenQuad.fx"
 				>
 			</File>
@@ -543,6 +551,54 @@
 				RelativePath=".\testUtilities\Vertices.h"
 				>
 			</File>
+			<Filter
+				Name="stripper"
+				>
+				<File
+					RelativePath=".\testUtilities\stripper\Adjacency.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\testUtilities\stripper\Adjacency.h"
+					>
+				</File>
+				<File
+					RelativePath=".\testUtilities\stripper\CustomArray.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\testUtilities\stripper\CustomArray.h"
+					>
+				</File>
+				<File
+					RelativePath=".\testUtilities\stripper\RevisitedRadix.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\testUtilities\stripper\RevisitedRadix.h"
+					>
+				</File>
+				<File
+					RelativePath=".\testUtilities\stripper\StdAfx.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\testUtilities\stripper\StdAfx.h"
+					>
+				</File>
+				<File
+					RelativePath=".\testUtilities\stripper\Striper.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\testUtilities\stripper\Striper.h"
+					>
+				</File>
+				<File
+					RelativePath=".\testUtilities\stripper\Strips.cpp"
+					>
+				</File>
+			</Filter>
 		</Filter>
 	</Files>
 	<Globals>

@@ -1,6 +1,8 @@
+#include "testUtilities/stripper/Striper.h"
 #include "harness/graphicsHarness.h"
 #include "testUtilities/IUtil.h"
 #include "testUtilities/Vertices.h"
+#include "testUtilities/bunny.h"
 
 /************************************************************************/
 /* Bare minimum test that shows discernable graphics.                   */
@@ -1449,7 +1451,7 @@ GRAPHICS_PERFORMANCE_TEST("basic/graphics/drawCallsTextureChanges", GraphicsDraw
    }
 };
 
-#define FILL_COUNT 2000
+#define FILL_COUNT 8000
 IDirect3DVertexBuffer9 *fill;
 IDirect3DIndexBuffer9 *fillIdx;
 
@@ -2049,7 +2051,6 @@ GRAPHICS_PERFORMANCE_TEST("chapter9-gpu/textureCount", GraphicsFillRateActiveTex
    {
       pd3dDevice->BeginScene();
 
-
       for(int i=0; i<samplerCount; i++)
       {
          pd3dDevice->SetTexture(i, mTextureA);
@@ -2070,89 +2071,561 @@ GRAPHICS_PERFORMANCE_TEST("chapter9-gpu/textureCount", GraphicsFillRateActiveTex
    }
 };
 
-/*GRAPHICS_PERFORMANCE_TEST("chapter9-gpu/fastZFill", GraphicsFastZFill, 9007)
+IDirect3DIndexBuffer9 *bunnyIndices;
+IDirect3DVertexBuffer9 *bunnyVertices;
+int bunnyPrimCount = 0;
+unsigned short *bunnyStrip = NULL;
+
+void initBunnyRenderer(IDirect3DDevice9 *device, bool optimizeIndexOrder, bool useTriStrip = false,
+                       bool use16BitIndices = true, int vertexFormat = D3DFVF_CUSTOMVERTEX)
 {
+   // Optimize the index order if required.
+   DWORD outIndices[BUNNY_NUM_TRIANGLES*3];
+   if(optimizeIndexOrder)
+   {
+      D3DXOptimizeFaces((void*)bunny_triangles, BUNNY_NUM_TRIANGLES, BUNNY_NUM_POINTS, false, &outIndices[0]);
+   }
+   else
+   {
+      for(int i=0; i<BUNNY_NUM_TRIANGLES*3; i++)
+         outIndices[i] = bunny_triangles[i];
+   }
+
+   // Stripify it.
+   if(useTriStrip)
+   {
+      STRIPERCREATE sc;
+      sc.AskForWords = false;
+      sc.ConnectAllStrips = true;
+      sc.DFaces = (udword*)bunny_triangles;
+      sc.NbFaces = BUNNY_NUM_TRIANGLES;
+      sc.OneSided = true;
+      sc.SGIAlgorithm = true;
+
+      Striper s;
+      s.Init(sc);
+
+      STRIPERRESULT sr;
+      sr.AskForWords = false;
+      s.Compute(sr);
+
+      memcpy(outIndices, ((int*)sr.StripRuns), *sr.StripLengths * 4);
+      bunnyPrimCount = sr.StripLengths[0];
+   }
+   else
+   {
+      bunnyPrimCount = BUNNY_NUM_TRIANGLES;
+   }
+
+   unsigned short *indices16 = NULL;
+   unsigned int *indices32 = NULL;
+
+   int idxFormat = use16BitIndices ? D3DFMT_INDEX16 : D3DFMT_INDEX32;
+   int idxStride = use16BitIndices ? 2 : 4;
+
+   device->CreateIndexBuffer(idxStride * bunnyPrimCount * 3, D3DUSAGE_WRITEONLY, (D3DFORMAT)idxFormat, D3DPOOL_DEFAULT, &bunnyIndices, NULL);
+
+   bunnyIndices->Lock(0, idxStride * bunnyPrimCount * 3, use16BitIndices ? (void**)&indices16 : (void**)&indices32, 0);
+
+   if(useTriStrip || optimizeIndexOrder)
+   {
+      if(use16BitIndices)
+      {
+         for(int i=0; i<bunnyPrimCount; i++)
+            indices16[i] = outIndices[i];
+      }
+      else
+      {
+         for(int i=0; i<bunnyPrimCount; i++)
+            indices32[i] = outIndices[i];
+      }
+   }
+   else
+   {
+      if(use16BitIndices)
+      {
+         for(int i=0; i<bunnyPrimCount; i++)
+            indices16[i] = bunny_triangles[i];
+      }
+      else
+      {
+         for(int i=0; i<bunnyPrimCount; i++)
+            indices32[i] = bunny_triangles[i];
+      }
+   }
+   bunnyIndices->Unlock();
+
+   CUSTOMVERTEX *verts = NULL;
+   CUSTOMVERT2 *verts2 = NULL;
+   CUSTOMVERT3 *verts3 = NULL;
+   CUSTOMVERT4 *verts4 = NULL;
+   CUSTOMVERT5 *verts5 = NULL;
+
+   switch(vertexFormat)
+   {
+   case D3DFVF_CUSTOMVERTEX:
+      device->CreateVertexBuffer(sizeof(CUSTOMVERTEX) * BUNNY_NUM_POINTS, D3DUSAGE_WRITEONLY, vertexFormat, D3DPOOL_DEFAULT, &bunnyVertices, NULL);
+
+      bunnyVertices->Lock(0, sizeof(CUSTOMVERTEX) * BUNNY_NUM_POINTS, (void**)&verts, 0);
+      for(int i=0; i<BUNNY_NUM_POINTS; i++)
+      {
+         verts[i].x = bunny_points[i*3+0] * 256.f + 256.f;
+         verts[i].y = bunny_points[i*3+1] * 256.f + 256.f;
+         verts[i].z = 1; //bunny_points[i*3+2] * 256.f + 256.f;
+         verts[i].rhw = 1.0;
+      }
+      break;
+   case D3DFVF_VERT2:
+      device->CreateVertexBuffer(sizeof(CUSTOMVERT2) * BUNNY_NUM_POINTS, D3DUSAGE_WRITEONLY, vertexFormat, D3DPOOL_DEFAULT, &bunnyVertices, NULL);
+
+      bunnyVertices->Lock(0, sizeof(CUSTOMVERT2) * BUNNY_NUM_POINTS, (void**)&verts2, 0);
+      for(int i=0; i<BUNNY_NUM_POINTS; i++)
+      {
+         verts2[i].x = bunny_points[i*3+0] * 256.f + 256.f;
+         verts2[i].y = bunny_points[i*3+1] * 256.f + 256.f;
+         verts2[i].z = 1; //bunny_points[i*3+2] * 256.f + 256.f;
+         verts2[i].rhw = 1.0;
+      }
+      break;
+   case D3DFVF_VERT3:
+      device->CreateVertexBuffer(sizeof(CUSTOMVERT3) * BUNNY_NUM_POINTS, D3DUSAGE_WRITEONLY, vertexFormat, D3DPOOL_DEFAULT, &bunnyVertices, NULL);
+
+      bunnyVertices->Lock(0, sizeof(CUSTOMVERT3) * BUNNY_NUM_POINTS, (void**)&verts3, 0);
+      for(int i=0; i<BUNNY_NUM_POINTS; i++)
+      {
+         verts3[i].x = bunny_points[i*3+0] * 256.f + 256.f;
+         verts3[i].y = bunny_points[i*3+1] * 256.f + 256.f;
+         verts3[i].z = 1; //bunny_points[i*3+2] * 256.f + 256.f;
+         verts3[i].rhw = 1.0;
+      }
+      break;
+   case D3DFVF_VERT4:
+      device->CreateVertexBuffer(sizeof(CUSTOMVERT4) * BUNNY_NUM_POINTS, D3DUSAGE_WRITEONLY, vertexFormat, D3DPOOL_DEFAULT, &bunnyVertices, NULL);
+
+      bunnyVertices->Lock(0, sizeof(CUSTOMVERT4) * BUNNY_NUM_POINTS, (void**)&verts4, 0);
+      for(int i=0; i<BUNNY_NUM_POINTS; i++)
+      {
+         verts4[i].x = bunny_points[i*3+0] * 256.f + 256.f;
+         verts4[i].y = bunny_points[i*3+1] * 256.f + 256.f;
+         verts4[i].z = 1; // bunny_points[i*3+2] * 256.f + 256.f;
+         verts4[i].rhw = 1.0;
+      }
+      break;
+   case D3DFVF_VERT5:
+      device->CreateVertexBuffer(sizeof(CUSTOMVERT5) * BUNNY_NUM_POINTS, D3DUSAGE_WRITEONLY, vertexFormat, D3DPOOL_DEFAULT, &bunnyVertices, NULL);
+
+      bunnyVertices->Lock(0, sizeof(CUSTOMVERT5) * BUNNY_NUM_POINTS, (void**)&verts5, 0);
+      for(int i=0; i<BUNNY_NUM_POINTS; i++)
+      {
+         verts5[i].x = bunny_points[i*3+0] * 256.f + 256.f;
+         verts5[i].y = bunny_points[i*3+1] * 256.f + 256.f;
+         verts5[i].z = 1; //bunny_points[i*3+2] * 256.f + 256.f;
+         verts5[i].rhw = 1.0;
+      }
+      break;
+
+   }
+
+   // Don't forget to unlock.
+   bunnyVertices->Unlock();
+}
+
+void renderBunny(IDirect3DDevice9 *device, bool useTriStrip = false)
+{
+   device->SetRenderState(D3DRS_CULLMODE, D3DCULL_NONE);
+   device->SetRenderState(D3DRS_ZENABLE, false);
+   device->SetStreamSource( 0, bunnyVertices, 0, sizeof( CUSTOMVERTEX ) );
+   device->SetFVF( D3DFVF_CUSTOMVERTEX );
+   device->SetIndices(bunnyIndices);
+
+   IDirect3DQuery9 *query = NULL;
+   device->CreateQuery(D3DQUERYTYPE_EVENT, &query);
+   
+   for(int i=0; i<20; i++)
+      device->DrawIndexedPrimitive( useTriStrip ? D3DPT_TRIANGLESTRIP : D3DPT_TRIANGLELIST, 0, 0, BUNNY_NUM_POINTS, 0, bunnyPrimCount);
+   
+   query->Issue(D3DISSUE_END);
+
+   for(int i=0; i<20; i++)
+      device->DrawIndexedPrimitive( useTriStrip ? D3DPT_TRIANGLESTRIP : D3DPT_TRIANGLELIST, 0, 0, BUNNY_NUM_POINTS, 0, bunnyPrimCount);
+
+   device->EndScene();
+
+   int data;
+   while(S_FALSE == query->GetData( &data, 4, D3DGETDATA_FLUSH ));
+   query->Release();
+}
+
+void shutdownBunnyRenderer()
+{
+   SAFE_RELEASE(bunnyIndices);
+   SAFE_RELEASE(bunnyVertices);
+}
+
+GRAPHICS_PERFORMANCE_TEST("chapter9-gpu/bunny/triList", GraphicsBunnyTriList, 9007)
+{
+   void initialize()
+   {
+      Parent::initialize(64, 64);
+
+      initBunnyRenderer(m_Device.m_Dx9, false);
+   }
+
    void renderFrame(IDirect3DDevice9* pd3dDevice, double fTime, float fElapsedTime)
    {
+      pd3dDevice->BeginScene();
 
+      renderBunny(pd3dDevice);
+   }
+
+   void teardown()
+   {
+      shutdownBunnyRenderer();
+   }
+};
+
+GRAPHICS_PERFORMANCE_TEST("chapter9-gpu/bunny/triListOpt", GraphicsBunnyTriListOpt, 9007)
+{
+   void initialize()
+   {
+      Parent::initialize(64, 64);
+
+      initBunnyRenderer(m_Device.m_Dx9, true);
+   }
+
+   void renderFrame(IDirect3DDevice9* pd3dDevice, double fTime, float fElapsedTime)
+   {
+      pd3dDevice->BeginScene();
+
+      renderBunny(pd3dDevice);
+
+   }
+
+   void teardown()
+   {
+      shutdownBunnyRenderer();
+   }
+};
+
+GRAPHICS_PERFORMANCE_TEST("chapter9-gpu/bunny/triStrip", GraphicsBunnyTriStrip, 9007)
+{
+   void initialize()
+   {
+      Parent::initialize(64, 64);
+
+      initBunnyRenderer(m_Device.m_Dx9, false, true);
+   }
+
+   void renderFrame(IDirect3DDevice9* pd3dDevice, double fTime, float fElapsedTime)
+   {
+      pd3dDevice->BeginScene();
+
+      renderBunny(pd3dDevice, true);
+   }
+
+   void teardown()
+   {
+      shutdownBunnyRenderer();
+   }
+};
+
+GRAPHICS_PERFORMANCE_TEST("chapter9-gpu/bunny/triStripOpt", GraphicsBunnyTriStripOpt, 9007)
+{
+   void initialize()
+   {
+      Parent::initialize(64, 64);
+
+      initBunnyRenderer(m_Device.m_Dx9, true, true);
+   }
+
+   void renderFrame(IDirect3DDevice9* pd3dDevice, double fTime, float fElapsedTime)
+   {
+      pd3dDevice->BeginScene();
+
+      renderBunny(pd3dDevice, true);
+   }
+
+   void teardown()
+   {
+      shutdownBunnyRenderer();
+   }
+};
+
+GRAPHICS_PERFORMANCE_TEST("chapter9-gpu/bunny/index16", GraphicsBunnyIndex16, 9007)
+{
+   void initialize()
+   {
+      Parent::initialize(64, 64);
+
+      initBunnyRenderer(m_Device.m_Dx9, true, false, true);
+   }
+
+   void renderFrame(IDirect3DDevice9* pd3dDevice, double fTime, float fElapsedTime)
+   {
+      pd3dDevice->BeginScene();
+
+      renderBunny(pd3dDevice, true);
+
+   }
+
+   void teardown()
+   {
+      shutdownBunnyRenderer();
+   }
+};
+
+GRAPHICS_PERFORMANCE_TEST("chapter9-gpu/bunny/index32", GraphicsBunnyIndex32, 9007)
+{
+   void initialize()
+   {
+      Parent::initialize(64, 64);
+
+      initBunnyRenderer(m_Device.m_Dx9, true, false, false);
+   }
+
+   void renderFrame(IDirect3DDevice9* pd3dDevice, double fTime, float fElapsedTime)
+   {
+      pd3dDevice->BeginScene();
+
+      renderBunny(pd3dDevice, true);
+   }
+
+   void teardown()
+   {
+      shutdownBunnyRenderer();
+   }
+};
+
+GRAPHICS_PERFORMANCE_TEST("chapter9-gpu/bunnyVertSize", GraphicsVertexSize, 9006)
+{
+   static const char *getIndependentVariableName()
+   {
+      return "Vertex Size (bytes)";
+   }
+
+   static int getIndependentVariableMin()
+   {
+      return 1;
+   }
+
+   static int getIndependentVariableMax()
+   {
+      return 1024;
+   }
+
+   static int checkSkipIndependentValue(int v)
+   {
+      if(v == sizeof(CUSTOMVERTEX)) return false;
+      if(v == sizeof(CUSTOMVERT2)) return false;
+      if(v == sizeof(CUSTOMVERT3)) return false;
+      if(v == sizeof(CUSTOMVERT4)) return false;
+      if(v == sizeof(CUSTOMVERT5)) return false;
+      return true;
+   }
+
+   void setIndependentVariable(int v)
+   {
+      if(v == sizeof(CUSTOMVERTEX)) vertexFormat = D3DFVF_CUSTOMVERTEX;
+      if(v == sizeof(CUSTOMVERT2)) vertexFormat = D3DFVF_VERT2;
+      if(v == sizeof(CUSTOMVERT3)) vertexFormat = D3DFVF_VERT3;
+      if(v == sizeof(CUSTOMVERT4)) vertexFormat = D3DFVF_VERT4;
+      if(v == sizeof(CUSTOMVERT5)) vertexFormat = D3DFVF_VERT5;
+   }
+
+   int vertexFormat;
+
+   void initialize()
+   {
+      Parent::initialize(64, 64);
+
+      initBunnyRenderer(m_Device.m_Dx9, true, false, true, vertexFormat);
+   }
+
+   void renderFrame(IDirect3DDevice9* pd3dDevice, double fTime, float fElapsedTime)
+   {
+      pd3dDevice->BeginScene();
+
+      renderBunny(pd3dDevice, false);
+   }
+
+   void teardown()
+   {
+      shutdownBunnyRenderer();
+   }
+};
+
+GRAPHICS_PERFORMANCE_TEST("chapter9-gpu/renderTargetSwitch", GraphicsSwitchingRenderTargets, 9006)
+{
+   static const char *getIndependentVariableName()
+   {
+      return "Target Count";
+   }
+
+   static int getIndependentVariableMin()
+   {
+      return 1;
+   }
+
+   static int getIndependentVariableMax()
+   {
+      return 6;
+   }
+
+   void setIndependentVariable(int v)
+   {
+      targetCount = v;
+   }
+
+   int targetCount;
+   IDirect3DSurface9 *renderTarget[8];
+
+   void initialize()
+   {
+      Parent::initialize(512, 512);
+
+      IDirect3DDevice9 *device = m_Device.m_Dx9;
+      for(int i=0; i<targetCount; i++)
+         device->CreateRenderTarget(512, 512, D3DFMT_X8R8G8B8, D3DMULTISAMPLE_NONE, 0, false, &renderTarget[i], NULL);
+
+      initFillrateRenderer(device);
+   }
+
+   void renderFrame(IDirect3DDevice9* pd3dDevice, double fTime, float fElapsedTime)
+   {
+      pd3dDevice->BeginScene();
+
+      IDirect3DSurface9 *oldSurf = NULL;
+      pd3dDevice->GetRenderTarget(0, &oldSurf);
+
+      for(int i=0; i<targetCount; i++)
+      {
+         pd3dDevice->SetRenderTarget(0, renderTarget[i]);
+         pd3dDevice->Clear(0, NULL, D3DCLEAR_TARGET, 0, 0, 0);
+
+         drawFillrateRenderer(pd3dDevice);
+      }
+
+      pd3dDevice->SetRenderTarget(0, oldSurf);
+      oldSurf->Release();
+      pd3dDevice->EndScene();
+   }
+
+   void teardown()
+   {
+      for(int i=0; i<targetCount; i++)
+         renderTarget[i]->Release();
+
+      teardownFillrateRenderer();
    }
 
 };
 
-GRAPHICS_PERFORMANCE_TEST("chapter9-gpu/zReject", GraphicsZReject, 9007)
+GRAPHICS_PERFORMANCE_TEST("chapter9-gpu/renderTargetMultiple", GraphicsMultipleRenderTargets, 9006)
 {
+   static const char *getIndependentVariableName()
+   {
+      return "Target Count";
+   }
+
+   static int getIndependentVariableMin()
+   {
+      return 1;
+   }
+
+   static int getIndependentVariableMax()
+   {
+      return 5;
+   }
+
+   void setIndependentVariable(int v)
+   {
+      targetCount = v;
+   }
+
+   int targetCount;
+   IDirect3DSurface9 *renderTarget[8];
+   IDirect3DTexture9 *mTextureA;
+   ID3DXEffect *effect;
+
+   void initialize()
+   {
+      Parent::initialize(512, 512);
+
+      IDirect3DDevice9 *device = m_Device.m_Dx9;
+      for(int i=0; i<targetCount; i++)
+         device->CreateRenderTarget(512, 512, D3DFMT_X8R8G8B8, D3DMULTISAMPLE_NONE, 0, false, &renderTarget[i], NULL);
+
+      const char *file;
+      switch(targetCount)
+      {
+      case 1: file = "mrt1.fx"; break;
+      case 2: file = "mrt2.fx"; break;
+      case 3: file = "mrt3.fx"; break;
+      case 4: file = "mrt4.fx"; break;
+      }
+
+      ID3DXBuffer *buff = NULL;
+      D3DXCreateBuffer(8192, &buff);
+
+      D3DXCreateEffectFromFileA(device, file, NULL, NULL, 0, NULL, &effect, &buff);
+
+      const char *errors = buff ? (const char*)(buff->GetBufferPointer()) : "OK";
+
+      initFillrateRendererTexture(device);
+
+      mTextureA = NULL;
+      D3DXCreateTextureFromFileEx (m_Device.m_Dx9, L"lena.jpg", 0, 0, 0, 0, 
+         D3DFMT_A8B8G8R8, D3DPOOL_DEFAULT, D3DX_DEFAULT, D3DX_DEFAULT, 0, NULL, NULL, &mTextureA);
+   }
+
    void renderFrame(IDirect3DDevice9* pd3dDevice, double fTime, float fElapsedTime)
    {
+      pd3dDevice->BeginScene();
 
+      IDirect3DSurface9 *oldSurf = NULL;
+      pd3dDevice->GetRenderTarget(0, &oldSurf);
+
+      UINT passes;
+      effect->Begin(&passes, 0);
+      for(int i=0; i<passes; i++)
+      {
+         effect->BeginPass(i);
+
+         for(int i=0; i<targetCount; i++)
+            pd3dDevice->SetRenderTarget(i, renderTarget[i]);
+
+         pd3dDevice->SetTexture(0, mTextureA);
+         pd3dDevice->SetSamplerState(0, D3DSAMP_MINFILTER, D3DTEXF_LINEAR);
+         pd3dDevice->SetSamplerState(0, D3DSAMP_MAGFILTER, D3DTEXF_LINEAR);
+         pd3dDevice->SetSamplerState(0, D3DSAMP_MIPFILTER, D3DTEXF_LINEAR);
+
+         drawFillrateRendererTexture(pd3dDevice);
+
+         for(int i=1; i<targetCount; i++)
+            pd3dDevice->SetRenderTarget(i, NULL);
+
+         effect->EndPass();
+      }
+      effect->End();
+
+      pd3dDevice->SetRenderTarget(0, oldSurf);
+      oldSurf->Release();
+      
+      pd3dDevice->SetTexture(0, NULL);
+
+      pd3dDevice->EndScene();
+   }
+
+   void teardown()
+   {
+      for(int i=0; i<targetCount; i++)
+         renderTarget[i]->Release();
+
+      effect->Release();
+
+      mTextureA->Release();
+
+      teardownFillrateRenderer();
    }
 
 };
-
-GRAPHICS_PERFORMANCE_TEST("chapter9-gpu/stencilReject", GraphicsStencilReject, 9007)
-{
-   void renderFrame(IDirect3DDevice9* pd3dDevice, double fTime, float fElapsedTime)
-   {
-
-   }
-
-};
-
-GRAPHICS_PERFORMANCE_TEST("chapter9-gpu/targetClearPerformance", GraphicsClearPerformance, 9008)
-{
-   void renderFrame(IDirect3DDevice9* pd3dDevice, double fTime, float fElapsedTime)
-   {
-
-   }
-
-};
-
-GRAPHICS_PERFORMANCE_TEST("chapter9-gpu/cacheFriendlyandNot", GraphicsStanfordCacheFriendlyAndNot, 9009)
-{
-   void renderFrame(IDirect3DDevice9* pd3dDevice, double fTime, float fElapsedTime)
-   {
-
-   }
-};
-
-GRAPHICS_PERFORMANCE_TEST("chapter9-gpu/index16vs32", GraphicsStanfordIB16And32Bit, 9010)
-{
-   void renderFrame(IDirect3DDevice9* pd3dDevice, double fTime, float fElapsedTime)
-   {
-
-   }
-
-};
-
-GRAPHICS_PERFORMANCE_TEST("chapter9-gpu/vertexSize", GraphicsStanfordVaryingVertexSize, 9011)
-{
-   void renderFrame(IDirect3DDevice9* pd3dDevice, double fTime, float fElapsedTime)
-   {
-
-   }
-
-};
-
-GRAPHICS_PERFORMANCE_TEST("chapter9-gpu/msaaFillRate", GraphicsMSAAFillRate, 9012)
-{
-   void renderFrame(IDirect3DDevice9* pd3dDevice, double fTime, float fElapsedTime)
-   {
-
-   }
-
-};
-
-GRAPHICS_PERFORMANCE_TEST("chapter9-gpu/mrtFillRate", GraphicsMRTFillRate, 9013)
-{
-   void renderFrame(IDirect3DDevice9* pd3dDevice, double fTime, float fElapsedTime)
-   {
-
-   }
-};
-
-GRAPHICS_PERFORMANCE_TEST("chapter9-gpu/pixelFormatRateVariation", GraphicsFillRateForPixelFormats, 9002)
-{
-   void renderFrame(IDirect3DDevice9* pd3dDevice, double fTime, float fElapsedTime)
-   {
-
-   }
-}; */

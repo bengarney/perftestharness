@@ -1451,7 +1451,7 @@ GRAPHICS_PERFORMANCE_TEST("basic/graphics/drawCallsTextureChanges", GraphicsDraw
    }
 };
 
-#define FILL_COUNT 8000
+#define FILL_COUNT 1000
 IDirect3DVertexBuffer9 *fill;
 IDirect3DIndexBuffer9 *fillIdx;
 
@@ -2520,11 +2520,11 @@ GRAPHICS_PERFORMANCE_TEST("chapter9-gpu/renderTargetSwitch", GraphicsSwitchingRe
 
 };
 
-GRAPHICS_PERFORMANCE_TEST("chapter9-gpu/renderTargetMultiple", GraphicsMultipleRenderTargets, 9006)
+GRAPHICS_PERFORMANCE_TEST("chapter10-shaders/varyingDependentChains", GraphicsVaryingDependentChain, 9006)
 {
    static const char *getIndependentVariableName()
    {
-      return "Target Count";
+      return "Dependent Chain Depth";
    }
 
    static int getIndependentVariableMin()
@@ -2534,16 +2534,20 @@ GRAPHICS_PERFORMANCE_TEST("chapter9-gpu/renderTargetMultiple", GraphicsMultipleR
 
    static int getIndependentVariableMax()
    {
-      return 5;
+      return 17;
+   }
+
+   static bool checkSkipIndependentValue(int v)
+   {
+      return (v&(v-1))!=0;
    }
 
    void setIndependentVariable(int v)
    {
-      targetCount = v;
+      groupSize = v;
    }
 
-   int targetCount;
-   IDirect3DSurface9 *renderTarget[8];
+   int groupSize;
    IDirect3DTexture9 *mTextureA;
    ID3DXEffect *effect;
 
@@ -2552,23 +2556,11 @@ GRAPHICS_PERFORMANCE_TEST("chapter9-gpu/renderTargetMultiple", GraphicsMultipleR
       Parent::initialize(512, 512);
 
       IDirect3DDevice9 *device = m_Device.m_Dx9;
-      for(int i=0; i<targetCount; i++)
-         device->CreateRenderTarget(512, 512, D3DFMT_X8R8G8B8, D3DMULTISAMPLE_NONE, 0, false, &renderTarget[i], NULL);
-
-      const char *file;
-      switch(targetCount)
-      {
-      case 1: file = "mrt1.fx"; break;
-      case 2: file = "mrt2.fx"; break;
-      case 3: file = "mrt3.fx"; break;
-      case 4: file = "mrt4.fx"; break;
-      }
 
       ID3DXBuffer *buff = NULL;
       D3DXCreateBuffer(8192, &buff);
 
-      D3DXCreateEffectFromFileA(device, file, NULL, NULL, 0, NULL, &effect, &buff);
-
+      D3DXCreateEffectFromFileA(device, "varyingSamples.fx", NULL, NULL, 0, NULL, &effect, &buff);
       const char *errors = buff ? (const char*)(buff->GetBufferPointer()) : "OK";
 
       initFillrateRendererTexture(device);
@@ -2582,8 +2574,14 @@ GRAPHICS_PERFORMANCE_TEST("chapter9-gpu/renderTargetMultiple", GraphicsMultipleR
    {
       pd3dDevice->BeginScene();
 
-      IDirect3DSurface9 *oldSurf = NULL;
-      pd3dDevice->GetRenderTarget(0, &oldSurf);
+      pd3dDevice->SetTexture(0, mTextureA);
+      pd3dDevice->SetSamplerState(0, D3DSAMP_MINFILTER, D3DTEXF_LINEAR);
+      pd3dDevice->SetSamplerState(0, D3DSAMP_MAGFILTER, D3DTEXF_LINEAR);
+      pd3dDevice->SetSamplerState(0, D3DSAMP_MIPFILTER, D3DTEXF_LINEAR);
+
+      effect->SetInt("numSamples", 16 / groupSize);
+      effect->SetInt("numDependent", groupSize);
+      effect->SetTexture("RandomTexture", mTextureA);
 
       UINT passes;
       effect->Begin(&passes, 0);
@@ -2591,25 +2589,11 @@ GRAPHICS_PERFORMANCE_TEST("chapter9-gpu/renderTargetMultiple", GraphicsMultipleR
       {
          effect->BeginPass(i);
 
-         for(int i=0; i<targetCount; i++)
-            pd3dDevice->SetRenderTarget(i, renderTarget[i]);
-
-         pd3dDevice->SetTexture(0, mTextureA);
-         pd3dDevice->SetSamplerState(0, D3DSAMP_MINFILTER, D3DTEXF_LINEAR);
-         pd3dDevice->SetSamplerState(0, D3DSAMP_MAGFILTER, D3DTEXF_LINEAR);
-         pd3dDevice->SetSamplerState(0, D3DSAMP_MIPFILTER, D3DTEXF_LINEAR);
-
          drawFillrateRendererTexture(pd3dDevice);
-
-         for(int i=1; i<targetCount; i++)
-            pd3dDevice->SetRenderTarget(i, NULL);
 
          effect->EndPass();
       }
       effect->End();
-
-      pd3dDevice->SetRenderTarget(0, oldSurf);
-      oldSurf->Release();
       
       pd3dDevice->SetTexture(0, NULL);
 
@@ -2618,14 +2602,186 @@ GRAPHICS_PERFORMANCE_TEST("chapter9-gpu/renderTargetMultiple", GraphicsMultipleR
 
    void teardown()
    {
-      for(int i=0; i<targetCount; i++)
-         renderTarget[i]->Release();
-
       effect->Release();
-
       mTextureA->Release();
 
       teardownFillrateRenderer();
    }
 
 };
+
+
+GRAPHICS_PERFORMANCE_TEST("chapter10-shaders/varyingMath", GraphicsVaryingMath, 9006)
+{
+   static const char *getIndependentVariableName()
+   {
+      return "Math Ops (in multiples of 30)";
+   }
+
+   static int getIndependentVariableMin()
+   {
+      return 1;
+   }
+
+   static int getIndependentVariableMax()
+   {
+      return 30;
+   }
+
+   static int checkSkipIndependentValue(int v)
+   {
+      return v&1;
+   }
+
+   void setIndependentVariable(int v)
+   {
+      mathCount = v;
+   }
+
+   int mathCount;
+   IDirect3DTexture9 *mTextureA;
+   ID3DXEffect *effect;
+
+   void initialize()
+   {
+      Parent::initialize(512, 512);
+
+      IDirect3DDevice9 *device = m_Device.m_Dx9;
+
+      ID3DXBuffer *buff = NULL;
+      D3DXCreateBuffer(8192, &buff);
+
+      D3DXCreateEffectFromFileA(device, "varyingMath.fx", NULL, NULL, 0, NULL, &effect, &buff);
+      const char *errors = buff ? (const char*)(buff->GetBufferPointer()) : "OK";
+
+      initFillrateRendererTexture(device);
+
+      mTextureA = NULL;
+      D3DXCreateTextureFromFileEx (m_Device.m_Dx9, L"lena.jpg", 0, 0, 0, 0, 
+         D3DFMT_A8B8G8R8, D3DPOOL_DEFAULT, D3DX_DEFAULT, D3DX_DEFAULT, 0, NULL, NULL, &mTextureA);
+   }
+
+   void renderFrame(IDirect3DDevice9* pd3dDevice, double fTime, float fElapsedTime)
+   {
+      pd3dDevice->BeginScene();
+
+      pd3dDevice->SetTexture(0, mTextureA);
+      pd3dDevice->SetSamplerState(0, D3DSAMP_MINFILTER, D3DTEXF_LINEAR);
+      pd3dDevice->SetSamplerState(0, D3DSAMP_MAGFILTER, D3DTEXF_LINEAR);
+      pd3dDevice->SetSamplerState(0, D3DSAMP_MIPFILTER, D3DTEXF_LINEAR);
+
+      effect->SetInt("mathCount", mathCount);
+      effect->SetTexture("RandomTexture", mTextureA);
+
+      UINT passes;
+      effect->Begin(&passes, 0);
+      for(int i=0; i<passes; i++)
+      {
+         effect->BeginPass(i);
+
+         drawFillrateRendererTexture(pd3dDevice);
+
+         effect->EndPass();
+      }
+      effect->End();
+
+      pd3dDevice->SetTexture(0, NULL);
+
+      pd3dDevice->EndScene();
+   }
+
+   void teardown()
+   {
+      effect->Release();
+      mTextureA->Release();
+
+      teardownFillrateRenderer();
+   }
+
+};
+
+
+GRAPHICS_PERFORMANCE_TEST("chapter10-shaders/varyingMathVsDependent", GraphicsVaryingMathVsDependent, 9006)
+{
+   static const char *getIndependentVariableName()
+   {
+      return "Math Ops (in multiples of 30)";
+   }
+
+   static int getIndependentVariableMin()
+   {
+      return 1;
+   }
+
+   static int getIndependentVariableMax()
+   {
+      return 10;
+   }
+
+   void setIndependentVariable(int v)
+   {
+      mathCount = v;
+   }
+
+   int mathCount;
+   IDirect3DTexture9 *mTextureA;
+   ID3DXEffect *effect;
+
+   void initialize()
+   {
+      Parent::initialize(512, 512);
+
+      IDirect3DDevice9 *device = m_Device.m_Dx9;
+
+      ID3DXBuffer *buff = NULL;
+      D3DXCreateBuffer(8192, &buff);
+
+      D3DXCreateEffectFromFileA(device, "varyingMathVsDependent.fx", NULL, NULL, 0, NULL, &effect, &buff);
+      const char *errors = buff ? (const char*)(buff->GetBufferPointer()) : "OK";
+
+      initFillrateRendererTexture(device);
+
+      mTextureA = NULL;
+      D3DXCreateTextureFromFileEx (m_Device.m_Dx9, L"lena.jpg", 0, 0, 0, 0, 
+         D3DFMT_A8B8G8R8, D3DPOOL_DEFAULT, D3DX_DEFAULT, D3DX_DEFAULT, 0, NULL, NULL, &mTextureA);
+   }
+
+   void renderFrame(IDirect3DDevice9* pd3dDevice, double fTime, float fElapsedTime)
+   {
+      pd3dDevice->BeginScene();
+
+      pd3dDevice->SetTexture(0, mTextureA);
+      pd3dDevice->SetSamplerState(0, D3DSAMP_MINFILTER, D3DTEXF_LINEAR);
+      pd3dDevice->SetSamplerState(0, D3DSAMP_MAGFILTER, D3DTEXF_LINEAR);
+      pd3dDevice->SetSamplerState(0, D3DSAMP_MIPFILTER, D3DTEXF_LINEAR);
+
+      effect->SetInt("mathCount", mathCount);
+      effect->SetTexture("RandomTexture", mTextureA);
+
+      UINT passes;
+      effect->Begin(&passes, 0);
+      for(int i=0; i<passes; i++)
+      {
+         effect->BeginPass(i);
+
+         drawFillrateRendererTexture(pd3dDevice);
+
+         effect->EndPass();
+      }
+      effect->End();
+
+      pd3dDevice->SetTexture(0, NULL);
+
+      pd3dDevice->EndScene();
+   }
+
+   void teardown()
+   {
+      effect->Release();
+      mTextureA->Release();
+
+      teardownFillrateRenderer();
+   }
+
+};
+
